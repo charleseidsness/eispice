@@ -1,0 +1,13 @@
+
+This is the reference implementation of a BLAS from netlib downloaded 03-17-07.
+If you want to improve pefromance you could use your own machine tuned BLAS
+(like ATLAS) instead though you may not see a huge performance boost, it will
+depend on the type of circuit you are simulating.
+
+A Makefile for eispice was added, and all of the files, except those used
+by eispice have been removed.
+
+Cheers,
+Charles Eidsness
+<charles@cooper-street.com>
+

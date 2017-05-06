@@ -1,0 +1,72 @@
+SRC/colamd.o: SRC/colamd.c SRC/colamd.h
+SRC/dcolumn_bmod.o: SRC/dcolumn_bmod.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dcolumn_dfs.o: SRC/dcolumn_dfs.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dcomplex.o: SRC/dcomplex.c SRC/slu_dcomplex.h
+SRC/dcopy_to_ucol.o: SRC/dcopy_to_ucol.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dgscon.o: SRC/dgscon.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgsequ.o: SRC/dgsequ.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgsrfs.o: SRC/dgsrfs.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgssv.o: SRC/dgssv.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgssvx.o: SRC/dgssvx.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgstrf.o: SRC/dgstrf.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dgstrs.o: SRC/dgstrs.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dlacon.o: SRC/dlacon.c SRC/slu_Cnames.h
+SRC/dlamch.o: SRC/dlamch.c SRC/slu_Cnames.h
+SRC/dlangs.o: SRC/dlangs.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dlaqgs.o: SRC/dlaqgs.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dmemory.o: SRC/dmemory.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dmyblas2.o: SRC/dmyblas2.c
+SRC/dpanel_bmod.o: SRC/dpanel_bmod.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dpanel_dfs.o: SRC/dpanel_dfs.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dpivotL.o: SRC/dpivotL.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dpivotgrowth.o: SRC/dpivotgrowth.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dpruneL.o: SRC/dpruneL.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dreadhb.o: SRC/dreadhb.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dsnode_bmod.o: SRC/dsnode_bmod.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dsnode_dfs.o: SRC/dsnode_dfs.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dsp_blas2.o: SRC/dsp_blas2.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dsp_blas3.o: SRC/dsp_blas3.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/dutil.o: SRC/dutil.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/dzsum1.o: SRC/dzsum1.c SRC/slu_Cnames.h SRC/slu_dcomplex.h
+SRC/get_perm_c.o: SRC/get_perm_c.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h SRC/colamd.h
+SRC/heap_relax_snode.o: SRC/heap_relax_snode.c SRC/slu_ddefs.h \
+  SRC/slu_Cnames.h SRC/supermatrix.h SRC/slu_util.h
+SRC/izmax1.o: SRC/izmax1.c SRC/slu_Cnames.h SRC/slu_dcomplex.h
+SRC/memory.o: SRC/memory.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h
+SRC/mmd.o: SRC/mmd.c
+SRC/relax_snode.o: SRC/relax_snode.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/sp_coletree.o: SRC/sp_coletree.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/sp_ienv.o: SRC/sp_ienv.c SRC/slu_Cnames.h
+SRC/sp_preorder.o: SRC/sp_preorder.c SRC/slu_ddefs.h SRC/slu_Cnames.h \
+  SRC/supermatrix.h SRC/slu_util.h
+SRC/superlu_timer.o: SRC/superlu_timer.c
+SRC/util.o: SRC/util.c SRC/slu_ddefs.h SRC/slu_Cnames.h SRC/supermatrix.h \
+  SRC/slu_util.h

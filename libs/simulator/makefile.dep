@@ -1,0 +1,83 @@
+tester.o: tester.c ../../include/log.h include/simulator.h
+core/control.o: core/control.c ../../include/log.h include/control.h
+core/device.o: core/device.c ../../include/log.h ../../include/data.h \
+  include/device_internal.h include/device.h include/matrix.h \
+  include/row.h include/node.h include/control.h
+core/history.o: core/history.c ../../include/log.h ../../include/data.h \
+  include/history.h
+core/matrix.o: core/matrix.c ../../include/log.h ../../include/superlu.h \
+  include/matrix.h ../../include/data.h include/row.h include/node.h \
+  include/control.h include/history.h
+core/node.o: core/node.c ../../include/data.h ../../include/log.h \
+  include/node.h
+core/row.o: core/row.c ../../include/log.h include/row.h ../../include/data.h
+core/simulator.o: core/simulator.c ../../include/log.h ../../include/data.h \
+  ../../include/calc.h include/simulator.h include/device.h \
+  include/matrix.h include/row.h include/node.h include/control.h \
+  include/history.h
+devices/callback_i.o: devices/callback_i.c ../../include/log.h \
+  ../../include/data.h include/checkbreak.h include/control.h \
+  include/checklinear.h include/device_internal.h include/device.h \
+  include/matrix.h include/row.h include/node.h
+devices/callback_v.o: devices/callback_v.c ../../include/log.h \
+  ../../include/data.h include/checkbreak.h include/control.h \
+  include/checklinear.h include/device_internal.h include/device.h \
+  include/matrix.h include/row.h include/node.h
+devices/capacitor.o: devices/capacitor.c ../../include/log.h include/integrator.h \
+  include/control.h include/device_internal.h ../../include/data.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/inductor.o: devices/inductor.c ../../include/log.h include/integrator.h \
+  include/control.h include/device_internal.h ../../include/data.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/nonlinear_c.o: devices/nonlinear_c.c ../../include/calc.h \
+  ../../include/data.h ../../include/log.h include/integrator.h \
+  include/control.h include/checklinear.h include/device_internal.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/nonlinear_i.o: devices/nonlinear_i.c ../../include/calc.h \
+  ../../include/log.h ../../include/data.h include/checkbreak.h \
+  include/control.h include/checklinear.h include/device_internal.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/nonlinear_v.o: devices/nonlinear_v.c ../../include/calc.h \
+  ../../include/log.h ../../include/data.h include/checkbreak.h \
+  include/control.h include/checklinear.h include/device_internal.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/resistor.o: devices/resistor.c ../../include/log.h \
+  include/device_internal.h ../../include/data.h include/device.h \
+  include/matrix.h include/row.h include/node.h include/control.h
+devices/source_i.o: devices/source_i.c ../../include/log.h include/checkbreak.h \
+  include/control.h include/waveform.h include/device_internal.h \
+  ../../include/data.h include/device.h include/matrix.h include/row.h \
+  include/node.h
+devices/source_v.o: devices/source_v.c ../../include/log.h include/checkbreak.h \
+  include/control.h include/waveform.h include/device_internal.h \
+  ../../include/data.h include/device.h include/matrix.h include/row.h \
+  include/node.h
+devices/tline.o: devices/tline.c ../../include/log.h ../../include/data.h \
+  include/checkbreak.h include/control.h include/history.h \
+  include/history_interp.h include/history.h include/device_internal.h \
+  include/device.h include/matrix.h include/row.h include/node.h
+devices/tline_w.o: devices/tline_w.c ../../include/log.h \
+  include/device_internal.h ../../include/data.h include/device.h \
+  include/matrix.h include/row.h include/node.h include/control.h \
+  include/mfunc.h include/complex.h include/complex.h include/netlib.h
+devices/vicurve.o: devices/vicurve.c ../../include/log.h include/checkbreak.h \
+  include/control.h include/piecewise.h include/checklinear.h \
+  include/device_internal.h ../../include/data.h include/device.h \
+  include/matrix.h include/row.h include/node.h
+math/checkbreak.o: math/checkbreak.c ../../include/log.h include/control.h \
+  include/checkbreak.h include/control.h
+math/checklinear.o: math/checklinear.c ../../include/log.h include/control.h \
+  include/checklinear.h include/control.h
+math/complex.o: math/complex.c ../../include/log.h include/complex.h
+math/history_interp.o: math/history_interp.c ../../include/log.h include/row.h \
+  ../../include/data.h include/history.h include/history_interp.h \
+  include/history.h
+math/integrator.o: math/integrator.c ../../include/log.h include/control.h \
+  include/integrator.h include/control.h
+math/mfunc.o: math/mfunc.c ../../include/log.h include/complex.h \
+  include/netlib.h include/complex.h
+math/netlib.o: math/netlib.c ../../include/log.h include/complex.h
+math/piecewise.o: math/piecewise.c ../../include/log.h include/piecewise.h
+math/waveform.o: math/waveform.c ../../include/log.h include/piecewise.h \
+  include/control.h include/waveform.h include/control.h include/netlib.h \
+  include/complex.h

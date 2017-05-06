@@ -1,0 +1,41 @@
+New since last release:
+- Added locking mechanism to list execute function
+- Migrated to Fortran95 from Fortran77
+	
+TODO Before next major release:
+- Finish W-Element model
+- Add a digital control to the VI Device to support controlling IBIS Drivers
+
+Long Term ToDo:
+- Add coupled inductor model
+- Add all missing Spice3 models to become Spice 3f5 equivelant
+- Add Ferrite Bead Model
+- Add non-liner inductor model
+- Integrate a 2D feild solver (MMTL)
+- Add remaining semi-conductor models required to become Spice 3f5 equivelant
+- Finish the the netlist / auto-tool
+- Add an interface for PyB devices to read from the simulator's history.
+- Is there a more memory friendly way to pass the results back to Python?
+- Clean up the error messages, add Pythonic error message display
+- Improve the break-point checking algorithum (make it more robust)
+-- what about doing bp check in the inductor and capacitor devices instead
+	of globaly...
+- Add options control
+- Add device definition helper tools (like Thomas suggested)
+- Improve the Python Defined Behaiverial Model
+-- Add a ddt operator to make it more compliant with Verlig-AMS
+-- Improve the performance by minimizing the number of operations per call-back
+- Take a closer look at performance, what can be done to improve it?
+- Build a Verilog/VHDL interface
+- Improve the plotter
+-- eye diagrams
+-- zoom
+-- resize window
+-- print
+-- save to file
+-- improve performance
+- Add Layout import (gerber files or something general like that)
+- Add S-Paramter Model Support
+- Add Initial Conditions Support (if required)
+- Add post-processors, (Over-Shoot, Non-Monotonic Checks, etc...)
+- Improve Documentation

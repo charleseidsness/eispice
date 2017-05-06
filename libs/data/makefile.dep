@@ -1,0 +1,5 @@
+data.o: data.c ../../include/log.h data.h
+dblhash.o: dblhash.c ../../include/log.h data.h
+hash.o: hash.c ../../include/log.h data.h
+list.o: list.c ../../include/log.h data.h
+test.o: test.c ../../include/log.h data.h

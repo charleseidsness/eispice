@@ -1,0 +1,12 @@
+
+This version of SuperLU has been modified for use in eispice. There are two
+primary patches (found in this directory). One patch fixes a bug that was
+causing seg faults when malformed matricies were passed to SuperLU. The other
+patch improves the library's performance. The Makefiles have also been 
+re-written to better fit with the eispice build process, and all unused 
+source files were removed to reduce the size of the source code.
+
+Cheers,
+Charles Eidsness
+<charles@cooper-street.com>
+

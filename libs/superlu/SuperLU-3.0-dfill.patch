@@ -1,0 +1,23 @@
+--- SuperLU-3.0/SRC/dutil.orig.c	2006-09-14 12:05:14.859375000 -0400
++++ SuperLU-3.0/SRC/dutil.c	2006-09-14 12:31:41.437500000 -0400
+@@ -392,7 +392,19 @@
+ dfill(double *a, int alen, double dval)
+ {
+     register int i;
+-    for (i = 0; i < alen; i++) a[i] = dval;
++	double d;
++	
++	if(dval == 0.0) {
++		/* I'm not sure how but maybe this could be 
++		 * changed to a compile-time check? */
++		memset((char*)&d, 0x0, sizeof(double));
++		if(d == 0.0) {
++			memset((char*)a, 0x0, sizeof(double)*alen);
++			return;
++		}
++	}
++	
++	for (i = 0; i < alen; i++) a[i] = dval;
+ }
+ 
+ 

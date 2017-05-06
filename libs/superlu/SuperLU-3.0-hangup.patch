@@ -1,0 +1,14 @@
+--- SRC/dgstrs.orig.c	2006-10-06 13:45:12.609375000 -0400
++++ SRC/dgstrs.c	2006-10-06 13:45:30.218750000 -0400
+@@ -121,6 +121,11 @@
+     else if ( ldb < SUPERLU_MAX(0, L->nrow) ||
+ 	      B->Stype != SLU_DN || B->Dtype != SLU_D || B->Mtype != SLU_GE )
+ 	*info = -6;
++	for (k = 0; k < L->nrow; k++) {
++		if((perm_r[k] < 0) || (perm_r[k] > (L->nrow-1))) {
++			*info = -5;
++		}
++	}
+     if ( *info ) {
+ 	i = -(*info);
+ 	xerbla_("dgstrs", &i);

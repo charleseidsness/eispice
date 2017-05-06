@@ -1,0 +1,7 @@
+calc.o: calc.c ../../include/log.h ../../include/data.h calc.h \
+  tokenizer.h parser.h
+main.o: main.c ../../include/log.h calc.h
+parser.o: parser.c ../../include/log.h tokenizer.h ../../include/data.h \
+  parser.h
+tokenizer.o: tokenizer.c ../../include/log.h ../../include/data.h \
+  tokenizer.h parser.h

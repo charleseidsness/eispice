@@ -1,0 +1,149 @@
+%include {
+/* 
+ * Copyright (C) 2006 Cooper Street Innovations Inc.
+ *	Charles Eidsness    <charles@cooper-street.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * 02110-1301, USA.
+ *
+ */
+
+	 
+	#include <math.h>
+	#include <log.h>
+	#include "tokenizer.h"
+	#include "parser.h"
+	
+	#define Ln(x)	log(fabs(x))
+	#define Div(x,y,m) \
+		((fabs(y) > (m))?((x)/(y)):(((y) > 0)?(x)/(m):(x)/(-(m))))
+	
+	typedef struct {
+		double f;	/* value of function */
+		double d;	/* value of derivative */
+	} derivData;
+}
+
+%token_type { token_* }
+%type   expr  { double }
+%type   eval  { double }
+%type   ans  { double }
+%type   diff  { derivData }
+%type   diff_eval  { derivData }
+%token_prefix    TOKEN_
+%extra_argument { double *solution }
+%parse_accept	{ Debug("Parsing Complete"); }
+%syntax_error	{ Error("Syntax Error"); *solution = sqrtf(-1.f); }
+%parse_failure	{ Error("Parser is lost..."); *solution = sqrtf(-1.f);}
+%stack_overflow	{ Error("Parser stack overflow"); *solution = sqrtf(-1.f);}
+
+%left PLUS MINUS.
+%left DIVIDE TIMES.
+%left POWER.
+%left NOT.
+%left ABS ACOSH ACOS ASINH ASIN ATANH ATAN COSH COS EXP LN LOG SINH SIN SQRT TAN URAMP U.
+%left LPAREN RPAREN.
+%left DIFF. 
+
+program ::= ans(A).   { Debug("Solution: %e", A); *solution = A; }
+
+ans(A) ::= expr(B). { A = B; }
+ans(A) ::= DIFF diff(B). { A = B.d; }
+ans(A) ::= EVAL eval(B). { A = B; }
+
+expr(A) ::= VARIABLE(B). { A = **B->variable; }
+expr(A) ::= ZERO_VARIABLE. { A = 0.0; }
+expr(A) ::= CONSTANT(B). { A = B->constant; }
+expr(A) ::= LPAREN expr(B) RPAREN. { A = B; }
+expr(A) ::= MINUS expr(B). [NOT] { A = -1*B; }
+expr(A) ::= expr(B) MINUS expr(C). { A = B - C; }
+expr(A) ::= expr(B) PLUS expr(C). { A = B + C; }
+expr(A) ::= expr(B) TIMES expr(C). { A = B * C; }
+expr(A) ::= expr(B) LPAREN expr(C) RPAREN. { A = B * C; }
+expr(A) ::= expr(B) DIVIDE(D) expr(C). { A = Div(B,C,(*D->minDiv)); }
+expr(A) ::= expr(B) POWER expr(C). { A = pow(B,C); }
+expr(A) ::= ABS expr(B) RPAREN.	 { A = fabs(B); }
+expr(A) ::= ACOSH expr(B) RPAREN. { A = acosh(B); }
+expr(A) ::= ACOS expr(B) RPAREN. { A = acos(B); }
+expr(A) ::= ASINH expr(B) RPAREN. { A = asinh(B); }
+expr(A) ::= ASIN expr(B) RPAREN. { A = asin(B); }
+expr(A) ::= ATANH expr(B) RPAREN. { A = atanh(B); }
+expr(A) ::= ATAN expr(B) RPAREN. { A = atan(B); }
+expr(A) ::= COSH expr(B) RPAREN. { A = cosh(B); }
+expr(A) ::= COS expr(B) RPAREN.	 { A = cos(B); }
+expr(A) ::= EXP expr(B) RPAREN.	 { A = exp(B); }
+expr(A) ::= LN expr(B) RPAREN. { A = Ln(B); }
+expr(A) ::= LOG expr(B) RPAREN.	 { A = log10(B); }
+expr(A) ::= SINH expr(B) RPAREN. { A = sinh(B); }
+expr(A) ::= SIN expr(B) RPAREN.	 { A = sin(B); }
+expr(A) ::= SQRT expr(B) RPAREN. { A = sqrt(B); }
+expr(A) ::= TAN expr(B) RPAREN.	 { A = tan(B); }
+expr(A) ::= URAMP expr(B) RPAREN. { A = ((B > 0) ? B : 0); }
+expr(A) ::= U expr(B) RPAREN. { A = ((B > 0) ? 1 : 0); }
+expr(A) ::= IF eval(B) RPAREN. { A = ((B) ? 1 : 0);}
+
+diff(A) ::= DIFF_VARIABLE(B). { A.f = **B->variable; A.d = 1.0; }
+diff(A) ::= VARIABLE(B). { A.f = **B->variable; A.d = 0.0; }
+diff(A) ::= CONSTANT(B). { A.f = B->constant; A.d = 0.0; }
+diff(A) ::= LPAREN diff(B) RPAREN. { A.f = B.f; A.d = B.d; }
+diff(A) ::= MINUS diff(B). [NOT] { A.f = -1*B.f; A.d = -1*B.d; }
+diff(A) ::= PLUS diff(B). [NOT] { A.f = B.f; A.d = B.d; }
+diff(A) ::= diff(B) PLUS diff(C). { A.f = B.f + C.f; A.d = B.d + C.d; }
+diff(A) ::= diff(B) MINUS diff(C). { A.f = B.f - C.f; A.d = B.d - C.d; }
+diff(A) ::= diff(B) TIMES diff(C). { A.f = B.f * C.f; A.d = B.d*C.f + B.f*C.d; }
+diff(A) ::= diff(B) LPAREN diff(C) RPAREN. { A.f = B.f * C.f; A.d = B.d*C.f + B.f*C.d; }
+diff(A) ::= diff(B) DIVIDE(D) diff(C). { A.f = Div(B.f,C.f,(*D->minDiv)); A.d = Div((B.d*C.f - B.f*C.d),(C.f*C.f),(*D->minDiv)); }
+diff(A) ::= diff(B) POWER(D) diff(C). { A.f = pow(B.f,C.f); A.d = pow(B.f,C.f) * ( B.d * Div(C.f, B.f, *D->minDiv) + (B.f ? C.d * Ln(B.f) : 0)); }
+diff(A) ::= ABS(D) diff(B) RPAREN.	 { A.f = fabs(B.f); A.d = Div(B.f,fabs(B.f),(*D->minDiv))*B.d; }
+diff(A) ::= ACOSH diff(B) RPAREN. { A.f = acosh(B.f); A.d = sinh(B.f)*B.d; }
+diff(A) ::= ACOS(D) diff(B) RPAREN. { A.f = acos(B.f); A.d = Div(-1,sqrt(1-B.f*B.f),(*D->minDiv))*B.d; }
+diff(A) ::= ASINH(D) diff(B) RPAREN. { A.f = asinh(B.f); A.d = Div(1,sqrt(1+B.f*B.f),(*D->minDiv))*B.d; }
+diff(A) ::= ASIN(D) diff(B) RPAREN. { A.f = asin(B.f); A.d = Div(1,sqrt(1-B.f*B.f),(*D->minDiv))*B.d; }
+diff(A) ::= ATANH(D) diff(B) RPAREN. { A.f = atanh(B.f); A.d = Div(1,(1-B.f*B.f),(*D->minDiv))*B.d; }
+diff(A) ::= ATAN(D) diff(B) RPAREN. { A.f = atan(B.f); A.d = Div(1,(1+B.f*B.f),(*D->minDiv))*B.d; }
+diff(A) ::= COSH diff(B) RPAREN. { A.f = cosh(B.f); A.d = sinh(B.f)*B.d; }
+diff(A) ::= COS diff(B) RPAREN.	 { A.f = cos(B.f); A.d = -1*sin(B.f)*B.d; }
+diff(A) ::= EXP diff(B) RPAREN.	 { A.f = exp(B.f);  A.d = exp(B.f)*B.d; }
+diff(A) ::= LN(D) diff(B) RPAREN. { A.f = Ln(B.f); A.d = Div(1,B.f,(*D->minDiv))*B.d; }
+diff(A) ::= LOG(D) diff(B) RPAREN.	 { A.f = log10(B.f); A.d = Div(1,(B.f*Ln(10)),(*D->minDiv))*B.d; }
+diff(A) ::= SINH diff(B) RPAREN. { A.f = sinh(B.f); A.d = cosh(B.f)*B.d; }
+diff(A) ::= SIN diff(B) RPAREN.	 { A.f = sin(B.f); A.d = cos(B.f)*B.d; }
+diff(A) ::= SQRT(D) diff(B) RPAREN. { A.f = sqrt(B.f); A.d = Div(1,(2*sqrt(B.f)),(*D->minDiv))*B.d; }
+diff(A) ::= TAN(D) diff(B) RPAREN.	 { A.f = tan(B.f); A.d = Div(1,cos(B.f),(*D->minDiv))*Div(1,cos(B.f),(*D->minDiv))*B.d; }
+diff(A) ::= URAMP diff(B) RPAREN. { A.f = ((B.f > 0) ? B.f : 0); A.d = (((B.f == 0)? 0.5 : ((B.f > 0) ? 1.0 : 0))*B.d); }
+diff(A) ::= U(D) diff(B) RPAREN. { A.f = ((B.f > 0) ? 1 : 0); A.d = ((B.f == 0)? 1/(*D->minDiv) : 0.0); }
+diff(A) ::= IF diff_eval(B) RPAREN. { A.f = (B.f) ? 1 : 0; A.d = 0.0; }
+
+eval(A) ::= LPAREN eval(B) RPAREN. { A = B; }
+eval(A) ::= expr(B) GREATERTHAN expr(C). { A = (B > C) ? 1 : 0; }
+eval(A) ::= expr(B) LESSTHAN expr(C). { A = (B < C) ? 1 : 0; }
+eval(A) ::= expr(B) GREATERTHAN EQUAL expr(C). { A = (B >= C) ? 1 : 0; }
+eval(A) ::= expr(B) LESSTHAN EQUAL expr(C). { A = (B <= C) ? 1 : 0; }
+eval(A) ::= expr(B) EQUAL EQUAL expr(C). { A = (B == C) ? 1 : 0; }
+eval(A) ::= expr(B) NOT EQUAL expr(C). { A = (B != C) ? 1 : 0; }
+eval(A) ::= NOT eval(B). { A = (B == 0) ? 1 : 0; }
+eval(A) ::= LPAREN eval(B) RPAREN AND AND LPAREN eval(C) RPAREN. { A = ((B == 1) && (C == 1)) ? 1 : 0; }
+eval(A) ::= LPAREN eval(B) RPAREN OR OR LPAREN eval(C) RPAREN. { A = ((B == 1) || (C == 1)) ? 1 : 0; }
+
+diff_eval(A) ::= LPAREN diff_eval(B) RPAREN. { A.f = B.f; }
+diff_eval(A) ::= diff(B) GREATERTHAN diff(C). { A.f = (B.f > C.f) ? 1 : 0; }
+diff_eval(A) ::= diff(B) LESSTHAN diff(C). { A.f = (B.f < C.f) ? 1 : 0; }
+diff_eval(A) ::= diff(B) GREATERTHAN EQUAL diff(C). { A.f = (B.f >= C.f) ? 1 : 0; }
+diff_eval(A) ::= diff(B) LESSTHAN EQUAL diff(C). { A.f = (B.f <= C.f) ? 1 : 0; }
+diff_eval(A) ::= diff(B) EQUAL EQUAL diff(C). { A.f = (B.f == C.f) ? 1 : 0; }
+diff_eval(A) ::= diff(B) NOT EQUAL diff(C). { A.f = (B.f != C.f) ? 1 : 0; }
+diff_eval(A) ::= NOT diff_eval(B). { A.f = (B.f == 0) ? 1 : 0; }
+diff_eval(A) ::= LPAREN diff_eval(B) RPAREN AND AND LPAREN diff_eval(C) RPAREN. { A.f = ((B.f == 1) && (C.f == 1)) ? 1 : 0; }
+diff_eval(A) ::= LPAREN diff_eval(B) RPAREN OR OR LPAREN diff_eval(C) RPAREN. { A.f = ((B.f == 1) || (C.f == 1)) ? 1 : 0; }
