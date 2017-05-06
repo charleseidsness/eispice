@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta name="eispice" content="eispice circuit simulator" />
+<meta name="Keywords" content="eispice, PCB, High Speed Digital, simulation, python" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="Distribution" content="Global" />
+<meta name="Author" content="Charles Eidsness" />
+<meta name="Robots" content="index,follow" />
+
+<link rel="stylesheet" href="default.css" type="text/css" />	
+
+<title>eispice</title>
+	
+</head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap"> 
+
+	<div id="header">	
+			
+		<h1 id="logo">ei<span class="orange">spice</span></h1>
+		<h2 id="slogan">An Open Source Circuit Simulator</h2>
+		
+	</div>		
+		
+	<!-- content-wrap starts here -->	
+	<div id="content-wrap">  
+	
+			<div id="sidebar">
+			
+				<h1>About</h1>
+				<ul class="sidemenu">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="screenshot.html">Screenshot</a></li>
+				</ul>
+				
+				<h1>Docs</h1>
+				<ul class="sidemenu">
+					<li><a href="manual.html">Manual</a></li>
+					<li><a href="examples.html">Examples</a></li>
+				</ul>
+				
+			</div>
+	
+	  		<div id="main"> 
+				
+				<a name="Introduction"></a>
+				<h1>
+					Introduction
+				</h1>
+				<p>
+					eispice is a clone of the Berkley SPICE 3 Simulation Engine. It was originally targeted toward PCB level Signal Integrity Simulation; simulating IBIS model defined devices, transmission lines, and passive termination but the scope of the tool has been slowly expanding to include more general purpose circuit simulation features.
+				</p>
+				<a name="The_Simulator"></a>
+				<h3>
+					The Simulator
+				</h3>
+				<p>
+					The simulation engine is written in C and utilizes the <a href="http://crd.lbl.gov/~xiaoye/SuperLU/">SuperLU</a> matrix library for solving the MNA Matrices. It should run faster than Berkley Spice for most IBIS based SI simulations (it's difficult to directly compare them because spice doesn't directly support IBIS models).
+				</p>
+				<a name="Models"></a>
+				<h3>
+					Models
+				</h3>
+				<p>
+					eispice contains a subset of standard spice3 device models. The intent is to one day be completely compliant with models available in the basic spice3f5 release. eispice also includes a set of unique models like direct IBIS model support, Python based Behavioral models, non-linear capacitors, etc. Refer to the <a href="examples.html">User's Manual</a> for more details about what's available in the current release.
+				</p>
+				<a name="Python"></a>
+				<h3>
+					Python
+				</h3>
+				<p>
+					Other than being the only Open Source simulator that provides native IBIS model support, the most unique feature of eispice is its <a href="http://www.python.org/">Python</a> based front-end. The eispice simulator is wrapped into a Python Module (the simulator itself is written in C) which makes it possible to use the Python language to control simulations and process results. For those familiar with Berkley Spice and not Python; a Python shell can be used in place of the nutmeg and Python scripts can be run like batch-mode SPICE.
+				</p>
+				<p>
+					One of the powers of Python is the ability to integrate different Python Modules. A great example of this is Thomas' <a href="http://myhdl.jandecaluwe.com/doku.php/projects:mixedmodesimulation">MyHDL/eispice Mixed-Mode Example</a>.
+				</p>
+				<a name="The_Plotter"></a>
+				<h3>
+					The Plotter
+				</h3>
+				<p>
+					eispice includes a very simple plot utility or you can use the Python Plotting tool of your choice, e.g. <a href="http://matplotlib.sourceforge.net/">matplotlib</a>.
+				</p>
+				
+	  		</div> 	
+	
+	<!-- content-wrap ends here -->	
+	</div>
+	
+<!-- wrap ends here -->
+</div>		
+
+</body>
+</html>

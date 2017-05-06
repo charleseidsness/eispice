@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<meta name="eispice" content="eispice circuit simulator" />
+<meta name="Keywords" content="eispice, PCB, High Speed Digital, simulation, python" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="Distribution" content="Global" />
+<meta name="Author" content="Charles Eidsness" />
+<meta name="Robots" content="index,follow" />
+
+<link rel="stylesheet" href="default.css" type="text/css" />
+
+<title>eispice</title>
+
+</head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap">
+
+	<div id="header">
+
+		<h1 id="logo">ei<span class="orange">spice</span></h1>
+		<h2 id="slogan">Examples</h2>
+
+	</div>
+
+	<!-- content-wrap starts here -->
+	<div id="content-wrap">
+
+			<div id="sidebar">
+
+				<h1>About</h1>
+				<ul class="sidemenu">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="screenshot.html">Screenshot</a></li>
+				</ul>
+
+				<h1>Docs</h1>
+				<ul class="sidemenu">
+					<li><a href="manual.html">Manual</a></li>
+					<li><a href="examples.html">Examples</a></li>
+				</ul>
+
+			</div>
+
+	  		<div id="main">
+				<a name="MyHDL"></a>
+					<p>
+					For a more advanced example check out Thomas' <a href="http://myhdl.org/doku.php/projects:mixedmodesimulation">MyHDL/eispice Mixed-Mode Example</a>.
+				</p>
+
+				<a name="capacitor.py"></a>
+				<h3>
+					capacitor.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Capacitor Test")<br/>
+					cct.Vx = eispice.V(1, eispice.GND, 4,<br/>
+					&nbsp;&nbsp;eispice.Pulse(4, 8, '10n', '2n', '3n', '5n', '20n'))<br/>
+					cct.Cx = eispice.C(1, eispice.GND, '10n')<br/>
+					cct.tran('0.5n', '100n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+				<a name="current_pulse.py"></a>
+				<h3>
+					current_pulse.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Current Pulse Test")<br/>
+					cct.Ix = eispice.I(1, eispice.GND, 4,<br/>
+					&nbsp;&nbsp;eispice.Pulse(4, 8, '10n', '2n', '3n', '5n', '20n'))<br/>
+					cct.Vx = eispice.V(2, 1, 0)<br/>
+					cct.Rx = eispice.R(2, eispice.GND, 10)<br/>
+					cct.tran('0.5n', '100n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+				<a name="ibis.py"></a>
+				<h3>
+					ibis.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					ibs = eispice.Ibis('test')<br/>
+					cct = eispice.Circuit('IBIS Test')<br/>
+					cct.Driver = ibs['2']('vs')<br/>
+					cct.Rt = eispice.R('vs', 'vi', 33.2)<br/>
+					cct.Tg = eispice.T('vi', 0, 'vo', 0, 50, '2n')<br/>
+					cct.Receiver = ibs['1']('vo')<br/>
+					cct.tran('0.01n', '20n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+				<a name="nonlinear_c.py"></a>
+				<h3>
+					nonlinear_c.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Non-Linear Capacitor Test")<br/>
+					wave = eispice.Pulse('1u', '10u', '10n', '5n', '3n', '5n', '50n')<br/>
+					cct.Vc = eispice.V(3, 0, '1n', wave)<br/>
+					cct.Vx = eispice.V(1, 0, 1,<br/>
+					&nbsp;&nbsp;eispice.Pulse('1m', '10m', '10n', '2n', '3n', '5n', '20n'))<br/>
+					cct.Cx = eispice.BC(1, 0, 'v(3)*10')<br/>
+					cct.tran('0.5n', '100n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+				<a name="nonlinear_i.py"></a>
+				<h3>
+					nonlinear_i.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Nonlinear Current Test")<br/>
+					cct.Rv = eispice.R(1, eispice.GND, 10)<br/>
+					cct.Vx = eispice.V(1, eispice.GND, 7)<br/>
+					cct.Rb = eispice.R(2, eispice.GND, 3)<br/>
+					cct.Bx = eispice.B(2, eispice.GND, eispice.Current,<br/>
+					&nbsp;&nbsp;"4.739057e-04 * (uramp( v(2,0) --5.060000e+00)) + sqrt(v(1)) / sinh(i(Vx))")<br/>
+					cct.op()<br/>
+					cct.check(1, 7)<br/>
+					cct.check(2, 10.44121563)<br/>
+					cct.check('Vx', -0.7, eispice.Current)<br/>
+				</code></p>
+
+				<a name="nonlinear_time.py"></a>
+				<h3>
+					nonlinear_time.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Nonlinear Time Test")<br/>
+					cct.Rb = eispice.R(2, eispice.GND, 3)<br/>
+					cct.Bx = eispice.B(2, eispice.GND, eispice.Voltage, 'sin(2*3.14159*100e6*time)')<br/>
+					cct.tran('0.5n', '15n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+				<a name="pyb_fets.py"></a>
+				<h3>
+					pyb_fets.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit('PyB Defined Behavioral MOS Divider Test')<br/>
+					class PMOS(eispice.PyB):<br/>
+					&nbsp;&nbsp;def __init__(self, d, g, s, k=2.0e-6, w=2, l=1, power=2.0):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;eispice.PyB.__init__(self, d, s, eispice.Current, self.v(g), self.v(s))<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Vt = 0.7<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.beta = k * (w/l)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.power = power<br/>
+					&nbsp;&nbsp;def model(self, Vg, Vs):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;if ((Vs - Vg) > self.Vt):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -0.5* self.beta * (Vs - Vg - self.Vt)**self.power<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;else:<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0.0<br/>
+					class NMOS(eispice.PyB):<br/>
+					&nbsp;&nbsp;def __init__(self, d, g, s, k=5.0e-6, w=2, l=1, power=2.0):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;eispice.PyB.__init__(self, d, s, eispice.Current, self.v(g), self.v(s))<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Vt = 0.7<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.beta = k * (w/l)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.power = power<br/>
+					&nbsp;&nbsp;def model(self, Vg, Vs):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;if ((Vg - Vs) > self.Vt):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0.5* self.beta * (Vg - Vs - self.Vt)**self.power<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;else:<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0.0<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.Vcc = eispice.V('vcc', eispice.GND, 3.3)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.Mx = PMOS('vg', 'vg', 'vcc', k=2.0e-6)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.My = NMOS('vg', 'vg', eispice.GND, k=5.0e-6)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.Rl = eispice.R('vg', eispice.GND, '10G')<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.op()<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;cct.check('vg', 1.436097)<br/>
+				</code></p>
+
+				<a name="subckt.py"></a>
+				<h3>
+					subckt.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					class Subckt1(eispice.Subckt):<br/>
+					&nbsp;&nbsp;def __init__(self, pNode, nNode, Rx, Ry):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Rx = eispice.R(pNode, self.node('node'), Rx)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Ry = eispice.R(nNode, self.node('node'), Ry)<br/>
+					class Subckt2(eispice.Subckt):<br/>
+					&nbsp;&nbsp;def __init__(self, pNode, nNode, Rx, Ry):<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Rx = eispice.R(pNode, self.node('node'), Rx)<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;self.Xy = Subckt1(nNode, self.node('node'), Rx, Ry)<br/>
+					cct = eispice.Circuit("Subckt Test")<br/>
+					cct.Vx = eispice.V(1, 0, 10)<br/>
+					cct.Xx = Subckt2(1, 0, 100, 100)<br/>
+					cct.op()<br/>
+					cct.check('Vx', -10.0 / 300.0, eispice.Current)<br/>
+				</code></p>
+
+				<a name="tline.py"></a>
+				<h3>
+					tline.py
+				</h3>
+				<p><code>
+					import eispice<br/>
+					cct = eispice.Circuit("Simple Transmission Line Model Test")<br/>
+					wave = eispice.Pulse(0, 1, '15n', '1n', '1n', '15n', '100n')<br/>
+					cct.Vs = eispice.V('vs', eispice.GND, 0, wave)<br/>
+					cct.Rs = eispice.R('vs', 'vi', 30)<br/>
+					cct.Tg = eispice.T('vi', eispice.GND, 'vo', eispice.GND, 50, '5n', 0.5)<br/>
+					cct.Rl = eispice.R('vo', eispice.GND, '10k')<br/>
+					cct.Cl = eispice.C('vo', eispice.GND, '5p')<br/>
+					cct.tran('0.1n', '200n')<br/>
+					eispice.plot(cct)<br/>
+				</code></p>
+
+	  		</div>
+
+			<div id="rightbar">
+
+				<h1>
+					Examples
+				</h1>
+				<p>
+					<a href="#MyHDL">MyHDL/eispice</a><br/>
+					<a href="#capacitor.py">capacitor.py</a><br/>
+					<a href="#current_pulse.py">current_pulse.py</a><br/>
+					<a href="#ibis.py">ibis.py</a><br/>
+					<a href="#nonlinear_c.py">nonlinear_c.py</a><br/>
+					<a href="#nonlinear_i.py">nonlinear_i.py</a><br/>
+					<a href="#nonlinear_time.py">nonlinear_time.py</a><br/>
+					<a href="#pyb_fets.py">pyb_fets.py</a><br/>
+					<a href="#subckt.py">subckt.py</a><br/>
+					<a href="#tline.py">tline.py</a><br/>
+				</p>
+
+
+			</div>
+
+	<!-- content-wrap ends here -->
+	</div>
+
+<!-- wrap ends here -->
+</div>
+
+</body>
+</html>
