@@ -26,6 +26,7 @@ ifeq ($(OS), Windows_NT)
 else
 	CFLAGS 	+= -fPIC
 	FFLAGS	+= -fPIC
+	NOOPT   += -fPIC
 endif
 
 LIB = liblapack.a
