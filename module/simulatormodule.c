@@ -60,7 +60,7 @@ static PyMemberDef pwMembers[] = {
 static void pwDestroy(pw_ *r)
 {
     Py_XDECREF(r->pw);
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -104,7 +104,7 @@ static int pwlInit(pw_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject pwlType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.pw",
     .tp_basicsize = sizeof(pw_),
     .tp_dealloc = (destructor)pwDestroy,
@@ -118,7 +118,7 @@ static PyTypeObject pwlType = {
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject pwcType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.pw",
     .tp_basicsize = sizeof(pw_),
     .tp_dealloc = (destructor)pwDestroy,
@@ -157,7 +157,7 @@ static PyMemberDef sffmMembers[] = {
 
 static void sffmDestroy(sffm_ *r)
 {
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -179,7 +179,7 @@ static int sffmInit(sffm_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject sffmType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.sffm",
     .tp_basicsize = sizeof(sffm_),
     .tp_dealloc = (destructor)sffmDestroy,
@@ -220,7 +220,7 @@ static PyMemberDef expMembers[] = {
 
 static void expDestroy(exp_ *r)
 {
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -243,7 +243,7 @@ static int expInit(exp_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject expType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.exp",
     .tp_basicsize = sizeof(exp_),
     .tp_dealloc = (destructor)expDestroy,
@@ -286,7 +286,7 @@ static PyMemberDef pulseMembers[] = {
 
 static void pulseDestroy(pulse_ *r)
 {
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -310,7 +310,7 @@ static int pulseInit(pulse_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject pulseType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.pulse",
     .tp_basicsize = sizeof(pulse_),
     .tp_dealloc = (destructor)pulseDestroy,
@@ -353,7 +353,7 @@ static PyMemberDef gaussMembers[] = {
 
 static void gaussDestroy(gauss_ *r)
 {
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -377,7 +377,7 @@ static int gaussInit(gauss_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject gaussType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.gauss",
     .tp_basicsize = sizeof(gauss_),
     .tp_dealloc = (destructor)gaussDestroy,
@@ -416,7 +416,7 @@ static PyMemberDef sinMembers[] = {
 
 static void sinDestroy(sin_ *r)
 {
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -438,7 +438,7 @@ static int sinInit(sin_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject sinType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.sin",
     .tp_basicsize = sizeof(sin_),
     .tp_dealloc = (destructor)sinDestroy,
@@ -479,7 +479,7 @@ static void deviceDestroy(device_ *r)
 {
     Debug("Destroying Device");
     Py_XDECREF(r->node);
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -498,7 +498,7 @@ static int deviceInit(device_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject deviceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.Device",
     .tp_basicsize = sizeof(device_),
     .tp_dealloc = (destructor)deviceDestroy,
@@ -546,7 +546,7 @@ static PyMemberDef vicurveMembers[] = {
 
 static int vicurveSetAttr(vicurve_ *r, PyObject *name, PyObject *stimulus)
 {
-    if(!strcmp(PyString_AsString(name), "VI")) {
+    if(!strcmp(PyUnicode_AsUTF8(name), "VI")) {
         ReturnErrIf(!(PyObject_TypeCheck(stimulus, &pwlType)
                 || PyObject_TypeCheck(stimulus, &pwcType)),
                 "Must be a PW object");
@@ -556,7 +556,7 @@ static int vicurveSetAttr(vicurve_ *r, PyObject *name, PyObject *stimulus)
         r->vi = (pw_*)stimulus;
         r->viData = (double *)&((pw_*)stimulus)->pw->data;
         r->viLength = ((pw_*)stimulus)->pw->dimensions[0];
-    } else if(!strcmp(PyString_AsString(name), "TA")) {
+    } else if(!strcmp(PyUnicode_AsUTF8(name), "TA")) {
         ReturnErrIf(r->ta == NULL, "Can't add a multiplier to a pre-existing "
             "VI-Curve with no multiplier.");
         ReturnErrIf(!(PyObject_TypeCheck(stimulus, &pwlType)
@@ -617,7 +617,7 @@ static int vicurveInit(vicurve_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject vicurveType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.VICurve",
     .tp_basicsize = sizeof(vicurve_),
     .tp_dealloc = (destructor)vicurveDestroy,
@@ -635,9 +635,9 @@ static PyTypeObject vicurveType = {
 static int vicurveAdd(vicurve_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddVICurve(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             &r->viData, &r->viLength, r->viType, &r->taData, &r->taLength,
             r->taType));
     return 0;
@@ -687,7 +687,7 @@ static int tlineInit(tline_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject tlineType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.TLine",
     .tp_basicsize = sizeof(tline_),
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
@@ -703,11 +703,11 @@ static PyTypeObject tlineType = {
 static int tlineAdd(tline_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddTLine(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 2)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 3)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 2)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 3)),
             &r->Z0, &r->Td, &r->loss));
     return 0;
 }
@@ -797,7 +797,7 @@ static int tlineWInit(tlineW_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject tlineWType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.TLineW",
     .tp_basicsize = sizeof(tlineW_),
     .tp_dealloc = (destructor)tlineWDestroy,
@@ -820,11 +820,11 @@ static int tlineWAdd(tlineW_ *r, simulator_ *simulator, PyObject *name)
     numNodes = PyTuple_Size(((device_*)r)->node);
     nodes = malloc(sizeof(char *)*numNodes);
     for(i = 0; i < numNodes; i++) {
-        nodes[i] = PyString_AsString(PyTuple_GetItem(((device_*)r)->node, i));
+        nodes[i] = PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, i));
     }
 
     ReturnErrIf(simulatorAddTLineW(simulator,
-            PyString_AsString(name),
+            PyUnicode_AsUTF8(name),
             nodes, numNodes,
             &r->M,
             &r->len,
@@ -949,8 +949,8 @@ static int sourceSetStimulus(source_ *r, PyObject *stimulus)
 
 static int sourceSetAttr(source_ *r, PyObject *name, PyObject *stimulus)
 {
-    if(!strcmp(PyString_AsString(name), "wave")) {
-        ReturnErrIf(stimulus->ob_type != r->stimulus->ob_type,
+    if(!strcmp(PyUnicode_AsUTF8(name), "wave")) {
+        ReturnErrIf(Py_TYPE(stimulus) != Py_TYPE(r->stimulus),
                 "Can't change stimulus type");
         ReturnErrIf(sourceSetStimulus(r, stimulus));
     } else {
@@ -1002,7 +1002,7 @@ static int vSourceInit(source_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject iSourceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.source",
     .tp_basicsize = sizeof(source_),
     .tp_dealloc = (destructor)sourceDestroy,
@@ -1018,7 +1018,7 @@ static PyTypeObject iSourceType = {
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject vSourceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.Source",
     .tp_basicsize = sizeof(source_),
     .tp_dealloc = (destructor)sourceDestroy,
@@ -1036,9 +1036,9 @@ static PyTypeObject vSourceType = {
 static int sourceAdd(source_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddSource(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             r->type, &r->dc,r->stimulusType, r->args));
     return 0;
 }
@@ -1077,7 +1077,7 @@ static int nlSourceInit(nlSource_ *r, PyObject *args, PyObject *kwds)
     char *type;
     static char *kwlist[] = {"pNode", "nNode", "type", "equation", NULL};
 
-    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsS:B", kwlist,
+    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOuU:B", kwlist,
             &pNode, &nNode, &type, &r->equation));
 
     DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
@@ -1091,7 +1091,7 @@ static int nlSourceInit(nlSource_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject nlSourceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.NLSource",
     .tp_basicsize = sizeof(nlSource_),
     .tp_dealloc = (destructor)nlSourceDestroy,
@@ -1108,11 +1108,11 @@ static PyTypeObject nlSourceType = {
 static int nlSourceAdd(nlSource_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddNonlinearSource(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             r->type,
-            PyString_AsString(r->equation)));
+            PyUnicode_AsUTF8(r->equation)));
     return 0;
 }
 
@@ -1164,7 +1164,7 @@ static int cbSourceInit(cbSource_ *r, PyObject *args, PyObject *kwds)
     static char *kwlist[] = {"pNode", "nNode", "type", "variables",
             "callback", NULL};
 
-    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsOO:CB", kwlist,
+    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOuOO:CB", kwlist,
             &pNode, &nNode, &type, &r->variables, &r->callback));
 
     DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
@@ -1196,7 +1196,7 @@ static int cbSourceInit(cbSource_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject cbSourceType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.CBSource",
     .tp_basicsize = sizeof(cbSource_),
     .tp_dealloc = (destructor)cbSourceDestroy,
@@ -1242,13 +1242,13 @@ static int cbSourceAdd(cbSource_ *r, simulator_ *simulator, PyObject *name)
     ReturnErrIf(vars == NULL);
 
     for(i = 0; i < numVars; i++) {
-        vars[i] = PyString_AsString(PyTuple_GetItem(r->variables, i));
+        vars[i] = PyUnicode_AsUTF8(PyTuple_GetItem(r->variables, i));
     }
 
     ReturnErrIf(simulatorAddCallbackSource(simulator,
-                PyString_AsString(name),
-                PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-                PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+                PyUnicode_AsUTF8(name),
+                PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+                PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
                 r->type, vars, (double*)r->values->data,
                 (double*)r->derivs->data, numVars, cbSourceCallback,
                 (void*)r));
@@ -1292,7 +1292,7 @@ static int inductorInit(inductor_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject inductorType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.Inductor",
     .tp_basicsize = sizeof(inductor_),
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
@@ -1308,9 +1308,9 @@ static PyTypeObject inductorType = {
 static int inductorAdd(inductor_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddInductor(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             &r->L));
     return 0;
 }
@@ -1349,7 +1349,7 @@ static int capacitorInit(capacitor_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject capacitorType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.Capacitor",
     .tp_basicsize = sizeof(capacitor_),
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
@@ -1365,9 +1365,9 @@ static PyTypeObject capacitorType = {
 static int capacitorAdd(capacitor_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddCapacitor(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             &r->C));
     return 0;
 }
@@ -1407,7 +1407,7 @@ static int resistorInit(resistor_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject resistorType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.Resistor",
     .tp_basicsize = sizeof(resistor_),
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
@@ -1423,9 +1423,9 @@ static PyTypeObject resistorType = {
 static int resistorAdd(resistor_ *r, simulator_ *simulator, PyObject *name)
 {
     ReturnErrIf(simulatorAddResistor(simulator,
-            PyString_AsString(name),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
-            PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
+            PyUnicode_AsUTF8(name),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 0)),
+            PyUnicode_AsUTF8(PyTuple_GetItem(((device_*)r)->node, 1)),
             &r->R));
     return 0;
 }
@@ -1454,7 +1454,7 @@ static void circuitDestroy(circuit_ *r)
     if(simulatorDestroy(&r->simulator)) {
         Warn("Failed to destroy simulator");
     }
-    r->ob_type->tp_free((PyObject*)r);
+    Py_TYPE(r)->tp_free(r);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1482,7 +1482,7 @@ static int circuitBuildNames(circuit_ *r, char **vars, int dims[2])
     r->variables = PyList_New(dims[1]);
     for(i = 0; i < dims[1]; i++) {
         ReturnErrIf(PyList_SetItem(r->variables, i,
-                PyString_FromString(vars[i])));
+                PyUnicode_FromString(vars[i])));
     }
     free(vars);
     return 0;
@@ -1581,7 +1581,7 @@ static int circuitSetAttr(circuit_ *r, PyObject *name, PyObject *device)
     ReturnErrIf(device == NULL, "Device removal not supported.");
 
     ReturnErrIf(PyDict_GetItem(r->devices, name) != NULL,
-            "Device %s already exists.", PyString_AsString(name));
+            "Device %s already exists.", PyUnicode_AsUTF8(name));
 
     if(PyObject_TypeCheck(device, &inductorType)) {
         /* Inductor */
@@ -1627,7 +1627,7 @@ static int circuitInit(circuit_ *r, PyObject *args, PyObject *kwds)
     static char *kwlist[] = {"title", NULL};
 
     r->title = NULL;
-    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "|S:circuit", kwlist,
+    ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "|U:circuit", kwlist,
             &r->title));
     Py_XINCREF(r->title);
 
@@ -1647,7 +1647,7 @@ static int circuitInit(circuit_ *r, PyObject *args, PyObject *kwds)
 /*---------------------------------------------------------------------------*/
 
 static PyTypeObject circuitType = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "simulator.CircuitBase",
     .tp_basicsize = sizeof(circuit_),
     .tp_dealloc = (destructor)circuitDestroy,
@@ -1707,7 +1707,7 @@ static PyObject * about(PyObject *self, PyObject *args)
 }
 
 /*===========================================================================
- |                                  esipice                                  |
+ |                                  eispice                                  |
   ===========================================================================*/
 
 static PyMethodDef simulatorMethods[] = {
@@ -1730,37 +1730,49 @@ void simulatorCleanup(void)
 
 PyDoc_STRVAR(simulatorDoc, "Circuit Simulator");
 
-PyMODINIT_FUNC initsimulator_(void)
+/* Create the module and add the functions */
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "simulator_",     /* m_name */
+    simulatorDoc,  /* m_doc */
+    -1,                  /* m_size */
+    simulatorMethods,    /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
+
+static PyObject * moduleinit(void)
 {
     PyObject *m;
 
-    if (PyType_Ready(&circuitType) < 0)        return;
-    if (PyType_Ready(&inductorType) < 0)    return;
-    if (PyType_Ready(&capacitorType) < 0)    return;
-    if (PyType_Ready(&resistorType) < 0)    return;
-    if (PyType_Ready(&nlSourceType) < 0)    return;
-    if (PyType_Ready(&cbSourceType) < 0)    return;
-    if (PyType_Ready(&iSourceType) < 0)        return;
-    if (PyType_Ready(&vSourceType) < 0)        return;
-    if (PyType_Ready(&sinType) < 0)            return;
-    if (PyType_Ready(&gaussType) < 0)        return;
-    if (PyType_Ready(&pulseType) < 0)        return;
-    if (PyType_Ready(&expType) < 0)            return;
-    if (PyType_Ready(&sffmType) < 0)        return;
-    if (PyType_Ready(&pwlType) < 0)            return;
-    if (PyType_Ready(&pwcType) < 0)            return;
-    if (PyType_Ready(&tlineType) < 0)        return;
-    if (PyType_Ready(&tlineWType) < 0)        return;
-    if (PyType_Ready(&vicurveType) < 0)        return;
-    if (PyType_Ready(&deviceType) < 0)        return;
+    m = PyModule_Create(&moduledef);
+
+    if (m == NULL)    return NULL;
+
+    if (PyType_Ready(&circuitType) < 0)    return NULL;
+    if (PyType_Ready(&inductorType) < 0)    return NULL;
+    if (PyType_Ready(&capacitorType) < 0)    return NULL;
+    if (PyType_Ready(&resistorType) < 0)    return NULL;
+    if (PyType_Ready(&nlSourceType) < 0)    return NULL;
+    if (PyType_Ready(&cbSourceType) < 0)    return NULL;
+    if (PyType_Ready(&iSourceType) < 0)    return NULL;
+    if (PyType_Ready(&vSourceType) < 0)    return NULL;
+    if (PyType_Ready(&sinType) < 0)        return NULL;
+    if (PyType_Ready(&gaussType) < 0)    return NULL;
+    if (PyType_Ready(&pulseType) < 0)    return NULL;
+    if (PyType_Ready(&expType) < 0)        return NULL;
+    if (PyType_Ready(&sffmType) < 0)    return NULL;
+    if (PyType_Ready(&pwlType) < 0)        return NULL;
+    if (PyType_Ready(&pwcType) < 0)        return NULL;
+    if (PyType_Ready(&tlineType) < 0)    return NULL;
+    if (PyType_Ready(&tlineWType) < 0)    return NULL;
+    if (PyType_Ready(&vicurveType) < 0)    return NULL;
+    if (PyType_Ready(&deviceType) < 0)    return NULL;
 
     /* Import the array object */
     import_array();
-
-    /* Create the module and add the functions */
-    m = Py_InitModule3("simulator_", simulatorMethods, simulatorDoc);
-    if (m == NULL)
-        return;
 
     Py_INCREF(&circuitType);
     PyModule_AddObject(m, "Circuit_", (PyObject *)&circuitType);
@@ -1787,7 +1799,12 @@ PyMODINIT_FUNC initsimulator_(void)
 
     Py_AtExit(simulatorCleanup);
 
+    return m;
+}
+
+PyMODINIT_FUNC PyInit_simulator_(void)
+{
+    return moduleinit();
 }
 
 /*===========================================================================*/
-
