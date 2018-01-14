@@ -9,7 +9,7 @@ typedef enum {
     SLU_NR,    /* row-wize, no supernode */
     SLU_SC,    /* column-wise, supernode */
     SLU_SR,    /* row-wise, supernode */
-    SLU_NCP,   /* column-wise, column-permuted, no supernode 
+    SLU_NCP,   /* column-wise, column-permuted, no supernode
                   (The consecutive columns of nonzeros, after permutation,
 		   may not be stored  contiguously.) */
     SLU_DN     /* Fortran style column-wise storage for dense matrix */
@@ -35,10 +35,10 @@ typedef enum {
 } Mtype_t;
 
 typedef struct {
-	Stype_t Stype; /* Storage type: interprets the storage structure 
+	Stype_t Stype; /* Storage type: interprets the storage structure
 		   	  pointed to by *Store. */
 	Dtype_t Dtype; /* Data type. */
-	Mtype_t Mtype; /* Matrix type: describes the mathematical property of 
+	Mtype_t Mtype; /* Matrix type: describes the mathematical property of
 			  the matrix. */
 	int_t  nrow;   /* number of rows */
 	int_t  ncol;   /* number of columns */
@@ -54,7 +54,7 @@ typedef struct {
     int_t  nnz;	    /* number of nonzeros in the matrix */
     void   *nzval;  /* pointer to array of nonzero values, packed by column */
     int_t  *rowind; /* pointer to array of row indices of the nonzeros */
-    int_t  *colptr; /* pointer to array of beginning of columns in nzval[] 
+    int_t  *colptr; /* pointer to array of beginning of columns in nzval[]
 		       and rowind[]  */
                     /* Note:
 		       Zero-based indexing is used;
@@ -67,7 +67,7 @@ typedef struct {
     int_t nnz;	   /* number of nonzeros in the matrix */
     void  *nzval;  /* pointer to array of nonzero values, packed by row */
     int_t *colind; /* pointer to array of column indices of the nonzeros */
-    int_t *rowptr; /* pointer to array of beginning of rows in nzval[] 
+    int_t *rowptr; /* pointer to array of beginning of rows in nzval[]
                       and colind[]  */
                    /* Note:
 		      Zero-based indexing is used;
@@ -82,12 +82,12 @@ typedef struct {
   int_t  nsuper;     /* number of supernodes, minus 1 */
   void *nzval;       /* pointer to array of nonzero values, packed by column */
   int_t *nzval_colptr;/* pointer to array of beginning of columns in nzval[] */
-  int_t *rowind;     /* pointer to array of compressed row indices of 
+  int_t *rowind;     /* pointer to array of compressed row indices of
 			rectangular supernodes */
   int_t *rowind_colptr;/* pointer to array of beginning of columns in rowind[] */
-  int_t *col_to_sup; /* col_to_sup[j] is the supernode number to which column 
+  int_t *col_to_sup; /* col_to_sup[j] is the supernode number to which column
 			j belongs; mapping from column to supernode number. */
-  int_t *sup_to_col; /* sup_to_col[s] points to the start of the s-th 
+  int_t *sup_to_col; /* sup_to_col[s] points to the start of the s-th
 			supernode; mapping from supernode number to column.
 		        e.g.: col_to_sup: 0 1 2 2 3 3 3 4 4 4 4 4 4 (ncol=12)
 		              sup_to_col: 0 1 2 4 7 12           (nsuper=4) */
@@ -107,14 +107,14 @@ typedef struct {
     void *nzval;  /* pointer to array of nonzero values, packed by column */
     int_t *rowind;/* pointer to array of row indices of the nonzeros */
 		  /* Note: nzval[]/rowind[] always have the same length */
-    int_t *colbeg;/* colbeg[j] points to the beginning of column j in nzval[] 
+    int_t *colbeg;/* colbeg[j] points to the beginning of column j in nzval[]
                      and rowind[]  */
     int_t *colend;/* colend[j] points to one past the last element of column
 		     j in nzval[] and rowind[]  */
 		  /* Note:
 		     Zero-based indexing is used;
-		     The consecutive columns of the nonzeros may not be 
-		     contiguous in storage, because the matrix has been 
+		     The consecutive columns of the nonzeros may not be
+		     contiguous in storage, because the matrix has been
 		     postmultiplied by a column permutation matrix. */
 } NCPformat;
 

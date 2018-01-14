@@ -42,7 +42,7 @@ typedef int int_t; /* default */
  * NOCHANGE indicates that fortran will be calling, and that it expects
  * the name called by fortran to be identical to that compiled by the C
  * (RS6K's do this).  UPCASE says it expects C routines called by fortran
- * to be in all upcase (CRAY wants this). 
+ * to be in all upcase (CRAY wants this).
  */
 
 #define ADD_       0
@@ -89,7 +89,7 @@ typedef int int_t; /* default */
 #if (F77_CALL_C == ADD__)
 /*
  * These defines set up the naming scheme required to have a fortran 77
- * routine call a C routine 
+ * routine call a C routine
  * for following Fortran to C interface:
  *           FORTRAN CALL               C DECLARATION
  *           call dgemm(...)           void dgemm__(...)
@@ -180,7 +180,7 @@ typedef int int_t; /* default */
 #if (F77_CALL_C == UPCASE)
 /*
  * These defines set up the naming scheme required to have a fortran 77
- * routine call a C routine 
+ * routine call a C routine
  * following Fortran to C interface:
  *           FORTRAN CALL               C DECLARATION
  *           call dgemm(...)           void DGEMM(...)
@@ -271,7 +271,7 @@ typedef int int_t; /* default */
 #if (F77_CALL_C == NOCHANGE)
 /*
  * These defines set up the naming scheme required to have a fortran 77
- * routine call a C routine 
+ * routine call a C routine
  * for following Fortran to C interface:
  *           FORTRAN CALL               C DECLARATION
  *           call dgemm(...)           void dgemm(...)
@@ -374,7 +374,7 @@ typedef enum {
     SLU_NR,    /* row-wize, no supernode */
     SLU_SC,    /* column-wise, supernode */
     SLU_SR,    /* row-wise, supernode */
-    SLU_NCP,   /* column-wise, column-permuted, no supernode 
+    SLU_NCP,   /* column-wise, column-permuted, no supernode
                   (The consecutive columns of nonzeros, after permutation,
 		   may not be stored  contiguously.) */
     SLU_DN     /* Fortran style column-wise storage for dense matrix */
@@ -400,10 +400,10 @@ typedef enum {
 } Mtype_t;
 
 typedef struct {
-	Stype_t Stype; /* Storage type: interprets the storage structure 
+	Stype_t Stype; /* Storage type: interprets the storage structure
 		   	  pointed to by *Store. */
 	Dtype_t Dtype; /* Data type. */
-	Mtype_t Mtype; /* Matrix type: describes the mathematical property of 
+	Mtype_t Mtype; /* Matrix type: describes the mathematical property of
 			  the matrix. */
 	int_t  nrow;   /* number of rows */
 	int_t  ncol;   /* number of columns */
@@ -419,7 +419,7 @@ typedef struct {
     int_t  nnz;	    /* number of nonzeros in the matrix */
     void   *nzval;  /* pointer to array of nonzero values, packed by column */
     int_t  *rowind; /* pointer to array of row indices of the nonzeros */
-    int_t  *colptr; /* pointer to array of beginning of columns in nzval[] 
+    int_t  *colptr; /* pointer to array of beginning of columns in nzval[]
 		       and rowind[]  */
                     /* Note:
 		       Zero-based indexing is used;
@@ -432,7 +432,7 @@ typedef struct {
     int_t nnz;	   /* number of nonzeros in the matrix */
     void  *nzval;  /* pointer to array of nonzero values, packed by row */
     int_t *colind; /* pointer to array of column indices of the nonzeros */
-    int_t *rowptr; /* pointer to array of beginning of rows in nzval[] 
+    int_t *rowptr; /* pointer to array of beginning of rows in nzval[]
                       and colind[]  */
                    /* Note:
 		      Zero-based indexing is used;
@@ -447,12 +447,12 @@ typedef struct {
   int_t  nsuper;     /* number of supernodes, minus 1 */
   void *nzval;       /* pointer to array of nonzero values, packed by column */
   int_t *nzval_colptr;/* pointer to array of beginning of columns in nzval[] */
-  int_t *rowind;     /* pointer to array of compressed row indices of 
+  int_t *rowind;     /* pointer to array of compressed row indices of
 			rectangular supernodes */
   int_t *rowind_colptr;/* pointer to array of beginning of columns in rowind[] */
-  int_t *col_to_sup; /* col_to_sup[j] is the supernode number to which column 
+  int_t *col_to_sup; /* col_to_sup[j] is the supernode number to which column
 			j belongs; mapping from column to supernode number. */
-  int_t *sup_to_col; /* sup_to_col[s] points to the start of the s-th 
+  int_t *sup_to_col; /* sup_to_col[s] points to the start of the s-th
 			supernode; mapping from supernode number to column.
 		        e.g.: col_to_sup: 0 1 2 2 3 3 3 4 4 4 4 4 4 (ncol=12)
 		              sup_to_col: 0 1 2 4 7 12           (nsuper=4) */
@@ -472,14 +472,14 @@ typedef struct {
     void *nzval;  /* pointer to array of nonzero values, packed by column */
     int_t *rowind;/* pointer to array of row indices of the nonzeros */
 		  /* Note: nzval[]/rowind[] always have the same length */
-    int_t *colbeg;/* colbeg[j] points to the beginning of column j in nzval[] 
+    int_t *colbeg;/* colbeg[j] points to the beginning of column j in nzval[]
                      and rowind[]  */
     int_t *colend;/* colend[j] points to one past the last element of column
 		     j in nzval[] and rowind[]  */
 		  /* Note:
 		     Zero-based indexing is used;
-		     The consecutive columns of the nonzeros may not be 
-		     contiguous in storage, because the matrix has been 
+		     The consecutive columns of the nonzeros may not be
+		     contiguous in storage, because the matrix has been
 		     postmultiplied by a column permutation matrix. */
 } NCPformat;
 
@@ -565,7 +565,7 @@ typedef struct {
 #define SUPERLU_MIN(x, y) 	( (x) < (y) ? (x) : (y) )
 
 /***********************************************************************
- * Constants 
+ * Constants
  ***********************************************************************/
 #define EMPTY	(-1)
 /*#define NO	(-1)*/
@@ -586,8 +586,8 @@ typedef enum {LUSUP, UCOL, LSUB, USUB}                          MemType;
 typedef enum {HEAD, TAIL}                                       stack_end_t;
 typedef enum {SYSTEM, USER}                                     LU_space_t;
 
-/* 
- * The following enumerate type is used by the statistics variable 
+/*
+ * The following enumerate type is used by the statistics variable
  * to keep track of flop count and time spent at various stages.
  *
  * Note that not all of the fields are disjoint.
@@ -614,7 +614,7 @@ typedef enum {
 typedef float    flops_t;
 typedef unsigned char Logical;
 
-/* 
+/*
  *-- This contains the options used to control the solve process.
  *
  * Fact   (fact_t)
@@ -626,7 +626,7 @@ typedef unsigned char Logical;
  *        = SamePattern: The matrix A will be factorized assuming
  *             that a factorization of a matrix with the same sparsity
  *             pattern was performed prior to this one. Therefore, this
- *             factorization will reuse column permutation vector 
+ *             factorization will reuse column permutation vector
  *             ScalePermstruct->perm_c and the column elimination tree
  *             LUstruct->etree.
  *        = SamePattern_SameRowPerm: The matrix A will be factorized
@@ -636,7 +636,7 @@ typedef unsigned char Logical;
  *             both row and column scaling factors R and C, both row and
  *             column permutation vectors perm_r and perm_c, and the
  *             data structure set up from the previous symbolic factorization.
- *        = FACTORED: On entry, L, U, perm_r and perm_c contain the 
+ *        = FACTORED: On entry, L, U, perm_r and perm_c contain the
  *              factored form of A. If DiagScale is not NOEQUIL, the matrix
  *              A has been equilibrated with scaling factors R and C.
  *
@@ -646,12 +646,12 @@ typedef unsigned char Logical;
  *
  * ColPerm (colperm_t)
  *        Specifies what type of column permutation to use to reduce fill.
- *        = NATURAL: use the natural ordering 
+ *        = NATURAL: use the natural ordering
  *        = MMD_ATA: use minimum degree ordering on structure of A'*A
  *        = MMD_AT_PLUS_A: use minimum degree ordering on structure of A'+A
  *        = COLAMD: use approximate minimum degree column ordering
  *        = MY_PERMC: use the ordering specified in ScalePermstruct->perm_c[]
- *         
+ *
  * Trans  (trans_t)
  *        Specifies the form of the system of equations:
  *        = NOTRANS: A * X = B        (No transpose)
@@ -682,7 +682,7 @@ typedef unsigned char Logical;
  *        = NO: not to permute the rows
  *        = LargeDiag: make the diagonal large relative to the off-diagonal
  *        = MY_PERMR: use the permutation given in ScalePermstruct->perm_r[]
- *           
+ *
  * ReplaceTinyPivot (yes_no_t) (only for SuperLU_DIST)
  *        Specifies whether to replace the tiny diagonals by
  *        sqrt(epsilon)*||A|| during LU factorization.
@@ -776,18 +776,18 @@ extern void    check_repfnz(int, int, int, int *);
 
 /*
  * Global data structures used in LU factorization -
- * 
+ *
  *   nsuper: #supernodes = nsuper + 1, numbered [0, nsuper].
  *   (xsup,supno): supno[i] is the supernode no to which i belongs;
  *	xsup(s) points to the beginning of the s-th supernode.
  *	e.g.   supno 0 1 2 2 3 3 3 4 4 4 4 4   (n=12)
  *	        xsup 0 1 2 4 7 12
- *	Note: dfs will be performed on supernode rep. relative to the new 
+ *	Note: dfs will be performed on supernode rep. relative to the new
  *	      row pivoting ordering
  *
  *   (xlsub,lsub): lsub[*] contains the compressed subscript of
  *	rectangular supernodes; xlsub[j] points to the starting
- *	location of the j-th column in lsub[*]. Note that xlsub 
+ *	location of the j-th column in lsub[*]. Note that xlsub
  *	is indexed by column.
  *	Storage: original row subscripts
  *
@@ -828,7 +828,7 @@ extern void    check_repfnz(int, int, int, int *);
  */
 typedef struct {
     int     *xsup;    /* supernode and column mapping */
-    int     *supno;   
+    int     *supno;
     int     *lsub;    /* compressed L subscripts */
     int	    *xlsub;
     double  *lusup;   /* L supernodes */
@@ -877,7 +877,7 @@ extern void
 dCreate_Dense_Matrix(SuperMatrix *, int, int, double *, int,
 		     Stype_t, Dtype_t, Mtype_t);
 extern void
-dCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, double *, 
+dCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, double *,
 		         int *, int *, int *, int *, int *,
 			 Stype_t, Dtype_t, Mtype_t);
 extern void
@@ -887,8 +887,8 @@ extern void    countnz (const int, int *, int *, int *, GlobalLU_t *);
 extern void    fixupL (const int, const int *, GlobalLU_t *);
 
 extern void    dallocateA (int, int, double **, int **, int **);
-extern void    dgstrf (superlu_options_t*, SuperMatrix*, double, 
-                       int, int, int*, void *, int, int *, int *, 
+extern void    dgstrf (superlu_options_t*, SuperMatrix*, double,
+                       int, int, int*, void *, int, int *, int *,
                        SuperMatrix *, SuperMatrix *, SuperLUStat_t*, int *);
 extern int     dsnode_dfs (const int, const int, const int *, const int *,
 			     const int *, int *, int *, GlobalLU_t *);
@@ -906,8 +906,8 @@ extern int     dcolumn_bmod (const int, const int, double *,
 			   double *, int *, int *, int,
                            GlobalLU_t *, SuperLUStat_t*);
 extern int     dcopy_to_ucol (int, int, int *, int *, int *,
-                              double *, GlobalLU_t *);         
-extern int     dpivotL (const int, const double, int *, int *, 
+                              double *, GlobalLU_t *);
+extern int     dpivotL (const int, const double, int *, int *,
                          int *, int *, int *, GlobalLU_t *, SuperLUStat_t*);
 extern void    dpruneL (const int, const int *, const int, const int,
 			  const int *, const int *, int *, GlobalLU_t *);
@@ -925,12 +925,12 @@ extern void    dgsequ (SuperMatrix *, double *, double *, double *,
 			double *, double *, int *);
 extern void    dlaqgs (SuperMatrix *, double *, double *, double,
                         double, double, char *);
-extern void    dgscon (char *, SuperMatrix *, SuperMatrix *, 
+extern void    dgscon (char *, SuperMatrix *, SuperMatrix *,
 		         double, double *, SuperLUStat_t*, int *);
-extern double   dPivotGrowth(int, SuperMatrix *, int *, 
+extern double   dPivotGrowth(int, SuperMatrix *, int *,
                             SuperMatrix *, SuperMatrix *);
 extern void    dgsrfs (trans_t, SuperMatrix *, SuperMatrix *,
-                       SuperMatrix *, int *, int *, char *, double *, 
+                       SuperMatrix *, int *, int *, char *, double *,
                        double *, SuperMatrix *, SuperMatrix *,
                        double *, double *, SuperLUStat_t*, int *);
 
@@ -940,7 +940,7 @@ extern int     sp_dgemv (char *, double, SuperMatrix *, double *,
 			int, double, double *, int);
 
 extern int     sp_dgemm (char *, char *, int, int, int, double,
-			SuperMatrix *, double *, int, double, 
+			SuperMatrix *, double *, int, double,
 			double *, int);
 
 /* Memory-related */

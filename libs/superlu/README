@@ -2,19 +2,19 @@
 		=====================
 
 Copyright (c) 2003, The Regents of the University of California, through
-Lawrence Berkeley National Laboratory (subject to receipt of any required 
-approvals from U.S. Dept. of Energy) 
+Lawrence Berkeley National Laboratory (subject to receipt of any required
+approvals from U.S. Dept. of Energy)
 
-All rights reserved. 
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 (1) Redistributions of source code must retain the above copyright notice,
-this list of conditions and the following disclaimer. 
+this list of conditions and the following disclaimer.
 (2) Redistributions in binary form must reproduce the above copyright notice,
 this list of conditions and the following disclaimer in the documentation
-and/or other materials provided with the distribution. 
+and/or other materials provided with the distribution.
 (3) Neither the name of Lawrence Berkeley National Laboratory, U.S. Dept. of
 Energy nor the names of its contributors may be used to endorse or promote
 products derived from this software without specific prior written permission.
@@ -29,22 +29,22 @@ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
 PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-  
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-SuperLU contains a set of subroutines to solve a sparse linear system 
-A*X=B. It uses Gaussian elimination with partial pivoting (GEPP). 
-The columns of A may be preordered before factorization; the 
+
+SuperLU contains a set of subroutines to solve a sparse linear system
+A*X=B. It uses Gaussian elimination with partial pivoting (GEPP).
+The columns of A may be preordered before factorization; the
 preordering for sparsity is completely separate from the factorization.
 
-SuperLU is implemented in ANSI C, and must be compiled with standard 
+SuperLU is implemented in ANSI C, and must be compiled with standard
 ANSI C compilers. It provides functionality for both real and complex
-matrices, in both single and double precision. The file names for the 
+matrices, in both single and double precision. The file names for the
 single-precision real version start with letter "s" (such as sgstrf.c);
 the file names for the double-precision real version start with letter "d"
 (such as dgstrf.c); the file names for the single-precision complex
 version start with letter "c" (such as cgstrf.c); the file names
-for the double-precision complex version start with letter "z" 
+for the double-precision complex version start with letter "z"
 (such as zgstrf.c).
 
 
@@ -66,36 +66,36 @@ SuperLU contains the following directory structure:
                        before compiling the whole package.)
 
 
-Before installing the package, please examine the three things dependent 
+Before installing the package, please examine the three things dependent
 on your system setup:
 
 1. Edit the make.inc include file.
    This make include file is referenced inside each of the Makefiles
-   in the various subdirectories. As a result, there is no need to 
+   in the various subdirectories. As a result, there is no need to
    edit the Makefiles in the subdirectories. All information that is
-   machine specific has been defined in this include file. 
+   machine specific has been defined in this include file.
 
-   Example machine-specific make.inc include files are provided 
-   in the MAKE_INC/ directory for several systems, such as 
+   Example machine-specific make.inc include files are provided
+   in the MAKE_INC/ directory for several systems, such as
    IBM RS/6000, DEC Alpha, SunOS 4.x, SunOS 5.x (Solaris), HP-PA and
-   SGI Iris 4.x.  When you have selected the machine to which you wish 
-   to install SuperLU, copy the appropriate sample include file (if one 
-   is present) into make.inc. For example, if you wish to run 
+   SGI Iris 4.x.  When you have selected the machine to which you wish
+   to install SuperLU, copy the appropriate sample include file (if one
+   is present) into make.inc. For example, if you wish to run
    SuperLU on an IBM RS/6000, you can do
 
        cp MAKE_INC/make.rs6k make.inc
-   
-   For the systems other than listed above, slight modifications to the 
+
+   For the systems other than listed above, slight modifications to the
    make.inc file will need to be made.
-   
+
 2. The BLAS library.
    If there is BLAS library available on your machine, you may define
    the following in the file SuperLU/make.inc:
         BLASDEF = -DUSE_VENDOR_BLAS
         BLASLIB = <BLAS library you wish to link with>
 
-   The CBLAS/ subdirectory contains the part of the C BLAS needed by 
-   SuperLU package. However, these codes are intended for use only if there 
+   The CBLAS/ subdirectory contains the part of the C BLAS needed by
+   SuperLU package. However, these codes are intended for use only if there
    is no faster implementation of the BLAS already available on your machine.
    In this case, you should do the following:
 
@@ -109,8 +109,8 @@ on your system setup:
 3. C preprocessor definition CDEFS.
    In the header file SRC/slu_Cnames.h, we use macros to determine how
    C routines should be named so that they are callable by Fortran.
-   (Some vendor-supplied BLAS libraries do not have C interface. So the 
-    re-naming is needed in order for the SuperLU BLAS calls (in C) to 
+   (Some vendor-supplied BLAS libraries do not have C interface. So the
+    re-naming is needed in order for the SuperLU BLAS calls (in C) to
     interface with the Fortran-style BLAS.)
    The possible options for CDEFS are:
 
@@ -119,17 +119,17 @@ on your system setup:
        o -DNoChange: Fortran expects a C routine name to be identical to
 		     that compiled by C;
        o -DUpCase: Fortran expects a C routine name to be all uppercase.
-   
+
 4. The Matlab MEX-file interface.
-   The MATLAB/ subdirectory includes Matlab C MEX-files, so that 
+   The MATLAB/ subdirectory includes Matlab C MEX-files, so that
    our factor and solve routines can be called as alternatives to those
-   built into Matlab. In the file SuperLU/make.inc, define MATLAB to be the 
+   built into Matlab. In the file SuperLU/make.inc, define MATLAB to be the
    directory in which Matlab is installed on your system, for example:
 
        MATLAB = /usr/local/matlab
 
    At the SuperLU/ directory, type "make matlabmex" to build the MEX-file
-   interface. After you have built the interface, you may go to the MATLAB/ 
+   interface. After you have built the interface, you may go to the MATLAB/
    directory to test the correctness by typing (in Matlab):
        trysuperlu
        trylusolve

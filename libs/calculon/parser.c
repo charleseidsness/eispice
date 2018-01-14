@@ -6,7 +6,7 @@
 #include <stdio.h>
 #line 1 "parser.lem"
 
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -14,29 +14,29 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
 
-	 
+
 	#include <math.h>
 	#include <log.h>
 	#include "tokenizer.h"
 	#include "parser.h"
-	
+
 	#define Ln(x)	log(fabs(x))
 	#define Div(x,y,m) \
 		((fabs(y) > (m))?((x)/(y)):(((y) > 0)?(x)/(m):(x)/(-(m))))
-	
+
 	typedef struct {
 		double f;	/* value of function */
 		double d;	/* value of derivative */
@@ -46,10 +46,10 @@
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
-/* 
+/*
 ** These constants (all generated automatically by the parser generator)
 ** specify the various kinds of tokens (terminals) that the parser
-** understands. 
+** understands.
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
@@ -106,7 +106,7 @@
 **                       and nonterminals.  "int" is used otherwise.
 **    YYNOCODE           is a number of type YYCODETYPE which corresponds
 **                       to no legal terminal or nonterminal number.  This
-**                       number is used to fill in empty slots of the hash 
+**                       number is used to fill in empty slots of the hash
 **                       table.
 **    YYFALLBACK         If defined, this indicates that one or more tokens
 **                       have fall-back values which should be used if the
@@ -115,7 +115,7 @@
 **                       and nonterminal numbers.  "unsigned char" is
 **                       used if there are fewer than 250 rules and
 **                       states combined.  "int" is used otherwise.
-**    ParseTOKENTYPE     is the data type used for minor tokens given 
+**    ParseTOKENTYPE     is the data type used for minor tokens given
 **                       directly to the parser from the tokenizer.
 **    YYMINORTYPE        is the data type used for all minor tokens.
 **                       This is typically a union of many types, one of
@@ -136,7 +136,7 @@
 #define YYNOCODE 47
 #define YYACTIONTYPE unsigned short int
 #if INTERFACE
-#define ParseTOKENTYPE  token_* 
+#define ParseTOKENTYPE  token_*
 #endif
 typedef union {
   ParseTOKENTYPE yy0;
@@ -149,9 +149,9 @@ typedef union {
 #endif
 #if INTERFACE
 #define ParseARG_SDECL  double *solution ;
-#define ParseARG_PDECL , double *solution 
-#define ParseARG_FETCH  double *solution  = yypParser->solution 
-#define ParseARG_STORE yypParser->solution  = solution 
+#define ParseARG_PDECL , double *solution
+#define ParseARG_FETCH  double *solution  = yypParser->solution
+#define ParseARG_STORE yypParser->solution  = solution
 #endif
 #define YYNSTATE 227
 #define YYNRULE 85
@@ -164,7 +164,7 @@ typedef union {
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
 ** functions that take a state number and lookahead value and return an
-** action integer.  
+** action integer.
 **
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
@@ -189,7 +189,7 @@ typedef union {
 ** If the index value yy_shift_ofst[S]+X is out of range or if the value
 ** yy_lookahead[yy_shift_ofst[S]+X] is not equal to X or if yy_shift_ofst[S]
 ** is equal to YY_SHIFT_USE_DFLT, it means that the action is not in the table
-** and that yy_default[S] should be used instead.  
+** and that yy_default[S] should be used instead.
 **
 ** The formula above is for computing the action when the lookahead is
 ** a terminal symbol.  If the lookahead is a non-terminal (as occurs after
@@ -431,7 +431,7 @@ static const YYACTIONTYPE yy_default[] = {
 
 /* The next table maps tokens into fallback tokens.  If a construct
 ** like the following:
-** 
+**
 **      %fallback ID X Y Z.
 **
 ** appears in the grammer, then ID becomes a fallback token for X, Y,
@@ -487,10 +487,10 @@ static char *yyTracePrompt = 0;
 #endif /* NDEBUG */
 
 #ifndef NDEBUG
-/* 
+/*
 ** Turn parser tracing on by giving a stream to which to write the trace
 ** and a prompt to preface each trace message.  Tracing is turned off
-** by making either argument NULL 
+** by making either argument NULL
 **
 ** Inputs:
 ** <ul>
@@ -515,19 +515,19 @@ void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
 #ifndef NDEBUG
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
-static const char *const yyTokenName[] = { 
-  "$",             "PLUS",          "MINUS",         "DIVIDE",      
-  "TIMES",         "POWER",         "NOT",           "ABS",         
-  "ACOSH",         "ACOS",          "ASINH",         "ASIN",        
-  "ATANH",         "ATAN",          "COSH",          "COS",         
-  "EXP",           "LN",            "LOG",           "SINH",        
-  "SIN",           "SQRT",          "TAN",           "URAMP",       
-  "U",             "LPAREN",        "RPAREN",        "DIFF",        
-  "EVAL",          "VARIABLE",      "ZERO_VARIABLE",  "CONSTANT",    
-  "IF",            "DIFF_VARIABLE",  "GREATERTHAN",   "LESSTHAN",    
-  "EQUAL",         "AND",           "OR",            "error",       
-  "expr",          "eval",          "ans",           "diff",        
-  "diff_eval",     "program",     
+static const char *const yyTokenName[] = {
+  "$",             "PLUS",          "MINUS",         "DIVIDE",
+  "TIMES",         "POWER",         "NOT",           "ABS",
+  "ACOSH",         "ACOS",          "ASINH",         "ASIN",
+  "ATANH",         "ATAN",          "COSH",          "COS",
+  "EXP",           "LN",            "LOG",           "SINH",
+  "SIN",           "SQRT",          "TAN",           "URAMP",
+  "U",             "LPAREN",        "RPAREN",        "DIFF",
+  "EVAL",          "VARIABLE",      "ZERO_VARIABLE",  "CONSTANT",
+  "IF",            "DIFF_VARIABLE",  "GREATERTHAN",   "LESSTHAN",
+  "EQUAL",         "AND",           "OR",            "error",
+  "expr",          "eval",          "ans",           "diff",
+  "diff_eval",     "program",
 };
 #endif /* NDEBUG */
 
@@ -647,7 +647,7 @@ static void yyGrowStack(yyParser *p){
 }
 #endif
 
-/* 
+/*
 ** This function allocates a new parser.
 ** The only argument is a pointer to a function which works like
 ** malloc.
@@ -681,7 +681,7 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     /* Here is inserted the actions which take place when a
     ** terminal or non-terminal is destroyed.  This can happen
     ** when the symbol is popped from the stack during a
-    ** reduce or during error processing or when a parser is 
+    ** reduce or during error processing or when a parser is
     ** being destroyed before it is finished parsing.
     **
     ** Note: during a reduce, the only symbols destroyed are those
@@ -718,7 +718,7 @@ static int yy_pop_parser_stack(yyParser *pParser){
   return yymajor;
 }
 
-/* 
+/*
 ** Deallocate and destroy a parser.  Destructors are all called for
 ** all stack elements before shutting the parser down.
 **
@@ -757,7 +757,7 @@ static int yy_find_shift_action(
 ){
   int i;
   int stateno = pParser->yystack[pParser->yyidx].stateno;
- 
+
   if( stateno>YY_SHIFT_MAX || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){
     return yy_default[stateno];
   }
@@ -815,7 +815,7 @@ static int yy_find_reduce_action(
 ){
   int i;
   /* int stateno = pParser->yystack[pParser->yyidx].stateno; */
- 
+
   if( stateno>YY_REDUCE_MAX ||
       (i = yy_reduce_ofst[stateno])==YY_REDUCE_USE_DFLT ){
     return yy_default[stateno];
@@ -862,7 +862,7 @@ static void yy_shift(
 ){
   yyStackEntry *yytos;
   yypParser->yyidx++;
-#if YYSTACKDEPTH>0 
+#if YYSTACKDEPTH>0
   if( yypParser->yyidx>=YYSTACKDEPTH ){
     yyStackOverflow(yypParser, yypMinor);
     return;
@@ -1004,7 +1004,7 @@ static void yy_reduce(
   ParseARG_FETCH;
   yymsp = &yypParser->yystack[yypParser->yyidx];
 #ifndef NDEBUG
-  if( yyTraceFILE && yyruleno>=0 
+  if( yyTraceFILE && yyruleno>=0
         && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
     fprintf(yyTraceFILE, "%sReduce [%s].\n", yyTracePrompt,
       yyRuleName[yyruleno]);
@@ -1017,7 +1017,7 @@ static void yy_reduce(
   ** not set the value of its left-hand side nonterminal.  Leaving the
   ** value of the nonterminal uninitialized is utterly harmless as long
   ** as the value is never used.  So really the only thing this code
-  ** accomplishes is to quieten purify.  
+  ** accomplishes is to quieten purify.
   **
   ** 2007-01-16:  The wireshark project (www.wireshark.org) reports that
   ** without this code, their parser segfaults.  I'm not sure what there
@@ -1513,7 +1513,7 @@ static void yy_syntax_error(
   ParseARG_FETCH;
 #define TOKEN (yyminor.yy0)
 #line 48 "parser.lem"
- Error("Syntax Error"); *solution = sqrtf(-1.f); 
+ Error("Syntax Error"); *solution = sqrtf(-1.f);
 #line 1522 "parser.c"
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
@@ -1534,7 +1534,7 @@ static void yy_accept(
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
 #line 47 "parser.lem"
- Debug("Parsing Complete"); 
+ Debug("Parsing Complete");
 #line 1544 "parser.c"
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
@@ -1617,7 +1617,7 @@ void Parse(
 #ifdef YYERRORSYMBOL
       /* A syntax error has occurred.
       ** The response to an error depends upon whether or not the
-      ** grammar defines an error token "ERROR".  
+      ** grammar defines an error token "ERROR".
       **
       ** This is what we do if the grammar does define ERROR:
       **

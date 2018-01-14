@@ -23,7 +23,7 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *   1. If A is stored column-wise (A->Stype = SLU_NC):
  *
  *      1.1. Permute the columns of A, forming A*Pc, where Pc
- *           is a permutation matrix. For more details of this step, 
+ *           is a permutation matrix. For more details of this step,
  *           see sp_preorder.c.
  *
  *      1.2. Factor A as Pr*A*Pc=L*U with the permutation Pr determined
@@ -38,7 +38,7 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *      above algorithm to the transpose of A:
  *
  *      2.1. Permute columns of transpose(A) (rows of A),
- *           forming transpose(A)*Pc, where Pc is a permutation matrix. 
+ *           forming transpose(A)*Pc, where Pc is a permutation matrix.
  *           For more details of this step, see sp_preorder.c.
  *
  *      2.2. Factor A as Pr*transpose(A)*Pc=L*U with the permutation Pr
@@ -50,7 +50,7 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *           form of A.
  *
  *   See supermatrix.h for the definition of 'SuperMatrix' structure.
- * 
+ *
  * Arguments
  * =========
  *
@@ -67,12 +67,12 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *
  * perm_c  (input/output) int*
  *         If A->Stype = SLU_NC, column permutation vector of size A->ncol
- *         which defines the permutation matrix Pc; perm_c[i] = j means 
+ *         which defines the permutation matrix Pc; perm_c[i] = j means
  *         column i of A is in position j in A*Pc.
  *         If A->Stype = SLU_NR, column permutation vector of size A->nrow
- *         which describes permutation of columns of transpose(A) 
+ *         which describes permutation of columns of transpose(A)
  *         (rows of A) as described above.
- * 
+ *
  *         If options->ColPerm = MY_PERMC or options->Fact = SamePattern or
  *            options->Fact = SamePattern_SameRowPerm, it is an input argument.
  *            On exit, perm_c may be overwritten by the product of the input
@@ -80,11 +80,11 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *            of Pc'*A'*A*Pc; perm_c is not changed if the elimination tree
  *            is already in postorder.
  *         Otherwise, it is an output argument.
- * 
+ *
  * perm_r  (input/output) int*
- *         If A->Stype = SLU_NC, row permutation vector of size A->nrow, 
- *         which defines the permutation matrix Pr, and is determined 
- *         by partial pivoting.  perm_r[i] = j means row i of A is in 
+ *         If A->Stype = SLU_NC, row permutation vector of size A->nrow,
+ *         which defines the permutation matrix Pr, and is determined
+ *         by partial pivoting.  perm_r[i] = j means row i of A is in
  *         position j in Pr*A.
  *         If A->Stype = SLU_NR, permutation vector of size A->ncol, which
  *         determines permutation of rows of transpose(A)
@@ -96,14 +96,14 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *         otherwise it is an output argument.
  *
  * L       (output) SuperMatrix*
- *         The factor L from the factorization 
+ *         The factor L from the factorization
  *             Pr*A*Pc=L*U              (if A->Stype = SLU_NC) or
  *             Pr*transpose(A)*Pc=L*U   (if A->Stype = SLU_NR).
  *         Uses compressed row subscripts storage for supernodes, i.e.,
  *         L has types: Stype = SLU_SC, Dtype = SLU_D, Mtype = SLU_TRLU.
- *         
+ *
  * U       (output) SuperMatrix*
- *	   The factor U from the factorization 
+ *	   The factor U from the factorization
  *             Pr*A*Pc=L*U              (if A->Stype = SLU_NC) or
  *             Pr*transpose(A)*Pc=L*U   (if A->Stype = SLU_NR).
  *         Uses column-wise storage scheme, i.e., U has types:
@@ -126,13 +126,13 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
  *                so the solution could not be computed.
  *             > A->ncol: number of bytes allocated when memory allocation
  *                failure occurred, plus A->ncol.
- *   
+ *
  */
     DNformat *Bstore;
     SuperMatrix *AA = NULL;/* A in SLU_NC format used by the factorization routine.*/
     SuperMatrix AC; /* Matrix postmultiplied by Pc */
     int      lwork = 0, *etree, i;
-    
+
     /* Set default values for some parameters */
     double   drop_tol = 0.;
     int      panel_size;     /* panel size */
@@ -165,7 +165,7 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
     if ( A->Stype == SLU_NR ) {
 	NRformat *Astore = A->Store;
 	AA = (SuperMatrix *) SUPERLU_MALLOC( sizeof(SuperMatrix) );
-	dCreate_CompCol_Matrix(AA, A->ncol, A->nrow, Astore->nnz, 
+	dCreate_CompCol_Matrix(AA, A->ncol, A->nrow, Astore->nnz,
 			       Astore->nzval, Astore->colind, Astore->rowptr,
 			       SLU_NC, A->Dtype, A->Mtype);
 	trans = TRANS;
@@ -176,7 +176,7 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
     t = SuperLU_timer_();
     /*
      * Get column permutation vector perm_c[], according to permc_spec:
-     *   permc_spec = NATURAL:  natural ordering 
+     *   permc_spec = NATURAL:  natural ordering
      *   permc_spec = MMD_AT_PLUS_A: minimum degree on structure of A'+A
      *   permc_spec = MMD_ATA:  minimum degree on structure of A'*A
      *   permc_spec = COLAMD:   approximate minimum degree column ordering
@@ -196,9 +196,9 @@ dgssv(superlu_options_t *options, SuperMatrix *A, int *perm_c, int *perm_r,
     panel_size = sp_ienv(1);
     relax = sp_ienv(2);
 
-    /*printf("Factor PA = LU ... relax %d\tw %d\tmaxsuper %d\trowblk %d\n", 
+    /*printf("Factor PA = LU ... relax %d\tw %d\tmaxsuper %d\trowblk %d\n",
 	  relax, panel_size, sp_ienv(3), sp_ienv(4));*/
-    t = SuperLU_timer_(); 
+    t = SuperLU_timer_();
     /* Compute the LU factorization of A. */
     dgstrf(options, &AC, drop_tol, relax, panel_size,
 	   etree, NULL, lwork, perm_c, perm_r, L, U, stat, info);

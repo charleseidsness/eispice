@@ -6,9 +6,9 @@
      register int i;
 -    for (i = 0; i < alen; i++) a[i] = dval;
 +	double d;
-+	
++
 +	if(dval == 0.0) {
-+		/* I'm not sure how but maybe this could be 
++		/* I'm not sure how but maybe this could be
 +		 * changed to a compile-time check? */
 +		memset((char*)&d, 0x0, sizeof(double));
 +		if(d == 0.0) {
@@ -16,8 +16,8 @@
 +			return;
 +		}
 +	}
-+	
++
 +	for (i = 0; i < alen; i++) a[i] = dval;
  }
- 
- 
+
+

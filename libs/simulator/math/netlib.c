@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -38,14 +38,14 @@ void dgemm_(char *transa, char *transb, int *M, int *N, int *K,
 
 /* from LAPACK */
 
-void zgesv_(int *N, int *NRHS, complex_ *A, int *lda, int *pivot, 
+void zgesv_(int *N, int *NRHS, complex_ *A, int *lda, int *pivot,
 		complex_ *b, int *ldb, int *info);
 
-void dgesv_(int *N, int *NRHS, double *A, int *lda, int *pivot, 
+void dgesv_(int *N, int *NRHS, double *A, int *lda, int *pivot,
 		double *b, int *ldb, int *info);
 
 void zgees_(char *jobvs, char *sort, complex_ *select, int *N, complex_ *A,
-		int *lda, int *sdim, complex_ *w, complex_ *Vs, int *lvds, 
+		int *lda, int *sdim, complex_ *w, complex_ *Vs, int *lvds,
 		complex_ *work, int *lwork, double *rwork, int *bwork, int *info);
 
 void dgetrf_(int *m, int *n, double *A, int *lda, int *ipiv, int *info);
@@ -179,7 +179,7 @@ int netlibZGEMM(char transa, char transb, int m, int n, int k,
 		complex_ alpha, complex_ *A, int lda, complex_ *B, int ldb,
 		complex_ beta, complex_ *C, int ldc)
 {
-	zgemm_(&transa, &transb, &m, &n, &k, &alpha, A, &lda, B, &ldb, &beta, 
+	zgemm_(&transa, &transb, &m, &n, &k, &alpha, A, &lda, B, &ldb, &beta,
 			C, &ldc);
 	return 0;
 }
@@ -300,7 +300,7 @@ int netlibDGEMM(char transa, char transb, int m, int n, int k,
 		double alpha, double *A, int lda, double *B, int ldb,
 		double beta, double *C, int ldc)
 {
-	dgemm_(&transa, &transb, &m, &n, &k, &alpha, A, &lda, B, &ldb, &beta, 
+	dgemm_(&transa, &transb, &m, &n, &k, &alpha, A, &lda, B, &ldb, &beta,
 			C, &ldc);
 	return 0;
 }
@@ -358,13 +358,13 @@ int netlibDGEMM(char transa, char transb, int m, int n, int k,
 *                singular, so the solution could not be computed.
 ===========================================================================*/
 
-int netlibZGESV(int n, int nrhs, complex_ *A, int lda, int *pivot, complex_ *b, 
+int netlibZGESV(int n, int nrhs, complex_ *A, int lda, int *pivot, complex_ *b,
 		int ldb)
 {
 	int info;
 	zgesv_(&n, &nrhs, A, &lda, pivot, b, &ldb, &info);
-	ReturnErrIf(info != 0, "info = %i", info);	
-	return 0;	
+	ReturnErrIf(info != 0, "info = %i", info);
+	return 0;
 }
 
 /*===========================================================================
@@ -420,13 +420,13 @@ int netlibZGESV(int n, int nrhs, complex_ *A, int lda, int *pivot, complex_ *b,
 *                singular, so the solution could not be computed.
 ===========================================================================*/
 
-int netlibDGESV(int n, int nrhs, double *A, int lda, int *pivot, double *b, 
+int netlibDGESV(int n, int nrhs, double *A, int lda, int *pivot, double *b,
 		int ldb)
 {
 	int info;
 	dgesv_(&n, &nrhs, A, &lda, pivot, b, &ldb, &info);
-	ReturnErrIf(info != 0, "info = %i", info);	
-	return 0;	
+	ReturnErrIf(info != 0, "info = %i", info);
+	return 0;
 }
 
 /*===========================================================================
@@ -529,7 +529,7 @@ int netlibDGESV(int n, int nrhs, double *A, int lda, int *pivot, double *b,
 ===========================================================================*/
 
 int netlibZGEES(char jobvs, char sort, complex_ *select, int n, complex_ *A,
-		int lda, int sdim, complex_ *W, complex_ *VS, int lvds, 
+		int lda, int sdim, complex_ *W, complex_ *VS, int lvds,
 		complex_ *WORK, int lwork, double *RWORK, int *BWORK)
 {
 	int info;
@@ -620,7 +620,7 @@ int netlibDGETRF(int m, int n, double *A, int lda, int *ipiv)
 	int info;
 	dgetrf_(&m, &n, A, &lda, ipiv, &info);
 	ReturnErrIf(info != 0, "info = %i", info);
-	return 0;	
+	return 0;
 }
 
 /*===========================================================================
@@ -676,7 +676,7 @@ int netlibDGETRI(int n, double *A, int lda, int *ipiv, double *work, int lwork)
 	int info;
 	dgetri_(&n, A, &lda, ipiv, work, &lwork, &info);
 	ReturnErrIf(info != 0, "info = %i", info);
-	return 0;	
+	return 0;
 }
 
 /*===========================================================================
@@ -693,7 +693,7 @@ int netlibDGETRI(int n, double *A, int lda, int *ipiv, double *work, int lwork)
 *
 * The integral is
 *
-*                           x 
+*                           x
 *                            -
 *                 2         | |          2
 *   erf(x)  =  --------     |    exp( - t  ) dt.

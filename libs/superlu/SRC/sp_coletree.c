@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include "slu_ddefs.h"
 
-/* 
+/*
  *  Implementation of disjoint set union routines.
- *  Elements are integers in 0..n-1, and the 
+ *  Elements are integers in 0..n-1, and the
  *  names of the sets themselves are of type int.
- *  
+ *
  *  Calls are:
  *  initialize_disjoint_sets (n) initial call.
  *  s = make_set (i)             returns a set containing only i.
@@ -26,7 +26,7 @@
 
 static int	*pp;		/* parent array for sets */
 
-static 
+static
 int *mxCallocInt(int n)
 {
     register int i;
@@ -39,7 +39,7 @@ int *mxCallocInt(int n)
     for (i = 0; i < n; i++) buf[i] = 0;
     return (buf);
 }
-      
+
 static
 void initialize_disjoint_sets (
 	int n
@@ -75,7 +75,7 @@ static
 int find (int i)
 {
     register int p, gp;
-    
+
     p = pp[i];
     gp = pp[p];
     while (gp != p) {
@@ -94,7 +94,7 @@ int find (
 	int i
 	)
 {
-	if (pp[i] != i) 
+	if (pp[i] != i)
 		pp[i] = find (pp[i]);
 	return pp[i];
 }
@@ -111,7 +111,7 @@ void finalize_disjoint_sets (
 
 /*
  *      Find the elimination tree for A'*A.
- *      This uses something similar to Liu's algorithm. 
+ *      This uses something similar to Liu's algorithm.
  *      It runs in time O(nz(A)*log n) and does not form A'*A.
  *
  *      Input:
@@ -139,7 +139,7 @@ sp_coletree(
 {
 	int	*root;			/* root of subtee of etree 	*/
 	int     *firstcol;		/* first nonzero col in each row*/
-	int	rset, cset;             
+	int	rset, cset;
 	int	row, col;
 	int	rroot;
 	int	p;
@@ -151,7 +151,7 @@ sp_coletree(
 
 	firstcol = mxCallocInt (nr);
 	for (row = 0; row < nr; firstcol[row++] = nc);
-	for (col = 0; col < nc; col++) 
+	for (col = 0; col < nc; col++)
 		for (p = acolst[col]; p < acolend[col]; p++) {
 			row = arow[p];
 			firstcol[row] = SUPERLU_MIN(firstcol[row], col);
@@ -204,7 +204,7 @@ sp_coletree(
  *	In the child structure, lower-numbered children are represented
  *	first, so that a tree which is already numbered in postorder
  *	will not have its order changed.
- *    
+ *
  *  Written by John Gilbert, Xerox, 10 Dec 1990.
  *  Based on code written by John Gilbert at CMI in 1987.
  */
@@ -272,12 +272,12 @@ int *TreePostorder(
  *      Input:
  *        Square sparse matrix A.  No check is made for symmetry;
  *        elements below and on the diagonal are ignored.
- *        Numeric values are ignored, so any explicit zeros are 
+ *        Numeric values are ignored, so any explicit zeros are
  *        treated as nonzero.
  *      Output:
  *        Integer array of parents representing the etree, with n
  *        meaning a root of the elimination forest.
- *      Note:  
+ *      Note:
  *        This routine uses only the upper triangle, while sparse
  *        Cholesky (as in spchol.c) uses only the lower.  Matlab's
  *        dense Cholesky uses only the upper.  This routine could
@@ -302,7 +302,7 @@ sp_symetree(
 	    )
 {
 	int	*root;		    /* root of subtree of etree 	*/
-	int	rset, cset;             
+	int	rset, cset;
 	int	row, col;
 	int	rroot;
 	int	p;

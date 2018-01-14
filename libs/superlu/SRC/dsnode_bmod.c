@@ -8,10 +8,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -26,7 +26,7 @@ void dmatvec(int, int, int, double*, double*, double*);
 
 
 /*
- * Performs numeric block updates within the relaxed snode. 
+ * Performs numeric block updates within the relaxed snode.
  */
 int
 dsnode_bmod (
@@ -50,7 +50,7 @@ dsnode_bmod (
 #endif
 
     int            luptr, nsupc, nsupr, nrow;
-    int            isub, irow, i, iptr; 
+    int            isub, irow, i, iptr;
     register int   ufirst, nextlu;
     int            *lsub, *xlsub;
     double         *lusup;
@@ -63,7 +63,7 @@ dsnode_bmod (
     xlusup  = Glu->xlusup;
 
     nextlu = xlusup[jcol];
-    
+
     /*
      *	Process the supernodal portion of L\U[*,j]
      */
@@ -75,7 +75,7 @@ dsnode_bmod (
     }
 
     xlusup[jcol + 1] = nextlu;	/* Initialize xlusup for next column */
-    
+
     if ( fsupc < jcol ) {
 
 	luptr = xlusup[fsupc];
@@ -90,19 +90,19 @@ dsnode_bmod (
 
 #ifdef USE_VENDOR_BLAS
 #ifdef _CRAY
-	STRSV( ftcs1, ftcs2, ftcs3, &nsupc, &lusup[luptr], &nsupr, 
+	STRSV( ftcs1, ftcs2, ftcs3, &nsupc, &lusup[luptr], &nsupr,
 	      &lusup[ufirst], &incx );
-	SGEMV( ftcs2, &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr, 
+	SGEMV( ftcs2, &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr,
 		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
 #else
-	dtrsv_( "L", "N", "U", &nsupc, &lusup[luptr], &nsupr, 
+	dtrsv_( "L", "N", "U", &nsupc, &lusup[luptr], &nsupr,
 	      &lusup[ufirst], &incx );
-	dgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr, 
+	dgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr,
 		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
 #endif
 #else
 	dlsolve ( nsupr, nsupc, &lusup[luptr], &lusup[ufirst] );
-	dmatvec ( nsupr, nrow, nsupc, &lusup[luptr+nsupc], 
+	dmatvec ( nsupr, nrow, nsupc, &lusup[luptr+nsupc],
 			&lusup[ufirst], &tempv[0] );
 
         /* Scatter tempv[*] into lusup[*] */

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -110,15 +110,15 @@ complex_ complexConj(complex_ a)
 complex_ complexDiv(complex_ a, complex_ b)
 {
 	complex_ c;
-	
+
 	/* Deal with divide by 0 */
 	if((b.r == 0) && (b.i == 0)) {
 		b.r = DBL_MIN;
 	}
-	
+
 	c.r = ((a.r*b.r) + (a.i*b.i)) / ((b.r*b.r) + (b.i*b.i));
 	c.i = ((a.i*b.r) - (a.r*b.i)) / ((b.r*b.r) + (b.i*b.i));
-	
+
 	return c;
 }
 
@@ -127,7 +127,7 @@ complex_ complexDiv(complex_ a, complex_ b)
 complex_ complexDivInt(complex_ a, int b)
 {
 	complex_ c;
-	
+
 	/* Deal with divide by 0 */
 	if(b != 0) {
 		c.r = a.r / b;
@@ -136,7 +136,7 @@ complex_ complexDivInt(complex_ a, int b)
 		c.r = a.r / DBL_MIN;
 		c.i = a.r / DBL_MIN;
 	}
-	
+
 	return c;
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006-2007 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -49,7 +49,7 @@ typedef struct {
 /*---------------------------------------------------------------------------*/
 
 static PyMemberDef pwMembers[] = {
-	{"type", T_CHAR, offsetof(pw_, type), READONLY, 
+	{"type", T_CHAR, offsetof(pw_, type), READONLY,
 			"Type (l = linear, c = cspline)"},
 	{"pw", T_OBJECT, offsetof(pw_, pw), READONLY, "Data (2D Array)"},
 	{NULL}  /* Sentinel */
@@ -68,18 +68,18 @@ static void pwDestroy(pw_ *r)
 static int pwInit(pw_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"pw", NULL};
-	
+
 	PyObject *pw;
-	
+
 	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "O:PW", kwlist, &pw));
-	
+
 	r->pw = (PyArrayObject *)PyArray_ContiguousFromObject(pw,
 			PyArray_DOUBLE, 2, 2);
-	
+
 	ReturnErrIf(r->pw == NULL);
-	
+
 	Py_INCREF(r->pw);
-	
+
 	return 0;
 }
 
@@ -165,14 +165,14 @@ static void sffmDestroy(sffm_ *r)
 static int sffmInit(sffm_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"Vo", "Va", "Fc", "MDI", "Fs", NULL};
-	
+
 	r->fc = HUGE_VAL;
 	r->mdi = HUGE_VAL;
 	r->fs = HUGE_VAL;
-	
+
 	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddd:sffm", kwlist,
 			&r->vo, &r->va, &r->fc, &r->mdi, &r->fs));
-	
+
 	return 0;
 }
 
@@ -228,15 +228,15 @@ static void expDestroy(exp_ *r)
 static int expInit(exp_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"V1", "V2", "Td1", "Tau1", "Td2", "Tau2", NULL};
-	
+
 	r->td1 = HUGE_VAL;
 	r->tau1 = HUGE_VAL;
 	r->td2 = HUGE_VAL;
 	r->tau2 = HUGE_VAL;
-	
+
 	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|dddd:exp", kwlist,
 			&r->v1, &r->v2, &r->td1, &r->tau1, &r->td2, &r->tau2));
-	
+
 	return 0;
 }
 
@@ -294,16 +294,16 @@ static void pulseDestroy(pulse_ *r)
 static int pulseInit(pulse_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"V1", "V2", "Td", "Tr", "Tf", "PW", "Per", NULL};
-	
+
 	r->td = HUGE_VAL;
 	r->tr = HUGE_VAL;
 	r->tf = HUGE_VAL;
 	r->pw = HUGE_VAL;
 	r->per = HUGE_VAL;
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddddd:pulse", 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddddd:pulse",
 			kwlist, &r->v1, &r->v2, &r->td, &r->tr, &r->tf, &r->pw, &r->per));
-	
+
 	return 0;
 }
 
@@ -361,16 +361,16 @@ static void gaussDestroy(gauss_ *r)
 static int gaussInit(gauss_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"V1", "V2", "Td", "Tr", "Tf", "PW", "Per", NULL};
-	
+
 	r->td = HUGE_VAL;
 	r->tr = HUGE_VAL;
 	r->tf = HUGE_VAL;
 	r->pw = HUGE_VAL;
 	r->per = HUGE_VAL;
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddddd:gauss", 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddddd:gauss",
 			kwlist, &r->v1, &r->v2, &r->td, &r->tr, &r->tf, &r->pw, &r->per));
-	
+
 	return 0;
 }
 
@@ -424,14 +424,14 @@ static void sinDestroy(sin_ *r)
 static int sinInit(sin_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"Vo", "Va", "Fc", "Td", "DF", NULL};
-	
+
 	r->fc = HUGE_VAL;
 	r->td = HUGE_VAL;
 	r->df = HUGE_VAL;
-	
+
 	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "dd|ddd:sin", kwlist,
 			&r->vo, &r->va, &r->fc, &r->td, &r->df));
-	
+
 	return 0;
 }
 
@@ -487,11 +487,11 @@ static void deviceDestroy(device_ *r)
 static int deviceInit(device_ *r, PyObject *args, PyObject *kwds)
 {
 	Debug("Initializing Device");
-	
+
 	r->node = args;
 	ReturnErrIf(r->node == NULL);
 	Py_INCREF(r->node);
-	
+
 	return 0;
 }
 
@@ -548,7 +548,7 @@ static int vicurveSetAttr(vicurve_ *r, PyObject *name, PyObject *stimulus)
 {
 	if(!strcmp(PyString_AsString(name), "VI")) {
 		ReturnErrIf(!(PyObject_TypeCheck(stimulus, &pwlType)
-				|| PyObject_TypeCheck(stimulus, &pwcType)), 
+				|| PyObject_TypeCheck(stimulus, &pwcType)),
 				"Must be a PW object");
 		ReturnErrIf(r->viType != ((pw_*)stimulus)->type,
 				"Can't change type of pre-existing PW");
@@ -560,7 +560,7 @@ static int vicurveSetAttr(vicurve_ *r, PyObject *name, PyObject *stimulus)
 		ReturnErrIf(r->ta == NULL, "Can't add a multiplier to a pre-existing "
 			"VI-Curve with no multiplier.");
 		ReturnErrIf(!(PyObject_TypeCheck(stimulus, &pwlType)
-				|| PyObject_TypeCheck(stimulus, &pwcType)), 
+				|| PyObject_TypeCheck(stimulus, &pwcType)),
 				"Must be a PW object");
 		ReturnErrIf(r->taType != ((pw_*)stimulus)->type,
 				"Can't change type of pre-existing PW");
@@ -571,7 +571,7 @@ static int vicurveSetAttr(vicurve_ *r, PyObject *name, PyObject *stimulus)
 	} else {
 		return PyObject_GenericSetAttr((PyObject *)r, name, stimulus);
 	}
-	
+
 	return 0;
 }
 
@@ -581,24 +581,24 @@ static int vicurveInit(vicurve_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNode, *nNode;
 	static char *kwlist[] = {"pNode", "nNode", "VI", "TA", NULL};
-	
+
 	r->ta = NULL;
 	r->taData = NULL;
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOO|O:VICurve", 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOO|O:VICurve",
 			kwlist, &pNode, &nNode, &r->vi, &r->ta));
-	
+
 	ReturnErrIf(!(PyObject_TypeCheck(r->vi, &pwlType)
-				|| PyObject_TypeCheck(r->vi, &pwcType)), 
+				|| PyObject_TypeCheck(r->vi, &pwcType)),
 				"Must be a PW object");
 	if(r->ta != NULL) {
 		ReturnErrIf(!(PyObject_TypeCheck(r->ta, &pwlType)
-				|| PyObject_TypeCheck(r->ta, &pwcType)), 
+				|| PyObject_TypeCheck(r->ta, &pwcType)),
 				"Must be a PW object");
 	}
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	r->viData = (double *)r->vi->pw->data;
 	r->viLength = r->vi->pw->dimensions[0];
 	r->viType = r->vi->type;
@@ -607,10 +607,10 @@ static int vicurveInit(vicurve_ *r, PyObject *args, PyObject *kwds)
 		r->taLength = r->ta->pw->dimensions[0];
 		r->taType = r->ta->type;
 	}
-	
+
 	Py_INCREF(r->vi);
 	Py_XINCREF(r->ta);
-	
+
 	return 0;
 }
 
@@ -634,8 +634,8 @@ static PyTypeObject vicurveType = {
 
 static int vicurveAdd(vicurve_ *r, simulator_ *simulator, PyObject *name)
 {
-	ReturnErrIf(simulatorAddVICurve(simulator, 
-			PyString_AsString(name), 
+	ReturnErrIf(simulatorAddVICurve(simulator,
+			PyString_AsString(name),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
 			&r->viData, &r->viLength, r->viType, &r->taData, &r->taLength,
@@ -668,19 +668,19 @@ static PyMemberDef tlineMembers[] = {
 static int tlineInit(tline_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNodeLeft, *nNodeLeft, *pNodeRight, *nNodeRight;
-	
+
 	static char *kwlist[] = {"pNodeLeft", "nNodeLeft", "pNodeRight",
 			"nNodeRight", "Z0", "Td", "loss", NULL};
-	
+
 	r->loss = HUGE_VAL;
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOOOdd|d:T", kwlist, 
-			&pNodeLeft, &nNodeLeft, &pNodeRight, &nNodeRight, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOOOdd|d:T", kwlist,
+			&pNodeLeft, &nNodeLeft, &pNodeRight, &nNodeRight,
 			&r->Z0, &r->Td, &r->loss));
-	
-	DeviceInit(r->device, Py_BuildValue("OOOO", pNodeLeft, nNodeLeft, 
+
+	DeviceInit(r->device, Py_BuildValue("OOOO", pNodeLeft, nNodeLeft,
 			pNodeRight, nNodeRight));
-	
+
 	return 0;
 }
 
@@ -702,7 +702,7 @@ static PyTypeObject tlineType = {
 
 static int tlineAdd(tline_ *r, simulator_ *simulator, PyObject *name)
 {
-	ReturnErrIf(simulatorAddTLine(simulator, 
+	ReturnErrIf(simulatorAddTLine(simulator,
 			PyString_AsString(name),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
@@ -733,7 +733,7 @@ typedef struct {
 /*---------------------------------------------------------------------------*/
 
 static PyMemberDef tlineWMembers[] = {
-	{"M"	, T_INT, offsetof(tlineW_, M), 0, 
+	{"M"	, T_INT, offsetof(tlineW_, M), 0,
 			"order of approixmation"},
 	{"len", T_DOUBLE, offsetof(tlineW_, len), 0,
 			"Length of the T-Line in inches"},
@@ -774,23 +774,23 @@ static void tlineWDestroy(tlineW_ *r)
 static int tlineWInit(tlineW_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *nodes;
-	
-	static char *kwlist[] = {"nodes", "M", "len", "L0", "C0", "R0", "G0", 
+
+	static char *kwlist[] = {"nodes", "M", "len", "L0", "C0", "R0", "G0",
 			"Rs", "Gd", "fgd", "fK", NULL};
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OidOOOOOOdd:W", kwlist, 
-			&nodes, &r->M, &r->len, &r->L0, &r->C0, &r->R0, &r->G0, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OidOOOOOOdd:W", kwlist,
+			&nodes, &r->M, &r->len, &r->L0, &r->C0, &r->R0, &r->G0,
 			&r->Rs, &r->Gd, &r->fgd, &r->fK));
-	
+
 	Py_INCREF(r->L0);
 	Py_INCREF(r->C0);
 	Py_INCREF(r->R0);
 	Py_INCREF(r->G0);
 	Py_INCREF(r->Rs);
 	Py_INCREF(r->Gd);
-	
+
 	DeviceInit(r->device, nodes);
-	
+
 	return 0;
 }
 
@@ -815,14 +815,14 @@ static int tlineWAdd(tlineW_ *r, simulator_ *simulator, PyObject *name)
 {
 	int i, numNodes;
 	char **nodes;
-	
+
 	/* Covert the Tuple of PyStrings into an array of C Stings */
 	numNodes = PyTuple_Size(((device_*)r)->node);
 	nodes = malloc(sizeof(char *)*numNodes);
 	for(i = 0; i < numNodes; i++) {
 		nodes[i] = PyString_AsString(PyTuple_GetItem(((device_*)r)->node, i));
 	}
-	
+
 	ReturnErrIf(simulatorAddTLineW(simulator,
 			PyString_AsString(name),
 			nodes, numNodes,
@@ -836,9 +836,9 @@ static int tlineWAdd(tlineW_ *r, simulator_ *simulator, PyObject *name)
 			(double**)&r->Gd->data,
 			&r->fgd,
 			&r->fK));
-	
+
 	free(nodes);
-	
+
 	return 0;
 }
 
@@ -950,13 +950,13 @@ static int sourceSetStimulus(source_ *r, PyObject *stimulus)
 static int sourceSetAttr(source_ *r, PyObject *name, PyObject *stimulus)
 {
 	if(!strcmp(PyString_AsString(name), "wave")) {
-		ReturnErrIf(stimulus->ob_type != r->stimulus->ob_type, 
+		ReturnErrIf(stimulus->ob_type != r->stimulus->ob_type,
 				"Can't change stimulus type");
 		ReturnErrIf(sourceSetStimulus(r, stimulus));
 	} else {
 		return PyObject_GenericSetAttr((PyObject *)r, name, stimulus);
 	}
-	
+
 	return 0;
 }
 
@@ -966,18 +966,18 @@ static int sourceInit(source_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNode, *nNode;
 	static char *kwlist[] = {"pNode", "nNode", "DC", "wave", NULL};
-	
+
 	r->stimulus = NULL;
-	
+
 	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd|O:source", kwlist,
 			&pNode, &nNode, &r->dc, &r->stimulus));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	ReturnErrIf(sourceSetStimulus(r, r->stimulus));
-	
+
 	Py_XINCREF(r->stimulus);
-	
+
 	return 0;
 }
 
@@ -1035,7 +1035,7 @@ static PyTypeObject vSourceType = {
 
 static int sourceAdd(source_ *r, simulator_ *simulator, PyObject *name)
 {
-	ReturnErrIf(simulatorAddSource(simulator, 
+	ReturnErrIf(simulatorAddSource(simulator,
 			PyString_AsString(name),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
@@ -1076,15 +1076,15 @@ static int nlSourceInit(nlSource_ *r, PyObject *args, PyObject *kwds)
 	PyObject *pNode, *nNode;
 	char *type;
 	static char *kwlist[] = {"pNode", "nNode", "type", "equation", NULL};
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsS:B", kwlist, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsS:B", kwlist,
 			&pNode, &nNode, &type, &r->equation));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	r->type = type[0];
 	Py_INCREF(r->equation);
-	
+
 	return 0;
 }
 
@@ -1107,7 +1107,7 @@ static PyTypeObject nlSourceType = {
 
 static int nlSourceAdd(nlSource_ *r, simulator_ *simulator, PyObject *name)
 {
-	ReturnErrIf(simulatorAddNonlinearSource(simulator, 
+	ReturnErrIf(simulatorAddNonlinearSource(simulator,
 			PyString_AsString(name),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
@@ -1160,36 +1160,36 @@ static int cbSourceInit(cbSource_ *r, PyObject *args, PyObject *kwds)
 	PyObject *pNode, *nNode;
 	char *type;
 	int length;
-	
+
 	static char *kwlist[] = {"pNode", "nNode", "type", "variables",
 			"callback", NULL};
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsOO:CB", kwlist, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOsOO:CB", kwlist,
 			&pNode, &nNode, &type, &r->variables, &r->callback));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	r->type = type[0];
 	ReturnErrIf(!PyCallable_Check(r->callback));
 	Py_XINCREF(r->callback);
-	
+
 	ReturnErrIf(!PyTuple_Check(r->variables));
 	Py_XINCREF(r->variables);
-	
+
 	length = PyTuple_Size(r->variables);
 	ReturnErrIf(length <= 0);
-	
+
 	r->derivs = (PyArrayObject*)PyArray_FromDims(1, &length, PyArray_DOUBLE);
 	ReturnErrIf(r->derivs == NULL);
 	Py_INCREF(r->derivs);
-	
+
 	r->values = (PyArrayObject*)PyArray_FromDims(1, &length, PyArray_DOUBLE);
 	ReturnErrIf(r->values == NULL);
 	Py_INCREF(r->values);
-	
+
 	r->arglist = Py_BuildValue("(OO)", r->values, r->derivs);
 	Py_INCREF(r->arglist);
-	
+
 	return 0;
 }
 
@@ -1213,19 +1213,19 @@ static PyTypeObject cbSourceType = {
 int cbSourceCallback(double *xN, void *private)
 {
 	PyObject *result;
-	
+
 	/* Call the callback */
 	result = PyEval_CallObject(((cbSource_*)private)->callback,
 			((cbSource_*)private)->arglist);
-	
+
 	ReturnErrIf(PyErr_Occurred() != NULL, "Python raised an exception");
-	
+
 	if(result != Py_None) {
 		*xN = PyFloat_AsDouble(result);
 	} else {
 		*xN = 0.0;
 	}
-	
+
 	return 0;
 }
 
@@ -1235,26 +1235,26 @@ static int cbSourceAdd(cbSource_ *r, simulator_ *simulator, PyObject *name)
 {
 	int numVars, i;
 	char **vars;
-	
+
 	numVars = PyTuple_Size(r->variables);
-	
+
 	vars = malloc(sizeof(char*)*numVars);
 	ReturnErrIf(vars == NULL);
-	
+
 	for(i = 0; i < numVars; i++) {
 		vars[i] = PyString_AsString(PyTuple_GetItem(r->variables, i));
 	}
-	
-	ReturnErrIf(simulatorAddCallbackSource(simulator, 
+
+	ReturnErrIf(simulatorAddCallbackSource(simulator,
 				PyString_AsString(name),
 				PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 				PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
-				r->type, vars, (double*)r->values->data, 
+				r->type, vars, (double*)r->values->data,
 				(double*)r->derivs->data, numVars, cbSourceCallback,
 				(void*)r));
-	
+
 	free(vars);
-	
+
 	return 0;
 }
 
@@ -1280,12 +1280,12 @@ static int inductorInit(inductor_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNode, *nNode;
 	static char *kwlist[] = {"pNode", "nNode", "L", NULL};
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:L", kwlist, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:L", kwlist,
 			&pNode, &nNode, &r->L));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	return 0;
 }
 
@@ -1337,12 +1337,12 @@ static int capacitorInit(capacitor_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNode, *nNode;
 	static char *kwlist[] = {"pNode", "nNode", "C", NULL};
-	
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:C", kwlist, 
+
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:C", kwlist,
 			&pNode, &nNode, &r->C));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	return 0;
 }
 
@@ -1394,13 +1394,13 @@ static int resistorInit(resistor_ *r, PyObject *args, PyObject *kwds)
 {
 	PyObject *pNode, *nNode;
 	static char *kwlist[] = {"pNode", "nNode", "R", NULL};
-	
+
 	Debug("Initializing Resistor");
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:R", kwlist, 
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "OOd:R", kwlist,
 			&pNode, &nNode, &r->R));
-	
+
 	DeviceInit(r->device, Py_BuildValue("OO", pNode, nNode));
-	
+
 	return 0;
 }
 
@@ -1422,7 +1422,7 @@ static PyTypeObject resistorType = {
 
 static int resistorAdd(resistor_ *r, simulator_ *simulator, PyObject *name)
 {
-	ReturnErrIf(simulatorAddResistor(simulator, 
+	ReturnErrIf(simulatorAddResistor(simulator,
 			PyString_AsString(name),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 0)),
 			PyString_AsString(PyTuple_GetItem(((device_*)r)->node, 1)),
@@ -1462,7 +1462,7 @@ static void circuitDestroy(circuit_ *r)
 static int circuitBuildResults(circuit_ *r, double *data, int dims[2])
 {
 	Py_XDECREF(r->results);
-	r->results = (PyArrayObject*)PyArray_FromDimsAndData(2, dims, 
+	r->results = (PyArrayObject*)PyArray_FromDimsAndData(2, dims,
 			PyArray_DOUBLE, (char*)data);
 	ReturnErrIf(r->results == NULL);
 	/* We own the data, should free it when we're done with it. */
@@ -1481,7 +1481,7 @@ static int circuitBuildNames(circuit_ *r, char **vars, int dims[2])
 	Py_XDECREF(r->variables);
 	r->variables = PyList_New(dims[1]);
 	for(i = 0; i < dims[1]; i++) {
-		ReturnErrIf(PyList_SetItem(r->variables, i, 
+		ReturnErrIf(PyList_SetItem(r->variables, i,
 				PyString_FromString(vars[i])));
 	}
 	free(vars);
@@ -1495,15 +1495,15 @@ static PyObject * circuitOP(circuit_ *r, PyObject *args)
 	double *data;
 	int dims[2];
 	char **vars;
-	
+
 	ReturnNULLIf(!PyArg_ParseTuple(args, ":op"));
-	
+
 	ReturnNULLIf(simulatorRunOperatingPoint(r->simulator, &data, &vars,
 			&dims[0], &dims[1]));
-	
+
 	ReturnNULLIf(circuitBuildResults(r, data, dims));
-	ReturnNULLIf(circuitBuildNames(r, vars, dims));	
-	
+	ReturnNULLIf(circuitBuildNames(r, vars, dims));
+
 	Py_RETURN_NONE;
 }
 
@@ -1516,17 +1516,17 @@ static PyObject * circuitTran(circuit_ *r, PyObject *args)
 	double *data;
 	int dims[2];
 	char **vars;
-	
-	
+
+
 	ReturnNULLIf(!PyArg_ParseTuple(args, "dd|di:tran", &tstep, &tstop, &tmax,
 			&restart));
-	
-	ReturnNULLIf(simulatorRunTransient(r->simulator, tstep, tstop, tmax, 
+
+	ReturnNULLIf(simulatorRunTransient(r->simulator, tstep, tstop, tmax,
 			restart, &data, &vars, &dims[0], &dims[1]));
-	
+
 	ReturnNULLIf(circuitBuildResults(r, data, dims));
 	ReturnNULLIf(circuitBuildNames(r, vars, dims));
-	
+
 	Py_RETURN_NONE;
 }
 
@@ -1541,11 +1541,11 @@ static PyObject * circuitPrintDevices(circuit_ *r, PyObject *args)
 /*---------------------------------------------------------------------------*/
 
 static PyMethodDef circuitMethods[] = {
-	{"op_", (PyCFunction)circuitOP, METH_VARARGS, 
+	{"op_", (PyCFunction)circuitOP, METH_VARARGS,
 			PyDoc_STR("Operating Point Analysis")},
-	{"tran_", (PyCFunction)circuitTran, METH_VARARGS, 
+	{"tran_", (PyCFunction)circuitTran, METH_VARARGS,
 			PyDoc_STR("Transient Analysis")},
-	{"devices_", (PyCFunction)circuitPrintDevices, METH_VARARGS, 
+	{"devices_", (PyCFunction)circuitPrintDevices, METH_VARARGS,
 			PyDoc_STR("Print Circuit")},
 	{NULL, NULL}		/* sentinel */
 };
@@ -1554,9 +1554,9 @@ static PyMethodDef circuitMethods[] = {
 
 static PyMemberDef circuitMembers[] = {
 	{"title", T_OBJECT, offsetof(circuit_, title), 0, "Circuit Title"},
-	{"results", T_OBJECT, offsetof(circuit_, results), READONLY, 
+	{"results", T_OBJECT, offsetof(circuit_, results), READONLY,
 			"Results of the last simulation."},
-	{"variables", T_OBJECT, offsetof(circuit_, variables), READONLY, 
+	{"variables", T_OBJECT, offsetof(circuit_, variables), READONLY,
 			"List that contains the column headers for the results array."},
 	{NULL}  /* Sentinel */
 };
@@ -1579,10 +1579,10 @@ static PyTypeObject circuitType;
 static int circuitSetAttr(circuit_ *r, PyObject *name, PyObject *device)
 {
 	ReturnErrIf(device == NULL, "Device removal not supported.");
-	
-	ReturnErrIf(PyDict_GetItem(r->devices, name) != NULL, 
+
+	ReturnErrIf(PyDict_GetItem(r->devices, name) != NULL,
 			"Device %s already exists.", PyString_AsString(name));
-	
+
 	if(PyObject_TypeCheck(device, &inductorType)) {
 		/* Inductor */
 		ReturnErrIf(inductorAdd((inductor_*)device, r->simulator, name));
@@ -1615,7 +1615,7 @@ static int circuitSetAttr(circuit_ *r, PyObject *name, PyObject *device)
 		/* Default */
 		return PyObject_GenericSetAttr((PyObject *)r, name, device);
 	}
-	
+
 	ReturnErrIf(PyDict_SetItem(r->devices, name, device));
 	return 0;
 }
@@ -1625,27 +1625,27 @@ static int circuitSetAttr(circuit_ *r, PyObject *name, PyObject *device)
 static int circuitInit(circuit_ *r, PyObject *args, PyObject *kwds)
 {
 	static char *kwlist[] = {"title", NULL};
-	
+
 	r->title = NULL;
-	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "|S:circuit", kwlist, 
+	ReturnErrIf(!PyArg_ParseTupleAndKeywords(args, kwds, "|S:circuit", kwlist,
 			&r->title));
 	Py_XINCREF(r->title);
-	
+
 	r->devices = PyDict_New();
 	ReturnErrIf(r->devices == NULL);
 	Py_XINCREF(r->devices);
-	
+
 	r->simulator = simulatorNew(r->simulator);
 	ReturnErrIf(r->simulator == NULL);
-	
+
 	r->results = NULL;
 	r->variables = NULL;
-	
+
 	return 0;
 }
 
 /*---------------------------------------------------------------------------*/
-	
+
 static PyTypeObject circuitType = {
 	PyObject_HEAD_INIT(NULL)
 	.tp_name = "simulator.CircuitBase",
@@ -1669,12 +1669,12 @@ static PyTypeObject circuitType = {
 static PyObject * logFile(PyObject *self, PyObject *args)
 {
 	const char *filename;
-	
+
     ReturnNULLIf(!PyArg_ParseTuple(args, "s:logFile", &filename));
-    
+
 	CloseLogFile;
 	OpenLogFile(filename);
-	
+
     Py_RETURN_NONE;
 }
 
@@ -1683,12 +1683,12 @@ static PyObject * logFile(PyObject *self, PyObject *args)
 static PyObject * errorFile(PyObject *self, PyObject *args)
 {
 	const char *filename;
-	
+
     ReturnNULLIf(!PyArg_ParseTuple(args, "s:errorFile", &filename));
-    
+
 	CloseLogFile;
 	OpenErrorFile(filename);
-	
+
     Py_RETURN_NONE;
 }
 
@@ -1697,12 +1697,12 @@ static PyObject * errorFile(PyObject *self, PyObject *args)
 static PyObject * about(PyObject *self, PyObject *args)
 {
 	ReturnNULLIf(!PyArg_ParseTuple(args, ":about"));
-	
+
 	Info(" ");
 	Info("The eispice simulator module contains the following libraries:");
 	Info(" ");
-	simulatorInfo();	
-	
+	simulatorInfo();
+
     Py_RETURN_NONE;
 }
 
@@ -1733,7 +1733,7 @@ PyDoc_STRVAR(simulatorDoc, "Circuit Simulator");
 PyMODINIT_FUNC initsimulator_(void)
 {
 	PyObject *m;
-	
+
 	if (PyType_Ready(&circuitType) < 0)		return;
 	if (PyType_Ready(&inductorType) < 0)	return;
 	if (PyType_Ready(&capacitorType) < 0)	return;
@@ -1753,15 +1753,15 @@ PyMODINIT_FUNC initsimulator_(void)
 	if (PyType_Ready(&tlineWType) < 0)		return;
 	if (PyType_Ready(&vicurveType) < 0)		return;
 	if (PyType_Ready(&deviceType) < 0)		return;
-	
+
 	/* Import the array object */
 	import_array();
-	
+
 	/* Create the module and add the functions */
 	m = Py_InitModule3("simulator_", simulatorMethods, simulatorDoc);
 	if (m == NULL)
 		return;
-	
+
 	Py_INCREF(&circuitType);
     PyModule_AddObject(m, "Circuit_", (PyObject *)&circuitType);
 	PyModule_AddObject(m, "Inductor_", (PyObject *)&inductorType);
@@ -1774,7 +1774,7 @@ PyMODINIT_FUNC initsimulator_(void)
 	PyModule_AddObject(m, "TLine_", (PyObject *)&tlineType);
 	PyModule_AddObject(m, "TLineW_", (PyObject *)&tlineWType);
 	PyModule_AddObject(m, "VICurve_", (PyObject *)&vicurveType);
-	
+
 	PyModule_AddObject(m, "Sin_", (PyObject *)&sinType);
 	PyModule_AddObject(m, "Pulse_", (PyObject *)&pulseType);
 	PyModule_AddObject(m, "Gauss_", (PyObject *)&gaussType);
@@ -1782,9 +1782,9 @@ PyMODINIT_FUNC initsimulator_(void)
 	PyModule_AddObject(m, "SFFM_", (PyObject *)&sffmType);
 	PyModule_AddObject(m, "PWL_", (PyObject *)&pwlType);
 	PyModule_AddObject(m, "PWC_", (PyObject *)&pwcType);
-	
+
 	PyModule_AddObject(m, "Device_", (PyObject *)&deviceType);
-	
+
 	Py_AtExit(simulatorCleanup);
 
 }

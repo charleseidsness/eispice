@@ -1,5 +1,5 @@
 %include {
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -7,29 +7,29 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
 
-	 
+
 	#include <math.h>
 	#include <log.h>
 	#include "tokenizer.h"
 	#include "parser.h"
-	
+
 	#define Ln(x)	log(fabs(x))
 	#define Div(x,y,m) \
 		((fabs(y) > (m))?((x)/(y)):(((y) > 0)?(x)/(m):(x)/(-(m))))
-	
+
 	typedef struct {
 		double f;	/* value of function */
 		double d;	/* value of derivative */
@@ -55,7 +55,7 @@
 %left NOT.
 %left ABS ACOSH ACOS ASINH ASIN ATANH ATAN COSH COS EXP LN LOG SINH SIN SQRT TAN URAMP U.
 %left LPAREN RPAREN.
-%left DIFF. 
+%left DIFF.
 
 program ::= ans(A).   { Debug("Solution: %e", A); *solution = A; }
 

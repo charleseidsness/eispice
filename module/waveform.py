@@ -1,20 +1,20 @@
 #
 # Copyright (C) 2006-2007 Cooper Street Innovations Inc.
 # Charles Eidsness    <charles@cooper-street.com>
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 #
 
@@ -46,7 +46,7 @@ class PWL(simulator_.PWL_):
 	Piece-Wise Linear Waveform
 	-- A 2D curve, points between defined data points are calculated
 	via linear interpolation.
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.PWL([['2n', 4],['12n', 3],['50n', 20],['75n', -20], \
@@ -63,7 +63,7 @@ class PWL(simulator_.PWL_):
 	def __init__(self, data):
 		"""
 		Arguments:
-		data -- 2D Array Representing the PWL Curve		
+		data -- 2D Array Representing the PWL Curve
 		"""
 		data = units.floatList2D(data)
 		data = data[data[:,0].argsort(),] # sort by first column for simulator
@@ -74,7 +74,7 @@ class PWC(simulator_.PWC_):
 	Piece-Wise Cubic-Spline Waveform
 	-- A 2D curve, points between defined data points are calculated
 	as cubic splines.
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.PWC([['2n', 4],['12n', 3],['50n', 20],['75n', -20], \
@@ -91,7 +91,7 @@ class PWC(simulator_.PWC_):
 	def __init__(self, data):
 		"""
 		Arguments:
-		data -- 2D Array Representing the PWC Curve		
+		data -- 2D Array Representing the PWC Curve
 		"""
 		data = units.floatList2D(data)
 		data = data[data[:,0].argsort(),] # sort by first column for simulator
@@ -99,7 +99,7 @@ class PWC(simulator_.PWC_):
 
 class SFFM(simulator_.SFFM_):
 	"""Single Frequency FM Waveform
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.SFFM(1, 4, '100M', 2, '10M')
@@ -125,7 +125,7 @@ class SFFM(simulator_.SFFM_):
 
 class Exp(simulator_.Exp_):
 	"""Exponential Rise and/or Fall Waveform
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.Exp(0, 4, '5n', '2n', '25n', '5n')
@@ -152,7 +152,7 @@ class Exp(simulator_.Exp_):
 
 class Pulse(simulator_.Pulse_):
 	"""Pulse Train Waveform
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.Pulse(4, 8, '10n', '2n', '3n', '5n', '20n')
@@ -180,7 +180,7 @@ class Pulse(simulator_.Pulse_):
 
 class Gauss(simulator_.Gauss_):
 	"""Pulse Train Waveform with Gaussian Edges
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = eispice.Gauss(0, 3.3, '0n', '2n', '5n', '10n', '50n')
@@ -208,7 +208,7 @@ class Gauss(simulator_.Gauss_):
 
 class Sin(simulator_.Sin_):
 	"""Sine Wave Waveform
-	
+
 	Example:
 	>>> import eispice
 	>>> wave = wave = eispice.Sin(0, 4, '50M', '5n', '10M')
@@ -233,9 +233,8 @@ class Sin(simulator_.Sin_):
 		simulator_.Sin_.__init__(self,*units.floatList1D(args))
 
 if __name__ == '__main__':
-	
+
 	import doctest
 	doctest.testmod(verbose=False)
 	print 'Testing Complete'
-	
-	
+

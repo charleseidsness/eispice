@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -47,26 +47,26 @@ int simulatorAddResistor(simulator_ *r,
 	char *pNode,
 	char *nNode,
 	double *resistance); /* Ohms */
-	
+
 int simulatorAddCapacitor(simulator_ *r,
 	char *refdes,
 	char *pNode,
 	char *nNode,
 	double *capacitance); /* Farads */
-	
+
 int simulatorAddInductor(simulator_ *r,
 	char *refdes,
 	char *pNode,
 	char *nNode,
 	double *inductance); /* Henrys */
-	
+
 int simulatorAddNonlinearSource(simulator_ *r,
 	char *refdes,
 	char *pNode,
 	char *nNode,
 	char type,		/* Either 'i' or 'v' */
 	char *equation);
-	
+
 int simulatorAddSource(simulator_ *r,
 	char *refdes,
 	char *pNode,
@@ -83,7 +83,7 @@ int simulatorAddSource(simulator_ *r,
 					 | sffm  | 'f' |
 					 *-------------*/
 	double *args[7]);
-	
+
 int simulatorAddTLine(simulator_ *r,
 	char *refdes,
 	char *pNodeLeft,
@@ -115,7 +115,7 @@ int simulatorAddVoltageControlledCap(simulator_ *r,
 	char *pNode,	/* positive node */
 	char *nNode,	/* negative node */
 	char *cNode);	/* control node */
-	
+
 int simulatorAddVICurve(simulator_ *r,
 	char *refdes,
 	char *pNode,

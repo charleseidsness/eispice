@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -93,14 +93,14 @@ struct _devicePrivate {
 static int deviceClassInitStep(device_ *r)
 {
 	devicePrivate_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Initializing Stepping %s %s %p", r->class->type, r->refdes, r);
-	
-	/* Remove explict km -> lm link */  
+
+	/* Remove explict km -> lm link */
 	ReturnErrIf(nodeDataClear(p->nodeRL));
 	ReturnErrIf(nodeDataClear(p->nodeRM));
 	ReturnErrIf(nodeDataClear(p->nodeSK));
@@ -109,7 +109,7 @@ static int deviceClassInitStep(device_ *r)
 	ReturnErrIf(nodeDataClear(p->nodeJS));
 	ReturnErrIf(nodeDataClear(p->nodeLR));
 	ReturnErrIf(nodeDataClear(p->nodeMR));
-		
+
 	/* set initial conditions */
 	p->IrIC = 0.0;
 	p->IsIC = 0.0;
@@ -117,7 +117,7 @@ static int deviceClassInitStep(device_ *r)
 	p->VjIC = rowGetSolution(p->rowJ);
 	p->VlIC = rowGetSolution(p->rowL);
 	p->VmIC = rowGetSolution(p->rowM);
-	
+
 	return 0;
 }
 
@@ -129,13 +129,13 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 	double Vl, Vm, Vj, Vk, Vs, Vr; /* Voltage at nodes (V) */
 	double Ir, Is; /* Current through sources (A) */
 	double tp; /* Time minus Tline's Delay (s) */
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Stepping %s %s %p", r->class->type, r->refdes, r);
-	
+
 	/* Modified Nodal Analysis Stamp
 	 *	                     		 	     /\     Zo    -
 	 *	  |_Vk_Vj_Ir_Vl_Vm_Is_|_rhs_|	k__ /  \__/\/\/\__j
@@ -146,13 +146,13 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 	 *	m | -- -- -- -- -- -1 | --  |      \  /
 	 *	s | -- -- --  1 -1 -Zo| Vs  |       \/ Vs = Vkj(t-Td) + Zo*Ikj(t-Td)
 	 */
-	
+
 	/* tp (time previous) is the time at which the waveform entered
 	 * the tranmision line
 	 */
 	tp = r->control->time - (*p->Td);
 	ReturnErrIf(isnan(tp));
-	
+
 	if(tp <= 0) {
 		Ir = p->IrIC;
 		Is = p->IsIC;
@@ -161,9 +161,9 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 		Vl = p->VlIC;
 		Vm = p->VmIC;
 	} else {
-		
+
 		ReturnErrIf(historyInterpSetTime(p->historyInterp, tp));
-		
+
 		ReturnErrIf(historyInterpGetData(p->historyInterp,
 				rowGetIndex(p->rowR), &Ir));
 		ReturnErrIf(historyInterpGetData(p->historyInterp,
@@ -176,10 +176,10 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 				rowGetIndex(p->rowL), &Vl));
 		ReturnErrIf(historyInterpGetData(p->historyInterp,
 				rowGetIndex(p->rowM), &Vm));
-		
+
 	}
-	
-	/* For a derivation of these equations refer to "Qucs Technical Papers" 
+
+	/* For a derivation of these equations refer to "Qucs Technical Papers"
 		pages 105-107 */
 	if(*p->loss == HUGE_VAL) {
 		Vr = (Vl - Vm) + (*p->Z0)*Is;
@@ -188,10 +188,10 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 		Vr = exp(-(*p->loss)/2)*((Vl - Vm) + (*p->Z0)*Is);
 		Vs = exp(-(*p->loss)/2)*((Vk - Vj) + (*p->Z0)*Ir);
 	}
-	
+
 	ReturnErrIf(rowRHSPlus(p->rowR, Vr - p->Vr));
 	p->Vr = Vr;
-	
+
 	ReturnErrIf(rowRHSPlus(p->rowS, Vs - p->Vs));
 	p->Vs = Vs;
 
@@ -214,9 +214,9 @@ static int deviceClassLoad(device_ *r)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Loading %s %s %p", r->class->type, r->refdes, r);
-	
+
 	/* Initialise / Reset State Data */
 	ReturnErrIf(checkbreakInitialize(p->checkbreakR, 0.0));
 	ReturnErrIf(checkbreakInitialize(p->checkbreakS, 0.0));
@@ -229,7 +229,7 @@ static int deviceClassLoad(device_ *r)
 	p->VjIC = 0.0;
 	p->VlIC = 0.0;
 	p->VmIC = 0.0;
-	
+
 	/* These short the output to the input for opertaing point analysis
 	 * they're removed during the first timestep.
 	 */
@@ -241,7 +241,7 @@ static int deviceClassLoad(device_ *r)
 	ReturnErrIf(nodeDataSet(p->nodeJS, -1.0));
 	ReturnErrIf(nodeDataSet(p->nodeLR, -1.0));
 	ReturnErrIf(nodeDataSet(p->nodeMR, 1.0));
-	
+
 	/* Modified Nodal Analysis Stamp
 	 *	                     		 	     /\     gmin   -
 	 *	  |_Vk_Vj_Ir__Vl_Vm_Is_|_rhs_|	k__ /  \__/\/\/\__j
@@ -252,20 +252,20 @@ static int deviceClassLoad(device_ *r)
 	 *	m | -- --  1  -- -- -1 | --  |      \  /
 	 *	s |  1 -1  -- 1 -1 -gm | --  |       \/ Vs = Vkj
 	 */
-	
+
 	ReturnErrIf(nodeDataSet(p->nodeRK, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeRJ, -1.0));
 	ReturnErrIf(nodeDataSet(p->nodeKR, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeJR, -1.0));
-	
+
 	ReturnErrIf(nodeDataSet(p->nodeSL, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeSM, -1.0));
 	ReturnErrIf(nodeDataSet(p->nodeLS, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeMS, -1.0));
-	
+
 	ReturnErrIf(nodeDataPlus(p->nodeRR, -(*p->Z0)));
 	ReturnErrIf(nodeDataPlus(p->nodeSS, -(*p->Z0)));
-	
+
 	return 0;
 }
 
@@ -277,35 +277,35 @@ static int deviceClassUnconfig(device_ *r)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Unconfiging %s %s %p", r->class->type, r->refdes, r);
-	
+
 	if(p->rowRName != NULL) {
 		free(p->rowRName);
 	}
-	
+
 	if(p->rowSName != NULL) {
 		free(p->rowSName);
 	}
-	
+
 	if(p->historyInterp != NULL) {
 		if(historyInterpDestroy(&p->historyInterp)) {
 			Warn("Error destroying history interpolation");
 		}
 	}
-	
+
 	if(p->checkbreakS != NULL) {
 		if(checkbreakDestroy(&p->checkbreakS)) {
 			Warn("Error destroying break check");
 		}
 	}
-	
+
 	if(p->checkbreakR != NULL) {
 		if(checkbreakDestroy(&p->checkbreakR)) {
 			Warn("Error destroying break check");
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -317,15 +317,15 @@ static int deviceClassPrint(device_ *r)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Printing %s %s %p", r->class->type, r->refdes, r);
-	
-	Info("%s -- %s %s -> %s, %s -> %s; Z0 = %gOhms, Td = %gs, loss = %g", 
-			r->class->type, r->refdes, 
+
+	Info("%s -- %s %s -> %s, %s -> %s; Z0 = %gOhms, Td = %gs, loss = %g",
+			r->class->type, r->refdes,
 			rowGetName(r->pin[K]), rowGetName(r->pin[L]),
 			rowGetName(r->pin[J]), rowGetName(r->pin[M]),
 			*p->Z0, *p->Td, *p->loss);
-	
+
 	return 0;
 }
 
@@ -353,26 +353,26 @@ deviceClass_ deviceTLine = {
 int deviceTLineConfig(device_ *r, double *Z0, double *Td, double *loss)
 {
 	devicePrivate_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(r->class != NULL);
 	ReturnErrIf(r->numPins != NP);
-	
+
 	ReturnErrIf((r->pin[K] == &gndRow) && (r->pin[J] == &gndRow),
 			"T-Line %s has both input nodes shorted to 0!", r->refdes);
 	ReturnErrIf((r->pin[L] == &gndRow) && (r->pin[M] == &gndRow),
 			"T-Line %s has both output nodes shorted to 0!", r->refdes);
-	
+
 	/* Copy in class pointer */
 	r->class = &deviceTLine;
-	
+
 	Debug("Configuring %s %s %p", r->class->type, r->refdes, r);
-	
+
 	/* allocate space for private data */
 	r->private =  calloc(1, sizeof(devicePrivate_));
 	ReturnErrIf(r->private == NULL);
 	p = r->private;
-	
+
 	/* Copy in parameter pointers */
 	p->Z0 = Z0;
 	ReturnErrIf(p->Z0 == NULL);
@@ -380,8 +380,8 @@ int deviceTLineConfig(device_ *r, double *Z0, double *Td, double *loss)
 	ReturnErrIf(p->Td == NULL);
 	p->loss = loss;
 	ReturnErrIf(p->loss == NULL);
-	
-	/* Create required nodes and rows (see MNA stamp above) 
+
+	/* Create required nodes and rows (see MNA stamp above)
 	 * Note: local names are created to differentiate the two v-sources
 	 */
 	p->rowRName = malloc(strlen(r->refdes) + 5);
@@ -392,7 +392,7 @@ int deviceTLineConfig(device_ *r, double *Z0, double *Td, double *loss)
 	ReturnErrIf(p->rowSName == NULL);
 	strcpy(p->rowSName, r->refdes);
 	strcat(p->rowSName, "#in2");
-	
+
 	/* Create required nodes and rows (see MNA stamp above) */
 	p->rowK = r->pin[K];
 	ReturnErrIf(p->rowK == NULL);
@@ -429,30 +429,30 @@ int deviceTLineConfig(device_ *r, double *Z0, double *Td, double *loss)
 	p->nodeSK = matrixFindOrAddNode(r->matrix, p->rowS, p->rowK);
 	ReturnErrIf(p->nodeSK == NULL);
 	p->nodeSJ = matrixFindOrAddNode(r->matrix, p->rowS, p->rowJ);
-	ReturnErrIf(p->nodeSJ == NULL);	
+	ReturnErrIf(p->nodeSJ == NULL);
 	p->nodeRR = matrixFindOrAddNode(r->matrix, p->rowR, p->rowR);
-	ReturnErrIf(p->nodeRR == NULL);	
+	ReturnErrIf(p->nodeRR == NULL);
 	p->nodeSS = matrixFindOrAddNode(r->matrix, p->rowS, p->rowS);
 	ReturnErrIf(p->nodeSS == NULL);
 	p->nodeKS = matrixFindOrAddNode(r->matrix, p->rowK, p->rowS);
-	ReturnErrIf(p->nodeKS == NULL);	
+	ReturnErrIf(p->nodeKS == NULL);
 	p->nodeJS = matrixFindOrAddNode(r->matrix, p->rowJ, p->rowS);
 	ReturnErrIf(p->nodeJS == NULL);
 	p->nodeLR = matrixFindOrAddNode(r->matrix, p->rowL, p->rowR);
-	ReturnErrIf(p->nodeLR == NULL);	
+	ReturnErrIf(p->nodeLR == NULL);
 	p->nodeMR = matrixFindOrAddNode(r->matrix, p->rowM, p->rowR);
 	ReturnErrIf(p->nodeMR == NULL);
-	
-	p->historyInterp = historyInterpNew(p->historyInterp, 
+
+	p->historyInterp = historyInterpNew(p->historyInterp,
 			matrixGetHistory(r->matrix));
 	ReturnErrIf(p->historyInterp == NULL);
-	
+
 	p->checkbreakR = checkbreakNew(p->checkbreakR, r->control, 'V');
 	ReturnErrIf(p->checkbreakR == NULL);
-	
+
 	p->checkbreakS = checkbreakNew(p->checkbreakS, r->control, 'V');
 	ReturnErrIf(p->checkbreakS == NULL);
-	
+
 	return 0;
 }
 

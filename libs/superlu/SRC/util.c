@@ -7,10 +7,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -21,7 +21,7 @@
 #include <math.h>
 #include "slu_ddefs.h"
 
-/* 
+/*
  * Global statistics variale
  */
 
@@ -122,13 +122,13 @@ Destroy_Dense_Matrix(SuperMatrix *A)
 }
 
 /*
- * Reset repfnz[] for the current column 
+ * Reset repfnz[] for the current column
  */
 void
 resetrep_col (const int nseg, const int *segrep, int *repfnz)
 {
     int i, irep;
-    
+
     for (i = 0; i < nseg; i++) {
 	irep = segrep[i];
 	repfnz[irep] = EMPTY;
@@ -137,8 +137,8 @@ resetrep_col (const int nseg, const int *segrep, int *repfnz)
 
 
 /*
- * Count the total number of nonzeros in factors L and U,  and in the 
- * symmetrically reduced L. 
+ * Count the total number of nonzeros in factors L and U,  and in the
+ * symmetrically reduced L.
  */
 void
 countnz(const int n, int *xprune, int *nnzL, int *nnzU, GlobalLU_t *Glu)
@@ -156,7 +156,7 @@ countnz(const int n, int *xprune, int *nnzL, int *nnzU, GlobalLU_t *Glu)
 
     if ( n <= 0 ) return;
 
-    /* 
+    /*
      * For each supernode
      */
     for (i = 0; i <= nsuper; i++) {
@@ -171,7 +171,7 @@ countnz(const int n, int *xprune, int *nnzL, int *nnzU, GlobalLU_t *Glu)
 	irep = xsup[i+1] - 1;
 	nnzL0 += xprune[irep] - xlsub[irep];
     }
-    
+
     /* printf("\tNo of nonzeros in symm-reduced L = %d\n", nnzL0);*/
 }
 
@@ -195,8 +195,8 @@ fixupL(const int n, const int *perm_r, GlobalLU_t *Glu)
     xlsub  = Glu->xlsub;
     nextl  = 0;
     nsuper = (Glu->supno)[n];
-    
-    /* 
+
+    /*
      * For each supernode ...
      */
     for (i = 0; i <= nsuper; i++) {
@@ -207,7 +207,7 @@ fixupL(const int n, const int *perm_r, GlobalLU_t *Glu)
 	    lsub[nextl] = perm_r[lsub[j]]; /* Now indexed into P*A */
 	    nextl++;
   	}
-	for (k = fsupc+1; k < xsup[i+1]; k++) 
+	for (k = fsupc+1; k < xsup[i+1]; k++)
 	    	xlsub[k] = nextl;	/* Other columns in supernode i */
 
     }
@@ -219,15 +219,15 @@ fixupL(const int n, const int *perm_r, GlobalLU_t *Glu)
 /*
  * Diagnostic print of segment info after panel_dfs().
  */
-void print_panel_seg(int n, int w, int jcol, int nseg, 
+void print_panel_seg(int n, int w, int jcol, int nseg,
 		     int *segrep, int *repfnz)
 {
     int j, k;
-    
+
     for (j = jcol; j < jcol+w; j++) {
 	printf("\tcol %d:\n", j);
 	for (k = 0; k < nseg; k++)
-	    printf("\t\tseg %d, segrep %d, repfnz %d\n", k, 
+	    printf("\t\tseg %d, segrep %d, repfnz %d\n", k,
 			segrep[k], repfnz[(j-jcol)*n + segrep[k]]);
     }
 
@@ -300,7 +300,7 @@ LUSolveFlops(SuperLUStat_t *stat)
 
 
 
-/* 
+/*
  * Fills an integer array with a given value.
  */
 void ifill(int *a, int alen, int ival)
@@ -311,8 +311,8 @@ void ifill(int *a, int alen, int ival)
 
 
 
-/* 
- * Get the statistics of the supernodes 
+/*
+ * Get the statistics of the supernodes
  */
 #define NBUCKS 10
 static 	int	max_sup_size;
@@ -328,7 +328,7 @@ void super_stats(int nsuper, int *xsup)
     for (i = 0; i <= nsuper; i++) {
 	isize = xsup[i+1] - xsup[i];
 	if ( isize == 1 ) nsup1++;
-	if ( max_sup_size < isize ) max_sup_size = isize;	
+	if ( max_sup_size < isize ) max_sup_size = isize;
     }
 
     printf("    Supernode statistics:\n\tno of super = %d\n", nsuper+1);
@@ -344,7 +344,7 @@ void super_stats(int nsuper, int *xsup)
         if (whichb >= NBUCKS) whichb = NBUCKS - 1;
         bucket[whichb]++;
     }
-    
+
     printf("\tHistogram of supernode sizes:\n");
     for (i = 0; i < NBUCKS; i++) {
         bl = (float) i * max_sup_size / NBUCKS;
@@ -374,7 +374,7 @@ void check_repfnz(int n, int w, int jcol, int *repfnz)
 {
     int jj, k;
 
-    for (jj = jcol; jj < jcol+w; jj++) 
+    for (jj = jcol; jj < jcol+w; jj++)
 	for (k = 0; k < n; k++)
 	    if ( repfnz[(jj-jcol)*n + k] != EMPTY ) {
 		fprintf(stderr, "col %d, repfnz_col[%d] = %d\n", jj,

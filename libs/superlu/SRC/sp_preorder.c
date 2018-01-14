@@ -1,7 +1,7 @@
 #include "slu_ddefs.h"
 
 void
-sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c, 
+sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 	    int *etree, SuperMatrix *AC)
 {
 /*
@@ -25,7 +25,7 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
  *
  * options (input) superlu_options_t*
  *         Specifies whether or not the elimination tree will be re-used.
- *         If options->Fact == DOFACT, this means first time factor A, 
+ *         If options->Fact == DOFACT, this means first time factor A,
  *         etree is computed, postered, and output.
  *         Otherwise, re-factor A, etree is input, unchanged on exit.
  *
@@ -36,8 +36,8 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
  *         In the future, more general A may be handled.
  *
  * perm_c  (input/output) int*
- *	   Column permutation vector of size A->ncol, which defines the 
- *         permutation matrix Pc; perm_c[i] = j means column i of A is 
+ *	   Column permutation vector of size A->ncol, which defines the
+ *         permutation matrix Pc; perm_c[i] = j means column i of A is
  *         in position j in A*Pc.
  *         If options->Fact == DOFACT, perm_c is both input and output.
  *         On output, it is changed according to a postorder of etree.
@@ -63,7 +63,7 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
     register  int n, i;
 
     n = A->ncol;
-    
+
     /* Apply column permutation perm_c to A's column pointers so to
        obtain NCP format in AC = A*Pc.  */
     AC->Stype       = SLU_NCP;
@@ -85,13 +85,13 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 #ifdef DEBUG
     print_int_vec("pre_order:", n, perm_c);
     check_perm("Initial perm_c", n, perm_c);
-#endif      
+#endif
 
     for (i = 0; i < n; i++) {
-	ACstore->colbeg[perm_c[i]] = Astore->colptr[i]; 
+	ACstore->colbeg[perm_c[i]] = Astore->colptr[i];
 	ACstore->colend[perm_c[i]] = Astore->colptr[i+1];
     }
-	
+
     if ( options->Fact == DOFACT ) {
 #undef ETREE_ATplusA
 #ifdef ETREE_ATplusA
@@ -112,7 +112,7 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 	c_colend = c_colbeg + n;
 	if (!c_colbeg ) ABORT("SUPERLU_MALLOC fails for c_colbeg/c_colend");
 	for (i = 0; i < n; i++) {
-	    c_colbeg[perm_c[i]] = b_colptr[i]; 
+	    c_colbeg[perm_c[i]] = b_colptr[i];
   	    c_colend[perm_c[i]] = b_colptr[i+1];
 	}
 	for (j = 0; j < n; ++j) {
@@ -127,7 +127,7 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 	SUPERLU_FREE(b_colptr);
 	if ( bnz ) SUPERLU_FREE(b_rowind);
 	SUPERLU_FREE(c_colbeg);
-	
+
 #else
         /*--------------------------------------------
 	  COMPUTE THE COLUMN ELIMINATION TREE.
@@ -135,10 +135,10 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 	sp_coletree(ACstore->colbeg, ACstore->colend, ACstore->rowind,
 		    A->nrow, A->ncol, etree);
 #endif
-#ifdef DEBUG	
+#ifdef DEBUG
 	print_int_vec("etree:", n, etree);
-#endif	
-	
+#endif
+
 	/* In symmetric mode, do not do postorder here. */
 	if ( options->SymmetricMode == NO ) {
 	    /* Post order etree */
@@ -148,19 +148,19 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 
 #ifdef DEBUG
 	    print_int_vec("post:", n+1, post);
-	    check_perm("post", n, post);	
-#endif	
-	    iwork = (int*) SUPERLU_MALLOC((n+1)*sizeof(int)); 
+	    check_perm("post", n, post);
+#endif
+	    iwork = (int*) SUPERLU_MALLOC((n+1)*sizeof(int));
 	    if ( !iwork ) ABORT("SUPERLU_MALLOC fails for iwork[]");
 
 	    /* Renumber etree in postorder */
 	    for (i = 0; i < n; ++i) iwork[post[i]] = post[etree[i]];
 	    for (i = 0; i < n; ++i) etree[i] = iwork[i];
 
-#ifdef DEBUG	
+#ifdef DEBUG
 	    print_int_vec("postorder etree:", n, etree);
 #endif
-	
+
 	    /* Postmultiply A*Pc by post[] */
 	    for (i = 0; i < n; ++i) iwork[post[i]] = ACstore->colbeg[i];
 	    for (i = 0; i < n; ++i) ACstore->colbeg[i] = iwork[i];
@@ -173,7 +173,7 @@ sp_preorder(superlu_options_t *options,  SuperMatrix *A, int *perm_c,
 
 #ifdef DEBUG
 	    print_int_vec("Pc*post:", n, perm_c);
-	    check_perm("final perm_c", n, perm_c);	
+	    check_perm("final perm_c", n, perm_c);
 #endif
 	    SUPERLU_FREE (post);
 	    SUPERLU_FREE (iwork);

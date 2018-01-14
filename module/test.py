@@ -1,20 +1,20 @@
 #
 # Copyright (C) 2006-2007 Cooper Street Innovations Inc.
 # Charles Eidsness    <charles@cooper-street.com>
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 #
 
@@ -32,7 +32,7 @@ def test_ibis():
 	NOTE: Will only work on my development tree, these models are copyrighted
 	and can not be distributed with eispice. CE
 	"""
-	
+
 	# 29le010.ibs
 	ibs = eispice.Ibis("../development/29le010.ibs")
 	cct = eispice.Circuit('test_29le010')
@@ -59,7 +59,7 @@ def test_ibis():
 	cct.Receiver = ibs['38']('vs')
 	cct.tran('0.1n', '200n')
 	eispice.plot(cct)
-	
+
 	# ad9289bbc.ibs
 	ibs = eispice.Ibis("../development/ad9289bbc.ibs")
 	cct = eispice.Circuit('test_ad9289bbc')
@@ -69,7 +69,7 @@ def test_ibis():
 	cct.R2 = eispice.R('vsn',0,50)
 	cct.tran('0.1n', '10n')
 	eispice.plot(cct)
-	
+
 	# ahc1g14.ibs
 	ibs = eispice.Ibis("../development/ahc1g14.ibs")
 	cct = eispice.Circuit('test_ahc1g14')
@@ -102,18 +102,18 @@ def test_ibis():
 
 def test_bugs():
 	"""Test bugfixes."""
-	
+
 	cct = eispice.Circuit('Break-Point Stall Bug')
-	cct.Vx = eispice.V('vs',0, 0, 
+	cct.Vx = eispice.V('vs',0, 0,
 			eispice.Pulse(0, 1, '0n','1n','1n','4n','8n'))
 	cct.Rt = eispice.R('vs', 'vi', 50)
 	cct.Tg = eispice.T('vi', 0, 'vo', 0, 50, '2n')
 	cct.Cx = eispice.C('vo',0,'5p')
 	cct.tran('0.01n', '18n')
 	eispice.plot(cct)
-	
+
 	cct = eispice.Circuit("LC Tline Bug")
-	cct.Vs = eispice.V('vs', 0, 0, 
+	cct.Vs = eispice.V('vs', 0, 0,
 			eispice.Pulse(0, 1, '15n', '1n', '1n', '5n', '50n'))
 	cct.Rs = eispice.R('vs', 1, 50)
 	for i in range(1,100):
@@ -124,9 +124,9 @@ def test_bugs():
 	eispice.plot_voltage(cct, 1 ,'%i' % (i+1))
 
 	cct = eispice.Circuit("SuperLU Hangup Bug")
-	cct.Vx = eispice.V('1', '0', 4, 
+	cct.Vx = eispice.V('1', '0', 4,
 			eispice.Pulse(4, 8, '10n', '2n', '3n', '5n', '20n'))
-	cct.Vy = eispice.V('1', '0', 4, 
+	cct.Vy = eispice.V('1', '0', 4,
 			eispice.Pulse(8, 4, '10n', '2n', '3n', '5n', '20n'))
 	cct.tran('0.5n', '100n')
 	eispice.plot(cct)
@@ -144,10 +144,9 @@ def test():
 	suite.addTest(doctest.DocTestSuite('waveform'))
 	runner = unittest.TextTestRunner()
 	runner.run(suite)
-	
+
 if __name__ == '__main__':
-	
+
 	test()
 	#~ test_ibis()
 	#~ test_bugs()
-		

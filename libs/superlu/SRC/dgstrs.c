@@ -8,10 +8,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -22,8 +22,8 @@
 #include "slu_ddefs.h"
 
 
-/* 
- * Function prototypes 
+/*
+ * Function prototypes
  */
 void dusolve(int, int, double*, double*);
 void dlsolve(int, int, double*, double*);
@@ -65,12 +65,12 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
  *         Stype = SLU_NC, Dtype = SLU_D, Mtype = SLU_TRU.
  *
  * perm_c  (input) int*, dimension (L->ncol)
- *	   Column permutation vector, which defines the 
- *         permutation matrix Pc; perm_c[i] = j means column i of A is 
+ *	   Column permutation vector, which defines the
+ *         permutation matrix Pc; perm_c[i] = j means column i of A is
  *         in position j in A*Pc.
  *
  * perm_r  (input) int*, dimension (L->nrow)
- *         Row permutation vector, which defines the permutation matrix Pr; 
+ *         Row permutation vector, which defines the permutation matrix Pr;
  *         perm_r[i] = j means row i of A is in position j in Pr*A.
  *
  * B       (input/output) SuperMatrix*
@@ -90,7 +90,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 #ifdef _CRAY
     _fcd ftcs1, ftcs2, ftcs3, ftcs4;
 #endif
-    
+
 #ifdef USE_VENDOR_BLAS
 	int      incx = 1, incy = 1;
     double   alpha = 1.0, beta = 1.0;
@@ -145,7 +145,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
     Ustore = U->Store;
     Uval = Ustore->nzval;
     solve_ops = 0;
-    
+
     if ( trans == NOTRANS ) {
 	/* Permute right hand sides to form Pr*B */
 	for (i = 0; i < nrhs; i++) {
@@ -153,7 +153,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 	    for (k = 0; k < n; k++) soln[perm_r[k]] = rhs_work[k];
 	    for (k = 0; k < n; k++) rhs_work[k] = soln[k];
 	}
-	
+
 	/* Forward solve PLy=Pb. */
 	for (k = 0; k <= Lstore->nsuper; k++) {
 	    fsupc = L_FST_SUPC(k);
@@ -164,7 +164,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 
 	    solve_ops += nsupc * (nsupc - 1) * nrhs;
 	    solve_ops += 2 * nrow * nsupc * nrhs;
-	    
+
 	    if ( nsupc == 1 ) {
 		for (j = 0; j < nrhs; j++) {
 		    rhs_work = &Bmat[j*ldb];
@@ -184,16 +184,16 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 		ftcs3 = _cptofcd("U", strlen("U"));
 		STRSM( ftcs1, ftcs1, ftcs2, ftcs3, &nsupc, &nrhs, &alpha,
 		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
-		
-		SGEMM( ftcs2, ftcs2, &nrow, &nrhs, &nsupc, &alpha, 
-			&Lval[luptr+nsupc], &nsupr, &Bmat[fsupc], &ldb, 
+
+		SGEMM( ftcs2, ftcs2, &nrow, &nrhs, &nsupc, &alpha,
+			&Lval[luptr+nsupc], &nsupr, &Bmat[fsupc], &ldb,
 			&beta, &work[0], &n );
 #else
 		dtrsm_("L", "L", "N", "U", &nsupc, &nrhs, &alpha,
 		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
-		
-		dgemm_( "N", "N", &nrow, &nrhs, &nsupc, &alpha, 
-			&Lval[luptr+nsupc], &nsupr, &Bmat[fsupc], &ldb, 
+
+		dgemm_( "N", "N", &nrow, &nrhs, &nsupc, &alpha,
+			&Lval[luptr+nsupc], &nsupr, &Bmat[fsupc], &ldb,
 			&beta, &work[0], &n );
 #endif
 		for (j = 0; j < nrhs; j++) {
@@ -207,7 +207,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 			iptr++;
 		    }
 		}
-#else		
+#else
 		for (j = 0; j < nrhs; j++) {
 		    rhs_work = &Bmat[j*ldb];
 		    dlsolve (nsupr, nsupc, &Lval[luptr], &rhs_work[fsupc]);
@@ -222,7 +222,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 			iptr++;
 		    }
 		}
-#endif		    
+#endif
 	    } /* else ... */
 	} /* for L-solve */
 
@@ -261,10 +261,10 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 		dtrsm_("L", "U", "N", "N", &nsupc, &nrhs, &alpha,
 		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
 #endif
-#else		
+#else
 		for (j = 0; j < nrhs; j++)
 		    dusolve ( nsupr, nsupc, &Lval[luptr], &Bmat[fsupc+j*ldb] );
-#endif		
+#endif
 	    }
 
 	    for (j = 0; j < nrhs; ++j) {
@@ -277,7 +277,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 		    }
 		}
 	    }
-	    
+
 	} /* for U-solve */
 
 #ifdef DEBUG
@@ -291,7 +291,7 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 	    for (k = 0; k < n; k++) soln[k] = rhs_work[perm_c[k]];
 	    for (k = 0; k < n; k++) rhs_work[k] = soln[k];
 	}
-	
+
         stat->ops[SOLVE] = solve_ops;
 
     } else { /* Solve A'*X=B or CONJ(A)*X=B */
@@ -304,13 +304,13 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 
 	stat->ops[SOLVE] = 0;
 	for (k = 0; k < nrhs; ++k) {
-	    
+
 	    /* Multiply by inv(U'). */
 	    sp_dtrsv("U", "T", "N", L, U, &Bmat[k*ldb], stat, info);
-	    
+
 	    /* Multiply by inv(L'). */
 	    sp_dtrsv("L", "T", "U", L, U, &Bmat[k*ldb], stat, info);
-	    
+
 	}
 	/* Compute the final solution X := Pr'*X (=inv(Pr)*X) */
 	for (i = 0; i < nrhs; i++) {
@@ -326,13 +326,13 @@ dgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 }
 
 /*
- * Diagnostic print of the solution vector 
+ * Diagnostic print of the solution vector
  */
 void
 dprint_soln(int n, int nrhs, double *soln)
 {
     int i;
 
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
   	printf("\t%d: %.4f\n", i, soln[i]);
 }

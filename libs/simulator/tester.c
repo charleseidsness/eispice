@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -54,19 +54,19 @@ void print(FILE *outFile, double *data, char **variables, int numVariables)
 	}
 }
 
-void plot(FILE *outFile, double *data, char **variables, int numPoints, 
+void plot(FILE *outFile, double *data, char **variables, int numPoints,
 		int numVariables)
 {
 	int i, j, comma;
-	
+
 	fprintf(outFile, "#!gnuplot\n");
 	fprintf(outFile, "set data style line\n");
 	fprintf(outFile, "set grid\n");
-			
+
 	fprintf(outFile, "set xlabel \"Time (s)\"\n");
 	fprintf(outFile, "set term x11 0 font clean persist\n");
 	fprintf(outFile, "plot ");
-	
+
 	comma = 0;
 	for(i = 1; i < numVariables; i++) {
 		if(comma) {
@@ -77,20 +77,20 @@ void plot(FILE *outFile, double *data, char **variables, int numPoints,
 		fprintf(outFile, "'-' title \"%s\" lw 2\\\n", variables[i]);
 	}
 	fprintf(outFile, "\n");
-	
+
 	for(i = 1; i < numVariables; i++) {
 		for(j = 0; j < numPoints*numVariables; j += numVariables) {
 			fprintf(outFile, "%e\t%e\n", data[j], data[j + i]);
 		}
 		fprintf(outFile, "e\n");
 	}
-	
+
 }
 
 int main(int argc, char *argv[])
 {
 	int opt;
-	struct option longopts[] = { 
+	struct option longopts[] = {
 			{"help", 0, NULL, 'h'},
 			{"version", 0, NULL, 'v'},
 			{"about", 0, NULL, 'a'},
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	double gaussD[7] = { 0, 3.3, 2e-9, 1e-9, 0.5e-9, 5e-9, 12e-9 };
 	double *gauss[7] = { &gaussD[0], &gaussD[1], &gaussD[2], &gaussD[3],
 			&gaussD[4], &gaussD[5], &gaussD[6] };
-	
+
 	/* Process the command line options */
 	while((opt = getopt_long(argc,argv,"hvae:l:01234o:",longopts,NULL)) != -1) {
 		switch(opt) {
@@ -125,17 +125,17 @@ int main(int argc, char *argv[])
 			/* Create a new simulator object */
 			simulator = simulatorNew(simulator);
 			ExitFailureIf(simulator == NULL);
-			
+
 			R = 10;
 			dc = 10;
 			ExitFailureIf(simulatorAddResistor(simulator, "R1", "n1", "0", &R));
 			ExitFailureIf(simulatorAddSource(simulator, "V1", "n1", "0",'v',
 					&dc, 0x0, NULL));
-			ExitFailureIf(simulatorRunOperatingPoint(simulator, 
+			ExitFailureIf(simulatorRunOperatingPoint(simulator,
 					&data, &variables, &numPoints, &numVariables));
-			
+
 			print(outFile, data, variables, numVariables);
-			
+
 			/* Destroy the Scripter Object */
 			if(simulatorDestroy(&simulator)) {
 				Warn("Failed to close simulator");
@@ -147,19 +147,19 @@ int main(int argc, char *argv[])
 			/* Create a new simulator object */
 			simulator = simulatorNew(simulator);
 			ExitFailureIf(simulator == NULL);
-			
+
 			R = 10; Z0 = 50; Td = 15e-9; loss = 0.2;
 			ExitFailureIf(simulatorAddResistor(simulator, "R1", "n1", "n2", &R));
 			ExitFailureIf(simulatorAddSource(simulator, "V1", "n1", "0",'v',
 					NULL, 'p', pulse));
 			ExitFailureIf(simulatorAddTLine(simulator, "T2", "n2", "0", "n3",
 					"0", &Z0, &Td, &loss));
-			ExitFailureIf(simulatorRunTransient(simulator, 
+			ExitFailureIf(simulatorRunTransient(simulator,
 					0.1e-9, 50e-9, 0.0, 0,
 					&data, &variables, &numPoints, &numVariables));
-			
+
 			plot(outFile, data, variables, numPoints, numVariables);
-			
+
 			/* Destroy the Scripter Object */
 			if(simulatorDestroy(&simulator)) {
 				Warn("Failed to close simulator");
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 			/* Create a new simulator object */
 			simulator = simulatorNew(simulator);
 			ExitFailureIf(simulator == NULL);
-			
+
 			R = 10; Z0 = 50; Td = 15e-9; loss = 0.2;
 			ExitFailureIf(simulatorAddResistor(simulator, "R1", "n1", "n2", &R));
 			ExitFailureIf(simulatorAddSource(simulator, "V1", "n1", "0",'v',
@@ -179,13 +179,13 @@ int main(int argc, char *argv[])
 			ExitFailureIf(simulatorAddTLine(simulator, "T2", "n2", "0", "n3",
 					"0", &Z0, &Td, &loss));
 			for(i = 0; i < 100; i++) {
-				ExitFailureIf(simulatorRunTransient(simulator, 
+				ExitFailureIf(simulatorRunTransient(simulator,
 					0.1e-9, 50e-9, 0.0, 0,
 					&data, &variables, &numPoints, &numVariables));
 			}
-			
+
 			//plot(outFile, data, variables, numPoints, numVariables);
-			
+
 			/* Destroy the Scripter Object */
 			if(simulatorDestroy(&simulator)) {
 				Warn("Failed to close simulator");
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 			/* Create a new simulator object */
 			simulator = simulatorNew(simulator);
 			ExitFailureIf(simulator == NULL);
-			
+
 			double L0[4] = {231.832e-9, 38.1483e-9, 38.1483e-9, 231.819e-9};
 			double *L0p = L0;
 			double C0[4] = {156.163e-12, -8.60102e-12,-8.60102e-12, 156.193e-12};
@@ -215,14 +215,14 @@ int main(int argc, char *argv[])
 			double len = 0.0265;
 			double fgd = 1e100;
 			double fK = 1e9;
-			
+
 			ExitFailureIf(simulatorAddResistor(simulator, "R1", "n1", "n2", &R));
 			ExitFailureIf(simulatorAddSource(simulator, "V1", "n1", "0",'v',
 					NULL, 'p', pulse));
 			ExitFailureIf(simulatorAddTLineW(simulator,
-					"T1", nodes, 6, &M, &len, &L0p, &C0p, &R0p, &G0p, &Rsp, 
+					"T1", nodes, 6, &M, &len, &L0p, &C0p, &R0p, &G0p, &Rsp,
 					&Gdp, &fgd, &fK));
-			
+
 			/* Destroy the Scripter Object */
 			if(simulatorDestroy(&simulator)) {
 				Warn("Failed to close simulator");
@@ -234,15 +234,15 @@ int main(int argc, char *argv[])
 			/* Create a new simulator object */
 			simulator = simulatorNew(simulator);
 			ExitFailureIf(simulator == NULL);
-			
+
 			ExitFailureIf(simulatorAddSource(simulator, "V1", "n1", "0",'v',
 					NULL, 'g', gauss));
-			ExitFailureIf(simulatorRunTransient(simulator, 
+			ExitFailureIf(simulatorRunTransient(simulator,
 					0.01e-9, 50e-9, 0.0, 0,
 					&data, &variables, &numPoints, &numVariables));
-			
+
 			plot(outFile, data, variables, numPoints, numVariables);
-			
+
 			/* Destroy the Scripter Object */
 			if(simulatorDestroy(&simulator)) {
 				Warn("Failed to close simulator");
@@ -252,10 +252,10 @@ int main(int argc, char *argv[])
 			break;
 		case 'a':
 		case 'v': version(); ExitSuccess;
-		case 'o': 
+		case 'o':
 			outFileName = optarg;
 			outFile = fopen(outFileName, "wb");
-			ExitFailureIf(outFile == NULL, "Failed to open %s for output", 
+			ExitFailureIf(outFile == NULL, "Failed to open %s for output",
 					outFileName);
 			break;
 		case 'e': OpenErrorFile(optarg); break;
@@ -266,12 +266,12 @@ int main(int argc, char *argv[])
 		default:  help(); ExitFailure("Invalid option");
 		}
 	}
-	
-	
+
+
 	if(outFileName != NULL) {
 		fclose(outFile);
 	}
-	
+
 	CloseErrorFile;
 	CloseLogFile;
 	ExitSuccess;

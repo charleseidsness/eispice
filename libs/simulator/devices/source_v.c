@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -57,14 +57,14 @@ static int deviceClassNextStep(device_ *r, double *nextStep)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	if(p->waveform != NULL) {
-		
+
 		Debug("Next Breaking %s %s %p", r->class->type, r->refdes, r);
-		
+
 		ReturnErrIf(waveformNextStep(p->waveform, nextStep));
 	}
-	
+
 	return 0;
 }
 
@@ -77,21 +77,21 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	if(p->waveform != NULL) {
-		
+
 		Debug("Stepping %s %s %p", r->class->type, r->refdes, r);
-		
+
 		ReturnErrIf(waveformCalcValue(p->waveform, &dc));
-		
+
 		ReturnErrIf(rowRHSPlus(p->rowR, dc - p->dc));
 		p->dc = dc;
-		
+
 		/* Check to see if we changed the voltage enough to warrant a break */
 		*breakPoint = checkbreakIsBreak(p->checkbreak, dc);
 		ReturnErrIf(*breakPoint < 0);
 	}
-	
+
 	return 0;
 }
 
@@ -100,13 +100,13 @@ static int deviceClassStep(device_ *r, int *breakPoint)
 static int deviceClassLoad(device_ *r)
 {
 	devicePrivate_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Loading %s %s %p", r->class->type, r->refdes, r);
-	
+
 	/* Initialise / Reset State Data */
 	ReturnErrIf(checkbreakInitialize(p->checkbreak, 0.0));
 	if(p->waveform != NULL) {
@@ -114,7 +114,7 @@ static int deviceClassLoad(device_ *r)
 	}
 	ReturnErrIf(p->dcParam == NULL);
 	p->dc = *p->dcParam;
-	
+
 	/* Modified Nodal Analysis Stamp
 	 *	                     	+  /\  -
 	 *	  |_Vk_Vj_Ir_|_rhs_|	__/Vr\__
@@ -123,14 +123,14 @@ static int deviceClassLoad(device_ *r)
 	 *	r |  1 -1 -- | Vr  |	------->
 	 *	                    	   Ir
 	 */
-	
+
 	ReturnErrIf(rowRHSPlus(p->rowR, p->dc));
-	
+
 	ReturnErrIf(nodeDataSet(p->nodeRK, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeRJ, -1.0));
 	ReturnErrIf(nodeDataSet(p->nodeKR, 1.0));
 	ReturnErrIf(nodeDataSet(p->nodeJR, -1.0));
-	
+
 	return 0;
 }
 
@@ -142,21 +142,21 @@ static int deviceClassUnconfig(device_ *r)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Unconfiging %s %s %p", r->class->type, r->refdes, r);
-	
+
 	if(p->checkbreak != NULL) {
 		if(checkbreakDestroy(&p->checkbreak)) {
 			Warn("Error destroying break check");
 		}
 	}
-	
+
 	if(p->waveform != NULL) {
 		if(waveformDestroy(&p->waveform)) {
 			Warn("Error destroying waveform");
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -168,13 +168,13 @@ static int deviceClassPrint(device_ *r)
 	ReturnErrIf(r == NULL);
 	p = r->private;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Printing %s %s %p", r->class->type, r->refdes, r);
-	
-	Info("%s -- %s %s -> %s; DC = %gV", r->class->type, 
+
+	Info("%s -- %s %s -> %s; DC = %gV", r->class->type,
 			r->refdes, rowGetName(r->pin[K]), rowGetName(r->pin[J]),
 			*p->dcParam);
-	
+
 	return 0;
 }
 
@@ -199,31 +199,31 @@ deviceClass_ deviceVoltageSource = {
  |                              Configuration                                |
   ===========================================================================*/
 
-int deviceVoltageSourceConfig(device_ *r, double *dc, char type, 
+int deviceVoltageSourceConfig(device_ *r, double *dc, char type,
 		double *args[7])
 {
 	devicePrivate_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(r->private != NULL);
 	ReturnErrIf(r->numPins != NP);
-	
+
 	ReturnErrIf((r->pin[K] == &gndRow) && (r->pin[J] == &gndRow),
 			"Source %s has both nodes shorted to 0!", r->refdes);
-	
+
 	/* Copy in class pointer */
 	r->class = &deviceVoltageSource;
-	
+
 	Debug("Configuring %s %s %p", r->class->type, r->refdes, r);
-	
+
 	/* allocate space for private data */
 	r->private = calloc(1, sizeof(devicePrivate_));
 	ReturnErrIf(r->private == NULL);
 	p = r->private;
-	
+
 	/* Copy in parameter pointers */
 	if(type != 0x0) {
-		p->waveform = waveformNew(p->waveform, r->control, type, args, 
+		p->waveform = waveformNew(p->waveform, r->control, type, args,
 				&p->dcParam);
 		ReturnErrIf(p->waveform == NULL);
 		ReturnErrIf(p->dcParam == NULL);
@@ -231,11 +231,11 @@ int deviceVoltageSourceConfig(device_ *r, double *dc, char type,
 		p->waveform = NULL;
 		p->dcParam = dc;
 	}
-	
+
 	/* Setup the break checking object */
 	p->checkbreak = checkbreakNew(p->checkbreak, r->control, 'V');
 	ReturnErrIf(p->checkbreak == NULL);
-	
+
 	/* Create required nodes and rows (see MNA stamp above) */
 	p->rowR = matrixFindOrAddRow(r->matrix, 'i', r->refdes);
 	ReturnErrIf(p->rowR == NULL);
@@ -247,7 +247,7 @@ int deviceVoltageSourceConfig(device_ *r, double *dc, char type,
 	ReturnErrIf(p->nodeKR == NULL);
 	p->nodeJR = matrixFindOrAddNode(r->matrix, r->pin[J], p->rowR);
 	ReturnErrIf(p->nodeJR == NULL);
-	
+
 	return 0;
 }
 

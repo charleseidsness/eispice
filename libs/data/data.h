@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,19 +6,19 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
-        
+
 #ifndef DATA_H
 #define DATA_H
 
@@ -65,7 +65,7 @@ typedef enum {
 	LIST_SEARCH_NEXT,		/* Data doesn't match key, move forward */
 	LIST_SEARCH_NOTONLIST		/* Data not on list, return NULL */
 } listSearchReturn_;
-typedef listSearchReturn_ (*listSearch_)(void *data, void *dataNext, 
+typedef listSearchReturn_ (*listSearch_)(void *data, void *dataNext,
 		void *key);
 int listSearch(list_ *r, void *key, listSearch_ f, listNode_ **node,
 		void **data);

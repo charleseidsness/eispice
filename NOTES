@@ -1,7 +1,7 @@
 New since last release:
 - Added locking mechanism to list execute function
 - Migrated to Fortran95 from Fortran77
-	
+
 TODO Before next major release:
 - Finish W-Element model
 - Add a digital control to the VI Device to support controlling IBIS Drivers

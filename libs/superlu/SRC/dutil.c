@@ -8,10 +8,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -23,7 +23,7 @@
 #include "slu_ddefs.h"
 
 void
-dCreate_CompCol_Matrix(SuperMatrix *A, int m, int n, int nnz, 
+dCreate_CompCol_Matrix(SuperMatrix *A, int m, int n, int nnz,
 		       double *nzval, int *rowind, int *colptr,
 		       Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
@@ -44,7 +44,7 @@ dCreate_CompCol_Matrix(SuperMatrix *A, int m, int n, int nnz,
 }
 
 void
-dCreate_CompRow_Matrix(SuperMatrix *A, int m, int n, int nnz, 
+dCreate_CompRow_Matrix(SuperMatrix *A, int m, int n, int nnz,
 		       double *nzval, int *colind, int *rowptr,
 		       Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
@@ -91,7 +91,7 @@ dCreate_Dense_Matrix(SuperMatrix *X, int m, int n, double *x, int ldx,
 		    Stype_t stype, Dtype_t dtype, Mtype_t mtype)
 {
     DNformat    *Xstore;
-    
+
     X->Stype = stype;
     X->Dtype = dtype;
     X->Mtype = mtype;
@@ -116,14 +116,14 @@ dCopy_Dense_Matrix(int M, int N, double *X, int ldx,
  *  Copies a two-dimensional matrix X to another matrix Y.
  */
     int    i, j;
-    
+
     for (j = 0; j < N; ++j)
         for (i = 0; i < M; ++i)
             Y[i + j*ldy] = X[i + j*ldx];
 }
 
 void
-dCreate_SuperNode_Matrix(SuperMatrix *L, int m, int n, int nnz, 
+dCreate_SuperNode_Matrix(SuperMatrix *L, int m, int n, int nnz,
 			double *nzval, int *nzval_colptr, int *rowind,
 			int *rowind_colptr, int *col_to_sup, int *sup_to_col,
 			Stype_t stype, Dtype_t dtype, Mtype_t mtype)
@@ -154,7 +154,7 @@ dCreate_SuperNode_Matrix(SuperMatrix *L, int m, int n, int nnz,
  * Convert a row compressed storage into a column compressed storage.
  */
 void
-dCompRow_to_CompCol(int m, int n, int nnz, 
+dCompRow_to_CompCol(int m, int n, int nnz,
 		    double *a, int *colind, int *rowptr,
 		    double **at, int **rowind, int **colptr)
 {
@@ -166,7 +166,7 @@ dCompRow_to_CompCol(int m, int n, int nnz,
     *rowind = (int *) intMalloc(nnz);
     *colptr = (int *) intMalloc(n+1);
     marker = (int *) intCalloc(n);
-    
+
     /* Get counts of each column of A, and set up column pointers */
     for (i = 0; i < m; ++i)
 	for (j = rowptr[i]; j < rowptr[i+1]; ++j) ++marker[colind[j]];
@@ -197,7 +197,7 @@ dPrint_CompCol_Matrix(char *what, SuperMatrix *A)
     NCformat     *Astore;
     register int i,n;
     double       *dp;
-    
+
     printf("\nCompCol matrix %s:\n", what);
     printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     n = A->ncol;
@@ -221,7 +221,7 @@ dPrint_SuperNode_Matrix(char *what, SuperMatrix *A)
     register int i, j, k, c, d, n, nsup;
     double       *dp;
     int *col_to_sup, *sup_to_col, *rowind, *rowind_colptr;
-    
+
     printf("\nSuperNode matrix %s:\n", what);
     printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     n = A->ncol;
@@ -231,7 +231,7 @@ dPrint_SuperNode_Matrix(char *what, SuperMatrix *A)
     sup_to_col = Astore->sup_to_col;
     rowind_colptr = Astore->rowind_colptr;
     rowind = Astore->rowind;
-    printf("nrow %d, ncol %d, nnz %d, nsuper %d\n", 
+    printf("nrow %d, ncol %d, nnz %d, nsuper %d\n",
 	   A->nrow,A->ncol,Astore->nnz,Astore->nsuper);
     printf("nzval:\n");
     for (k = 0; k <= Astore->nsuper; ++k) {
@@ -250,14 +250,14 @@ dPrint_SuperNode_Matrix(char *what, SuperMatrix *A)
     printf("\nnzval_colptr: ");
     for (i = 0; i <= n; ++i) printf("%d  ", Astore->nzval_colptr[i]);
     printf("\nrowind: ");
-    for (i = 0; i < Astore->rowind_colptr[n]; ++i) 
+    for (i = 0; i < Astore->rowind_colptr[n]; ++i)
         printf("%d  ", Astore->rowind[i]);
     printf("\nrowind_colptr: ");
     for (i = 0; i <= n; ++i) printf("%d  ", Astore->rowind_colptr[i]);
     printf("\ncol_to_sup: ");
     for (i = 0; i < n; ++i) printf("%d  ", col_to_sup[i]);
     printf("\nsup_to_col: ");
-    for (i = 0; i <= Astore->nsuper+1; ++i) 
+    for (i = 0; i <= Astore->nsuper+1; ++i)
         printf("%d  ", sup_to_col[i]);
     printf("\n");
     fflush(stdout);
@@ -269,7 +269,7 @@ dPrint_Dense_Matrix(char *what, SuperMatrix *A)
     DNformat     *Astore = NULL;
     register int i, j, lda = Astore->lda;
     double       *dp;
-    
+
     printf("\nDense matrix %s:\n", what);
     printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     Astore = (DNformat *) A->Store;
@@ -307,11 +307,11 @@ dprint_lu_col(char *msg, int jcol, int pivrow, int *xprune, GlobalLU_t *Glu)
     ucol    = Glu->ucol;
     usub    = Glu->usub;
     xusub   = Glu->xusub;
-    
+
     printf("%s", msg);
-    printf("col %d: pivrow %d, supno %d, xprune %d\n", 
+    printf("col %d: pivrow %d, supno %d, xprune %d\n",
 	   jcol, pivrow, supno[jcol], xprune[jcol]);
-    
+
     printf("\tU-col:\n");
     for (i = xusub[jcol]; i < xusub[jcol+1]; i++)
 	printf("\t%d%10.4f\n", usub[i], ucol[i]);
@@ -328,15 +328,15 @@ dprint_lu_col(char *msg, int jcol, int pivrow, int *xprune, GlobalLU_t *Glu)
 
 
 /*
- * Check whether tempv[] == 0. This should be true before and after 
- * calling any numeric routines, i.e., "panel_bmod" and "column_bmod". 
+ * Check whether tempv[] == 0. This should be true before and after
+ * calling any numeric routines, i.e., "panel_bmod" and "column_bmod".
  */
 void dcheck_tempv(int n, double *tempv)
 {
     int i;
-	
+
     for (i = 0; i < n; i++) {
-	if (tempv[i] != 0.0) 
+	if (tempv[i] != 0.0)
 	{
 	    fprintf(stderr,"tempv[%d] = %f\n", i,tempv[i]);
 	    ABORT("dcheck_tempv");
@@ -376,7 +376,7 @@ dFillRHS(trans_t trans, int nrhs, double *x, int ldx,
     Bstore = B->Store;
     rhs    = Bstore->nzval;
     ldc    = Bstore->lda;
-    
+
     if ( trans == NOTRANS ) *(unsigned char *)transc = 'N';
     else *(unsigned char *)transc = 'T';
 
@@ -385,17 +385,17 @@ dFillRHS(trans_t trans, int nrhs, double *x, int ldx,
 
 }
 
-/* 
+/*
  * Fills a double precision array with a given value.
  */
-void 
+void
 dfill(double *a, int alen, double dval)
 {
     register int i;
 	double d;
-	
+
 	if(dval == 0.0) {
-		/* I'm not sure how but maybe this could be 
+		/* I'm not sure how but maybe this could be
 		 * changed to a compile-time check? */
 		memset((char*)&d, 0x0, sizeof(double));
 		if(d == 0.0) {
@@ -403,14 +403,14 @@ dfill(double *a, int alen, double dval)
 			return;
 		}
 	}
-	
+
 	for (i = 0; i < alen; i++) a[i] = dval;
 }
 
 
 
-/* 
- * Check the inf-norm of the error vector 
+/*
+ * Check the inf-norm of the error vector
  */
 void dinf_norm_error(int nrhs, SuperMatrix *X, double *xtrue)
 {
@@ -446,10 +446,10 @@ dPrintPerf(SuperMatrix *L, SuperMatrix *U, mem_usage_t *mem_usage,
     NCformat *Ustore;
     double   *utime;
     flops_t  *ops;
-    
+
     utime = stat->utime;
     ops   = stat->ops;
-    
+
     if ( utime[FACT] != 0. )
 	printf("Factor flops = %e\tMflops = %8.2f\n", ops[FACT],
 	       ops[FACT]*1e-6/utime[FACT]);
@@ -457,27 +457,27 @@ dPrintPerf(SuperMatrix *L, SuperMatrix *U, mem_usage_t *mem_usage,
     if ( utime[SOLVE] != 0. )
 	printf("Solve flops = %.0f, Mflops = %8.2f\n", ops[SOLVE],
 	       ops[SOLVE]*1e-6/utime[SOLVE]);
-    
+
     Lstore = (SCformat *) L->Store;
     Ustore = (NCformat *) U->Store;
     printf("\tNo of nonzeros in factor L = %d\n", Lstore->nnz);
     printf("\tNo of nonzeros in factor U = %d\n", Ustore->nnz);
     printf("\tNo of nonzeros in L+U = %d\n", Lstore->nnz + Ustore->nnz);
-	
+
     printf("L\\U MB %.3f\ttotal MB needed %.3f\texpansions %d\n",
 	   mem_usage->for_lu/1e6, mem_usage->total_needed/1e6,
 	   mem_usage->expansions);
-	
+
     printf("\tFactor\tMflops\tSolve\tMflops\tEtree\tEquil\tRcond\tRefine\n");
     printf("PERF:%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n",
 	   utime[FACT], ops[FACT]*1e-6/utime[FACT],
 	   utime[SOLVE], ops[SOLVE]*1e-6/utime[SOLVE],
 	   utime[ETREE], utime[EQUIL], utime[RCOND], utime[REFINE]);
-    
+
     printf("\tRpg\t\tRcond\t\tFerr\t\tBerr\t\tEquil?\n");
     printf("NUM:\t%e\t%e\t%e\t%e\t%s\n",
 	   rpg, rcond, ferr[0], berr[0], equed);
-    
+
 }
 
 

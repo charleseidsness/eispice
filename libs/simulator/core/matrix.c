@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -82,14 +82,14 @@ struct _matrixLibrary {
 static int matrixSolveSuperLU(matrix_ *r)
 {
 	matrixLibrary_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->library;
 	ReturnErrIf(p == NULL);
-	
+
 	/* Set the control back to full factorization (if it was changed) */
 	p->control.Fact = DOFACT;
-	
+
 	if(p->firstPass) {
 		p->firstPass = 0;
 	} else {
@@ -97,23 +97,23 @@ static int matrixSolveSuperLU(matrix_ *r)
 		Destroy_SuperNode_Matrix(&p->L);
 		Destroy_CompCol_Matrix(&p->U);
 	}
-	
+
 	/* Check out the SuperLU Header files and the SuperLU User's manual
 	 * to make sense of this mess...
 	 */
-	dgssvx(&p->control, &p->A, p->perm_c, p->perm_r, p->etree, &p->equed, 
-			p->R, p->C, &p->L, &p->U, NULL, 0, &p->B, &p->X, &p->rpg, 
+	dgssvx(&p->control, &p->A, p->perm_c, p->perm_r, p->etree, &p->equed,
+			p->R, p->C, &p->L, &p->U, NULL, 0, &p->B, &p->X, &p->rpg,
 			&p->rcond, p->ferr, p->berr, &p->mem_usage, &p->stat, &p->info);
-	
+
 	ReturnErrIf(p->info < 0, "SuperLU: %ith arg had illegal value", -p->info);
 	if(p->info > 0) {
 		ReturnErrIf((p->info <= p->A.ncol), "SuperLU: U is singular");
-		ReturnErrIf((p->info == (p->A.ncol + 1)), 
+		ReturnErrIf((p->info == (p->A.ncol + 1)),
 				"SuperLU: RCOND is singular to working precision");
-		ReturnErrIf((p->info > (p->A.ncol + 1)), 
+		ReturnErrIf((p->info > (p->A.ncol + 1)),
 				"SuperLU: memory allocation error");
 	}
-	
+
 	return 0;
 }
 
@@ -122,30 +122,30 @@ static int matrixSolveSuperLU(matrix_ *r)
 static int matrixSolveAgainSuperLU(matrix_ *r)
 {
 	matrixLibrary_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->library;
 	ReturnErrIf(p == NULL);
-	
+
 	/* Set the SuperLU control to use the same pattern and row permitations */
 	p->control.Fact = SamePattern_SameRowPerm;
-	
+
 	/* Check out the SuperLU Header files and the SuperLU User's manual
 	 * to make sense of this mess...
 	 */
-	dgssvx(&p->control, &p->A, p->perm_c, p->perm_r, p->etree, &p->equed, 
-			p->R, p->C, &p->L, &p->U, NULL, 0, &p->B, &p->X, &p->rpg, 
+	dgssvx(&p->control, &p->A, p->perm_c, p->perm_r, p->etree, &p->equed,
+			p->R, p->C, &p->L, &p->U, NULL, 0, &p->B, &p->X, &p->rpg,
 			&p->rcond, p->ferr, p->berr, &p->mem_usage, &p->stat, &p->info);
-	
+
 	ReturnErrIf(p->info < 0, "SuperLU: %ith arg had illegal value", -p->info);
 	if(p->info > 0) {
 		ReturnErrIf((p->info <= p->A.ncol), "SuperLU: U is singular");
-		ReturnErrIf((p->info == (p->A.ncol + 1)), 
+		ReturnErrIf((p->info == (p->A.ncol + 1)),
 				"SuperLU: RCOND is singular to wokring precision");
-		ReturnErrIf((p->info > (p->A.ncol + 1)), 
+		ReturnErrIf((p->info > (p->A.ncol + 1)),
 				"SuperLU: memory allocation error");
 	}
-	
+
 	return 0;
 }
 
@@ -154,13 +154,13 @@ static int matrixSolveAgainSuperLU(matrix_ *r)
 static int matrixUnconfigSuperLU(matrix_ *r)
 {
 	matrixLibrary_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	p = r->library;
 	ReturnErrIf(p == NULL);
-	
+
 	Debug("Unconfiguring Solution %p", r);
-	
+
 	SUPERLU_FREE(p->perm_r);
 	SUPERLU_FREE(p->perm_c);
 	SUPERLU_FREE(p->etree);
@@ -192,33 +192,33 @@ static int matrixUnconfigSuperLU(matrix_ *r)
 static int matrixInitializeSuperLU(matrix_ *r, control_ *control)
 {
 	matrixLibrary_ *p;
-	
+
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(r->library != NULL);
-	
+
 	Debug("Configuring Solution %p", r);
-	
+
 	r->name = matrixNameSuperLU;
 	r->unconfig = matrixUnconfigSuperLU;
 	r->solve = matrixSolveSuperLU;
 	r->solveAgain = matrixSolveAgainSuperLU;
-	
+
 	r->library = calloc(1, sizeof(matrixLibrary_));
 	ReturnErrIf(r->library == NULL);
-	
+
 	p = r->library;
-	
+
 	/* Create solution A in the format expected by SuperLU. */
 	dCreate_CompCol_Matrix(&p->A, r->lenXB, r->lenXB, r->lenA, r->A,
 			r->aRow, r->aColStart, SLU_NC, SLU_D, SLU_GE);
-	
+
 	/* Create right-hand solution matrix X. */
 	dCreate_Dense_Matrix(&p->B, r->lenXB, 1, r->B, r->lenXB,
 			SLU_DN, SLU_D, SLU_GE);
-	
+
 	dCreate_Dense_Matrix(&p->X, r->lenXB, 1, r->X, r->lenXB,
 			SLU_DN, SLU_D, SLU_GE);
-	
+
 	/* Create permitation matrices. */
 	p->perm_r = intMalloc(r->lenXB);
 	ReturnErrIf(p->perm_r == NULL);
@@ -234,7 +234,7 @@ static int matrixInitializeSuperLU(matrix_ *r, control_ *control)
 	ReturnErrIf(p->ferr == NULL);
 	p->berr = (double *) SUPERLU_MALLOC(1 * sizeof(double));
 	ReturnErrIf(p->berr == NULL);
-	
+
 	/* Set the default input control. */
 	/* TODO: Make these configurable with an control command */
 	p->control.Fact = DOFACT;
@@ -247,13 +247,13 @@ static int matrixInitializeSuperLU(matrix_ *r, control_ *control)
 	p->control.DiagPivotThresh = 1.0;
 	p->control.PivotGrowth = NO;
 	p->control.ConditionNumber = NO;
-	
+
 	/* Initialize the statistics variables. */
     StatInit(&p->stat);
-	
+
 	/* Ready for first pass (used to know when to free the LU Matrices) */
 	p->firstPass = -1;
-	
+
 	return 0;
 }
 
@@ -296,25 +296,25 @@ node_ * matrixFindOrAddNode(matrix_ *r, row_ *row, row_ *col)
 	ReturnNULLIf(r == NULL);
 	ReturnNULLIf(row == NULL);
 	ReturnNULLIf(col == NULL);
-	
+
 	if((row == &gndRow) || (col == &gndRow)) {
 		return &gndNode;
 	}
-	
+
 	index.row = rowGetIndex(row);
 	ReturnNULLIf(index.row < 0);
 	index.col = rowGetIndex(col);
 	ReturnNULLIf(index.col < 0);
-	
-	ReturnNULLIf(listFind(r->nodes, (void*)&index, (listFind_)nodeCompare, 
+
+	ReturnNULLIf(listFind(r->nodes, (void*)&index, (listFind_)nodeCompare,
 			(void*)&node));
-	
+
 	/* If can't find the node then create it */
 	if(node == NULL) {
 		node = nodeNew(index);
 		ReturnNULLIf(listAdd(r->nodes, node, (listAdd_)nodeAdd));
 	}
-	
+
 	return node;
 }
 
@@ -327,13 +327,13 @@ row_ * matrixFindOrAddRow(matrix_ *r, char rowType, char *rowName)
 	int index;
 	ReturnNULLIf(r == NULL);
 	ReturnNULLIf(rowName == NULL);
-	
+
 	name.type = rowType;
 	name.name = rowName;
-	
-	ReturnNULLIf(listFind(r->rows, (void*)&name, (listFind_)rowCompare, 
+
+	ReturnNULLIf(listFind(r->rows, (void*)&name, (listFind_)rowCompare,
 			(void*)&row));
-	
+
 	/* If can't find the row then create it */
 	if(row == NULL) {
 		index = listLength(r->rows);
@@ -341,7 +341,7 @@ row_ * matrixFindOrAddRow(matrix_ *r, char rowType, char *rowName)
 		row = rowNew(name, index);
 		ReturnNULLIf(listAdd(r->rows, row, NULL));
 	}
-	
+
 	return row;
 }
 
@@ -352,18 +352,18 @@ row_ * matrixFindOrAddRow(matrix_ *r, char rowType, char *rowName)
 int matrixClear(matrix_ *r)
 {
 	ReturnErrIf(r == NULL);
-	
+
 	Debug("Clearing Matrix");
-	
+
 	memset(r->A, 0x0, sizeof(double)*r->lenA);
 	memset(r->X, 0x0, sizeof(double)*r->lenXB);
 	memset(r->B, 0x0, sizeof(double)*r->lenXB);
-	
+
 	/* Clear History List */
 	if(r->history != NULL) {
 		ReturnErrIf(listClear(r->history, (listDestroy_)historyDestroy));
 	}
-	
+
 	return 0;
 }
 
@@ -372,7 +372,7 @@ int matrixClear(matrix_ *r)
 int matrixRecord(matrix_ *r, double time, unsigned int flag)
 {
 	ReturnErrIf(r == NULL);
-	ReturnErrIf(listAdd(r->history, 
+	ReturnErrIf(listAdd(r->history,
 			historyNew(time, r->X, r->lenXB, flag), NULL));
 	if(flag & HISTORY_FLAG_END) {
 		Debug("Last matrix record");
@@ -404,12 +404,12 @@ list_ * matrixGetHistory(matrix_ *r)
 static int matrixFillData(history_ *history, double *data[])
 {
 	int length;
-	
+
 	length = historyGetLength(history) + 1;
 	ReturnErrIf(length < 1);
 	ReturnErrIf(historyGetAllData(history, *data, length));
 	(*data) += length;
-	
+
 	return 0;
 }
 
@@ -427,12 +427,12 @@ static int matrixGetVariables(row_ *row, char **variables[])
 
 /*---------------------------------------------------------------------------*/
 
-int matrixGetSolution(matrix_ *r, double *data[], char **variables[], 
+int matrixGetSolution(matrix_ *r, double *data[], char **variables[],
 		int *numPoints, int *numVariables)
 {
 	double *dataPtr;
 	char **variablePtr;
-	
+
 	/* TODO: This seems like a waste to processing time, especially
 		if there are a lot of variables and data points but the
 		data is a linked list, and has to be passed back to the
@@ -440,32 +440,32 @@ int matrixGetSolution(matrix_ *r, double *data[], char **variables[],
 		Another option would be to guess what the number of points
 		will be and store into an array instead of a linked list.
 	*/
-	
+
 	ReturnErrIf(r == NULL);
-	
+
 	*numVariables = listLength(r->rows);
 	ReturnErrIf(numVariables < 0);
-	
+
 	*numPoints = listLength(r->history);
 	ReturnErrIf(numPoints < 0);
-	
+
 	*data = malloc((*numPoints) * (*numVariables) * sizeof(double));
 	ReturnErrIf(*data == NULL);
-	
+
 	dataPtr = *data;
-	ReturnErrIf(listExecute(r->history, (listExecute_)matrixFillData, 
+	ReturnErrIf(listExecute(r->history, (listExecute_)matrixFillData,
 					(void*)&dataPtr));
-	
+
 	*variables = malloc((*numVariables + 1) * sizeof(char*));
 	ReturnErrIf(*variables == NULL);
-	
+
 	variablePtr = *variables;
 	*variablePtr = "time";
 	variablePtr++;
-	ReturnErrIf(listExecute(r->rows, (listExecute_)matrixGetVariables, 
+	ReturnErrIf(listExecute(r->rows, (listExecute_)matrixGetVariables,
 					(void*)&variablePtr));
 	*variablePtr = NULL;
-	
+
 	return 0;
 }
 
@@ -476,13 +476,13 @@ int matrixGetSolution(matrix_ *r, double *data[], char **variables[],
 static int matrixInitializeRows(row_ *row, matrix_ *r)
 {
 	ReturnErrIf(row == NULL);
-	
+
 	/* Trying to set the gnd row will raise a flag and we can exit */
 	if(rowSetRHSPtr(row, &r->B[r->index]))
 		return 0;
 	ReturnErrIf(rowSetSolutionPtr(row, &r->X[r->index]));
 	r->index++;
-	
+
 	return 0;
 }
 
@@ -492,7 +492,7 @@ static int matrixInitializeNodes(node_ *node, matrix_ *r)
 {
 	int row, col;
 	ReturnErrIf(node == NULL);
-	
+
 	/* Trying to set the gnd node will raise a flag and we can exit */
 	if(nodeSetDataPtr(node, &r->A[r->index]))
 		return 0;
@@ -503,7 +503,7 @@ static int matrixInitializeNodes(node_ *node, matrix_ *r)
 	r->aRow[r->index] = row - 1; /* Minus 1 becuase ignore gnd row */
 	r->aColStart[col] = r->index + 1; /* plus one because fist start is 0 */
 	r->index++;
-	
+
 	return 0;
 }
 
@@ -513,38 +513,38 @@ int matrixInitialize(matrix_ *r, control_ *control)
 {
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(r->A != NULL);
-	
+
 	r->lenA = listLength(r->nodes) - 1; /* Minus the ground node */
 	ReturnErrIf(r->lenA < 0);
 	r->lenXB = listLength(r->rows) - 1; /* Minus the ground row */
 	ReturnErrIf(r->lenXB < 0);
-	
+
 	r->A = calloc(r->lenA, sizeof(double));
 	ReturnErrIf(r->A == NULL);
-	
+
 	r->aRow = calloc(r->lenA, sizeof(int));
 	ReturnErrIf(r->aRow == NULL);
-	
+
 	r->aColStart = calloc((r->lenXB+1), sizeof(int));
 	ReturnErrIf(r->aColStart == NULL);
-	
+
 	r->X = calloc(r->lenXB, sizeof(double));
 	ReturnErrIf(r->X == NULL);
-	
+
 	r->B = calloc(r->lenXB, sizeof(double));
 	ReturnErrIf(r->B == NULL);
-	
+
 	r->index = 0;
 	ReturnErrIf(listExecute(r->nodes, (listExecute_)matrixInitializeNodes, r));
 	r->index = 0;
 	ReturnErrIf(listExecute(r->rows, (listExecute_)matrixInitializeRows, r));
-	
+
 	if(control->luLibrary == CONTROL_LU_SUPERLU) {
 		ReturnErrIf(matrixInitializeSuperLU(r, control));
 	} else {
 		ReturnErr("Unsupported matrix library");
 	}
-	
+
 	return 0;
 }
 
@@ -556,31 +556,31 @@ int matrixDestroy(matrix_ **r)
 {
 	ReturnErrIf(r == NULL);
 	ReturnErrIf((*r) == NULL);
-	
+
 	Debug("Destroying Matrix %p", (*r));
-	
+
 	if((*r)->rows != NULL) {
 		if(listDestroy(&(*r)->rows, (listDestroy_)rowDestroy)) {
 			Warn("Error destroying row list");
 		}
 	}
-	
+
 	if((*r)->nodes != NULL) {
 		if(listDestroy(&(*r)->nodes, (listDestroy_)nodeDestroy)) {
 			Warn("Error destroying node list");
 		}
 	}
-	
+
 	if((*r)->history != NULL) {
 		if(listDestroy(&(*r)->history, (listDestroy_)historyDestroy)) {
 			Warn("Error destroying history list");
 		}
 	}
-	
+
 	if((*r)->unconfig != NULL) {
 		ReturnErrIf((*r)->unconfig(*r));
 	}
-	
+
 	if((*r)->A != NULL)
 		free((*r)->A);
 	if((*r)->aRow != NULL)
@@ -591,10 +591,10 @@ int matrixDestroy(matrix_ **r)
 		free((*r)->X);
 	if((*r)->B != NULL)
 		free((*r)->B);
-	
+
 	if((*r)->library != NULL)
 		free((*r)->library);
-	
+
 	free(*r);
 	*r = NULL;
 	return 0;
@@ -609,27 +609,27 @@ matrix_ * matrixNew(matrix_ *r)
 	ReturnNULLIf(r != NULL);
 	r = calloc(1, sizeof(matrix_));
 	ReturnNULLIf(r == NULL);
-	
+
 	Debug("Creating Matrix %p", r);
-	
+
 	/* Create Row List */
 	r->rows = listNew(r->rows);
 	GotoFailedIf(r->rows == NULL);
 	/* Add the ground row */
 	GotoFailedIf(listAdd(r->rows, &gndRow, NULL));
-	
+
 	/* Create Node List */
 	r->nodes = listNew(r->nodes);
 	GotoFailedIf(r->nodes == NULL);
 	/* Add the ground node */
 	GotoFailedIf(listAdd(r->nodes, &gndNode, NULL));
-	
+
 	/* Create Results List */
 	r->history = listNew(r->history);
 	GotoFailedIf(r->history == NULL);
-	
+
 	r->name = defaultName;
-	
+
 	return r;
 
 failed:

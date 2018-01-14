@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-	
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
@@ -11,28 +11,28 @@
 <meta name="Author" content="Charles Eidsness" />
 <meta name="Robots" content="index,follow" />
 
-<link rel="stylesheet" href="default.css" type="text/css" />	
+<link rel="stylesheet" href="default.css" type="text/css" />
 
 <title>eispice</title>
-	
+
 </head>
 
 <body>
 <!-- wrap starts here -->
-<div id="wrap"> 
+<div id="wrap">
 
-	<div id="header">	
-			
+	<div id="header">
+
 		<h1 id="logo">ei<span class="orange">spice</span></h1>
 		<h2 id="slogan">User's Manual</h2>
-		
-	</div>		
-		
-	<!-- content-wrap starts here -->	
-	<div id="content-wrap">  
-	
+
+	</div>
+
+	<!-- content-wrap starts here -->
+	<div id="content-wrap">
+
 			<div id="sidebar">
-			
+
 				<h1>About</h1>
 				<ul class="sidemenu">
 					<li><a href="index.html">Home</a></li>
@@ -44,16 +44,16 @@
 					<li><a href="manual.html">Manual</a></li>
 					<li><a href="examples.html">Examples</a></li>
 				</ul>
-				
+
 			</div>
-			
+
 	  		<div id="main">
-				
+
 				<a name="Introduction"></a>
 				<h1>
 					Introduction
 				</h1>
-				
+
 				<a name="Status"></a>
 				<h1>
 					*** NOTE ***
@@ -65,7 +65,7 @@ Opens a GUI where you can enter a search string e.g. "eispice". This opens your 
 $ pydoc -p 8099<br/>
 This lets you access all python documentation via http://localhost:8099.
 				</p>
-				<h2>	
+				<h2>
 					Status of This Document
 				</h2>
 				<p>
@@ -74,7 +74,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					This document only applies to the most recent version of eispice, if you're using an older version please upgrade to the most recent version.
 				</p>
-				
+
 				<a name="Purpose"></a>
 				<h2>
 					Purpose
@@ -82,18 +82,18 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					eispice is a clone of the Berkley Spice 3 Simulation Engine optimized for High Speed Digital Design with a <a href="http://www.python.org/">Python</a> based front-end. It contains a subset of standard spice3 device models and a set of unique models e.g. direct IBIS model support, Python based Behavioral models, etc. The purpose of this document is to provide a reference for eispice Users. Those new to eispice may want to also check out the <a href="examples.html">Tutorials</a> and the example scripts in the test/recursion folder of the source-code distribution.
 				</p>
-				
+
 				<a name="Intended_Audience"></a>
 				<h2>
 					Intended Audience
 				</h2>
 				<p>
-					The indented audience for this document is the eispice user (development documents are stored separately). A basic understanding of Berkley Spice 3 is assumed, for an introduction to Spice take a look at <a href="http://www.fe.uni-lj.si/spice/getstarted/getstarted.html">Spice Opus</a>. A basic understanding of Python is also assumed. If you are new to Python you may want to take a look at this <a href="http://docs.python.org/tut/">Python Tutorial</a>. 
+					The indented audience for this document is the eispice user (development documents are stored separately). A basic understanding of Berkley Spice 3 is assumed, for an introduction to Spice take a look at <a href="http://www.fe.uni-lj.si/spice/getstarted/getstarted.html">Spice Opus</a>. A basic understanding of Python is also assumed. If you are new to Python you may want to take a look at this <a href="http://docs.python.org/tut/">Python Tutorial</a>.
 				</p>
 				<p>
 					If you've never used Python before don't let it scare you off. It shouldn't take more than a half hour or so for you to pick up enough Python to get a simulation running and hopefully you find it much more powerful, and liberating compared to basic spice syntax.
 				</p>
-				
+
 				<a name="Features"></a>
 				<h2>
 					Features
@@ -159,12 +159,12 @@ This lets you access all python documentation via http://localhost:8099.
 						Plus many more additions and improvements.
 					</span></li>
 				</ul>
-				
+
 				<a name="Usage"></a>
 				<h1>
 					Usage
 				</h1>
-				
+
 				<a name="Installation"></a>
 				<h2>
 					Installation
@@ -181,7 +181,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					As of release 0.9 in order to use eispice you will need to have <a href="http://www.python.org/">Python</a> and the <a href="http://numpy.scipy.org/">Numpy</a> Python Module installed on your system.
 				</p>
-				
+
 				<a name="Running"></a>
 				<h2>
 					Running eispice
@@ -189,7 +189,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Fire up Python, i.e. run "python" from the command line and then import the eispice module with a "import eispice" command. Then you're off to the races, check out the Python scripts in the test/pass directory for some examples, or try out the example below or use the help command for up to data and maybe more detailed help, i.e. help(eispice), help(eispice.device), etc...
 				</p>
-				
+
 				<a name="Example"></a>
 				<h2>
 					Example
@@ -206,7 +206,7 @@ This lets you access all python documentation via http://localhost:8099.
 					cct.tran('0.5n', '100n')<br/>
 					eispice.plot(cct)<br/>
 				</code></p>
-				
+
 				<a name="Statement_Types"></a>
 				<h2>
 					Basic Statement Types
@@ -220,7 +220,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Node names may be arbitrary character strings, or integer values. The datum (ground) node must be named 0, '0', or eispice.GND.
 				</p>
-				
+
 				<a name="The_Circuit"></a>
 				<h1>
 					The Circuit
@@ -251,13 +251,13 @@ This lets you access all python documentation via http://localhost:8099.
 					column = cct.names.index('v(1)') or...<br/>
 					name = cct.names[column]<br/>
 				</p>
-				
+
 				<h2>
 					Circuit Class Methods
 				</h2>
 				<p>
 					_init__(self, title='eispice')<br/>
-					&nbsp;&nbsp;Circuit constructor.<br/><br/>						
+					&nbsp;&nbsp;Circuit constructor.<br/><br/>
 					&nbsp;&nbsp;Arguments:<br/>
 					&nbsp;&nbsp;title -- String containing the circuit's name.<br/><br/>
 					__setattr__(self, name, value)<br/>
@@ -265,7 +265,7 @@ This lets you access all python documentation via http://localhost:8099.
 					&nbsp;&nbsp;like a Subckt it adds all of the devices in the dict.<br/><br/>
 					check(self, name, value, type='v')<br/>
 					&nbsp;&nbsp;Raises an exception if the value of the variable at 0 seconds<br/>
-					&nbsp;&nbsp;does not equal the value supplied plus / minus 0.00001%.<br/><br/>						
+					&nbsp;&nbsp;does not equal the value supplied plus / minus 0.00001%.<br/><br/>
 					&nbsp;&nbsp;Arguments:<br/>
 					&nbsp;&nbsp;name -- name of the node or device<br/>
 					&nbsp;&nbsp;value -- value to check against<br/>
@@ -306,13 +306,13 @@ This lets you access all python documentation via http://localhost:8099.
 					&nbsp;&nbsp;List that contains the column headers for the results array.<br/>
 				</p>
 
-				
-				
+
+
 				<a name="Devices"></a>
 				<h1>
 					Devices
 				</h1>
-				
+
 				<a name="Resistor"></a>
 				<h2>
 					Resistor
@@ -321,9 +321,9 @@ This lets you access all python documentation via http://localhost:8099.
 					Syntax: R(<i>'pNode', 'nNode', resistance (Ohms)</i>)<br/>
 					Example: Rx = eispice.R('pNode', 'nNode', 10)<br/>
 					Parameters:<br/>
-					&nbsp;&nbsp;&nbsp;&nbsp;x.R --> Resistance					
+					&nbsp;&nbsp;&nbsp;&nbsp;x.R --> Resistance
 				</p>
-				
+
 				<a name="Inductor"></a>
 				<h2>
 					Inductor
@@ -334,7 +334,7 @@ This lets you access all python documentation via http://localhost:8099.
 					Parameters:<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;x.L --> Inductance
 				</p>
-				
+
 				<a name="Capacitor"></a>
 				<h2>
 					Capacitor
@@ -345,7 +345,7 @@ This lets you access all python documentation via http://localhost:8099.
 					Parameters:<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;x.C --> Capacitance
 				</p>
-				
+
 				<a name="Source"></a>
 				<h2>
 					Source
@@ -362,7 +362,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					The optional waveform can be any of the objects listed below.
 				</p>
-				
+
 				<a name="Waveforms"></a>
 				<h2>
 					Waveforms
@@ -457,7 +457,7 @@ This lets you access all python documentation via http://localhost:8099.
 					&nbsp;&nbsp;&nbsp;&nbsp;x.type --> 'l' = linear, 'c' = cspline, readonly<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;x.pw --> data array, readonly<br/>
 				</p>
-				
+
 				<a name="Nonlinear_Source"></a>
 				<h2>
 					Nonlinear Source
@@ -481,7 +481,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					 It is also possible to add a time variable to the B element equations using  the keyword time, i.e. eispice.B(2, 0, device.Voltage, 'sin(2*3.14159*100e6*time)')
 				</p>
-				
+
 				<a name="Nonlinear_Capcitor"></a>
 				<h2>
 					Nonlinear Capacitor
@@ -496,7 +496,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Refer to the Nonlinear Source.
 				</p>
-				
+
 				<a name="Behavioral_Model"></a>
 				<h2>
 					Python Based Behavioral Model
@@ -523,7 +523,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					This device is intended as a version of the B-Element that can make use of python commands. It provides an inheritable class that can be used to define Python based Behavioral models. The constructor takes as arguments, the positive node, the negative node, the type (Voltage or Current), and a list of node voltages, source currents, or 'Time' to be passed to the defined callback function, which is called model and should be part of the new device class.
 				</p>
-				
+
 				<a name="Transmission_Line"></a>
 				<h2>
 					Transmission Line
@@ -536,7 +536,7 @@ This lets you access all python documentation via http://localhost:8099.
 					&nbsp;&nbsp;&nbsp;&nbsp;x.Td --> Time Delay<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;x.loss --> Loss Factor Times Length
 				</p>
-				
+
 				<a name="VI_Curve"></a>
 				<h2>
 					VI Curve
@@ -564,7 +564,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					The optional TA Piece-Wise element multiplies the VI curve by the A factor depending on the simulation time, T. It is used for the basis of the IBIS model driver. If not included the element behaves like a run-of-the-mill VI Curve (also used for IBIS elements).
 				</p>
-				
+
 				<a name="Utilities"></a>
 				<h1>
 					Utilities
@@ -572,7 +572,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					There are a handful of functions that are part of the eispice module that can be used to help out during a simulation (mostly for debug purposes).
 				</p>
-				
+
 				<a name="Log_File"></a>
 				<h2>
 					Log File
@@ -584,7 +584,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Usually the simulator library prints it's log messages (and debug messages if they are turned on with a compile-time option) to std-out, this function can be used to output the messages to a file instead.
 				</p>
-				
+
 				<a name="Error_File"></a>
 				<h2>
 					Error File
@@ -596,7 +596,7 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Usually the simulator library prints it's error and warning messages to std-err, this function can be used to output the messages to a file instead.
 				</p>
-				
+
 				<a name="About"></a>
 				<h2>
 					About
@@ -607,15 +607,15 @@ This lets you access all python documentation via http://localhost:8099.
 				<p>
 					Prints some library version information.
 				</p>
-				
-	  		</div> 	
-			
+
+	  		</div>
+
 			<div id="rightbar">
-			
+
 				<h1>
 					Quick Links
 				</h1>
-				
+
 				<p>
 					<a href="#Introduction">Introduction</a><br/>
 					&nbsp;&nbsp;<a href="#Status">Status</a><br/>
@@ -674,15 +674,15 @@ This lets you access all python documentation via http://localhost:8099.
 					&nbsp;&nbsp;<a href="#Error File">Error File</a><br/>
 					&nbsp;&nbsp;<a href="#About">About</a><br/>
 				</p>
-				
-			
+
+
 			</div>
-	
-	<!-- content-wrap ends here -->	
+
+	<!-- content-wrap ends here -->
 	</div>
-	
+
 <!-- wrap ends here -->
-</div>		
+</div>
 
 </body>
 </html>

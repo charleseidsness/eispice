@@ -57,7 +57,7 @@
 #define SUPERLU_MIN(x, y) 	( (x) < (y) ? (x) : (y) )
 
 /***********************************************************************
- * Constants 
+ * Constants
  ***********************************************************************/
 #define EMPTY	(-1)
 /*#define NO	(-1)*/
@@ -78,8 +78,8 @@ typedef enum {LUSUP, UCOL, LSUB, USUB}                          MemType;
 typedef enum {HEAD, TAIL}                                       stack_end_t;
 typedef enum {SYSTEM, USER}                                     LU_space_t;
 
-/* 
- * The following enumerate type is used by the statistics variable 
+/*
+ * The following enumerate type is used by the statistics variable
  * to keep track of flop count and time spent at various stages.
  *
  * Note that not all of the fields are disjoint.
@@ -106,7 +106,7 @@ typedef enum {
 typedef float    flops_t;
 typedef unsigned char Logical;
 
-/* 
+/*
  *-- This contains the options used to control the solve process.
  *
  * Fact   (fact_t)
@@ -118,7 +118,7 @@ typedef unsigned char Logical;
  *        = SamePattern: The matrix A will be factorized assuming
  *             that a factorization of a matrix with the same sparsity
  *             pattern was performed prior to this one. Therefore, this
- *             factorization will reuse column permutation vector 
+ *             factorization will reuse column permutation vector
  *             ScalePermstruct->perm_c and the column elimination tree
  *             LUstruct->etree.
  *        = SamePattern_SameRowPerm: The matrix A will be factorized
@@ -128,7 +128,7 @@ typedef unsigned char Logical;
  *             both row and column scaling factors R and C, both row and
  *             column permutation vectors perm_r and perm_c, and the
  *             data structure set up from the previous symbolic factorization.
- *        = FACTORED: On entry, L, U, perm_r and perm_c contain the 
+ *        = FACTORED: On entry, L, U, perm_r and perm_c contain the
  *              factored form of A. If DiagScale is not NOEQUIL, the matrix
  *              A has been equilibrated with scaling factors R and C.
  *
@@ -138,12 +138,12 @@ typedef unsigned char Logical;
  *
  * ColPerm (colperm_t)
  *        Specifies what type of column permutation to use to reduce fill.
- *        = NATURAL: use the natural ordering 
+ *        = NATURAL: use the natural ordering
  *        = MMD_ATA: use minimum degree ordering on structure of A'*A
  *        = MMD_AT_PLUS_A: use minimum degree ordering on structure of A'+A
  *        = COLAMD: use approximate minimum degree column ordering
  *        = MY_PERMC: use the ordering specified in ScalePermstruct->perm_c[]
- *         
+ *
  * Trans  (trans_t)
  *        Specifies the form of the system of equations:
  *        = NOTRANS: A * X = B        (No transpose)
@@ -174,7 +174,7 @@ typedef unsigned char Logical;
  *        = NO: not to permute the rows
  *        = LargeDiag: make the diagonal large relative to the off-diagonal
  *        = MY_PERMR: use the permutation given in ScalePermstruct->perm_r[]
- *           
+ *
  * ReplaceTinyPivot (yes_no_t) (only for SuperLU_DIST)
  *        Specifies whether to replace the tiny diagonals by
  *        sqrt(epsilon)*||A|| during LU factorization.

@@ -9,7 +9,7 @@
 #ifndef __SUPERLU_SCOMPLEX /* allow multiple inclusions */
 #define __SUPERLU_SCOMPLEX
 
-/* 
+/*
  * This header file is to be included in source files c*.c
  */
 #ifndef SCOMPLEX_INCLUDE

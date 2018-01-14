@@ -1,20 +1,20 @@
 #
 # Copyright (C) 2006-2007 Cooper Street Innovations Inc.
 # Charles Eidsness    <charles@cooper-street.com>
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 #
 
@@ -65,7 +65,7 @@ GND = '0'
 
 class L(simulator_.Inductor_):
 	"""Inductor Model
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Inductor Test")
@@ -83,14 +83,14 @@ class L(simulator_.Inductor_):
 		Arguments:
 		pNode -- positive node name
 		nNode -- negative node name
-		L -- inductance in Henrys	
+		L -- inductance in Henrys
 		"""
-		simulator_.Inductor_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Inductor_.__init__(self, str(pNode), str(nNode),
 				units.float(L))
 
 class C(simulator_.Capacitor_):
 	"""Capacitor Model
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Capacitor Test")
@@ -102,7 +102,7 @@ class C(simulator_.Capacitor_):
 	True
 	>>> cct.check_i('Vx', -2.000000e+01, '1.05e-8')
 	True
-	"""	
+	"""
 	def __init__(self, pNode, nNode, C):
 		"""
 		Arguments:
@@ -110,12 +110,12 @@ class C(simulator_.Capacitor_):
 		nNode -- negative node name
 		C -- capacitance in Farads
 		"""
-		simulator_.Capacitor_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Capacitor_.__init__(self, str(pNode), str(nNode),
 				units.float(C))
 
 class R(simulator_.Resistor_):
 	"""Resistor Model
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Resistor Test")
@@ -134,12 +134,12 @@ class R(simulator_.Resistor_):
 		nNode -- negative node name
 		R -- resistance in Ohms
 		"""
-		simulator_.Resistor_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Resistor_.__init__(self, str(pNode), str(nNode),
 				units.float(R))
 
 class RealC(subckt.Subckt):
 	"""Capacitor Model that includes ESL and ESR.
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Real Capacitor Test")
@@ -152,7 +152,7 @@ class RealC(subckt.Subckt):
 	>>> cct.check_i('Vx', -0.2574886, '1.05e-8')
 	True
 	"""
-	
+
 	def __init__(self, pNode, nNode, cap, ESL, ESR):
 		"""
 		Arguments:
@@ -160,8 +160,8 @@ class RealC(subckt.Subckt):
 		nNode -- negative node name
 		C -- capacitance in Farads
 		ESL -- Effective Series Inductance in Henrys
-		ESR -- Effective Series Resistance in Ohms		
-		"""		
+		ESR -- Effective Series Resistance in Ohms
+		"""
 		self.C = C(pNode, self.node('n0'), cap)
 		self.R = R(self.node('n0'), self.node('n1'), ESR)
 		self.L = L(self.node('n1'), nNode, ESL)
@@ -173,32 +173,32 @@ class RealC(subckt.Subckt):
 class B(simulator_.Behavioral_):
 	"""
 	Behaivioral Model
-	
-	This is the most versatile device (and the easiest to abuse). This 
-	device is similar to the B element in Spice3, i.e. it should be 
+
+	This is the most versatile device (and the easiest to abuse). This
+	device is similar to the B element in Spice3, i.e. it should be
 	possible to cut and paste B element equations in from spice3.
-	
-	The equation string can consist of any of the following functions and 
-	operators: abs(), acosh(), acos(), asinh(), asin(), atanh(), atan(), 
-	cosh(), cos(), exp(), ln(), log(), sinh(), sin(), sqrt(), tan(), uramp(), 
+
+	The equation string can consist of any of the following functions and
+	operators: abs(), acosh(), acos(), asinh(), asin(), atanh(), atan(),
+	cosh(), cos(), exp(), ln(), log(), sinh(), sin(), sqrt(), tan(), uramp(),
 	u(), +, -, *, /, ^.
-	
-	The function "u" is the unit step function, with a value of one for 
-	arguments greater than one and a value of zero for arguments less than 
+
+	The function "u" is the unit step function, with a value of one for
+	arguments greater than one and a value of zero for arguments less than
 	zero. The function "uramp" is the integral of the unit step: for an input
 	x, the value is zero if x is less than zero, or if x is greater than zero\
 	the value is x.
 
 	It is also possible to add a time variable to the B element equations using
 	the keyword time, i.e.
-	
+
 	device.B(2, 0, device.Voltage, 'sin(2*3.14159*100e6*time)')
-	
-	Will result in a sinewave input (though it will run slower than the V 
+
+	Will result in a sinewave input (though it will run slower than the V
 	element with a sin waveform input).
-	
+
 	Examples:
-	
+
 	1. Nonlinear Current Source
 	>>> import eispice
 	>>> cct = eispice.Circuit("Nonlinear Current Test")
@@ -215,7 +215,7 @@ class B(simulator_.Behavioral_):
 	True
 	>>> cct.check_i('Vx', -0.7)
 	True
-	
+
 	2. Nonlinear Voltage Source
 	>>> import eispice
 	>>> cct = eispice.Circuit("Nonlinear Time Test")
@@ -227,7 +227,7 @@ class B(simulator_.Behavioral_):
 	True
 	>>> cct.check_v(2, 3.088685702e-01, '10.5n')
 	True
-	
+
 	3. Nonlinear Capacitor
 	>>> import eispice
 	>>> cct = eispice.Circuit("Non-Linear Capacitor Test")
@@ -242,38 +242,38 @@ class B(simulator_.Behavioral_):
 	>>> cct.check_i('Vx', -3.770187057e2, '71n')
 	True
 	"""
-	
+
 	def __init__(self, pNode, nNode, type, equation):
 		"""
 		Arguments:
 		pNode -- positive node name
 		nNode -- negative node name
-		type -- either Voltage to create a voltage source, Current to create 
+		type -- either Voltage to create a voltage source, Current to create
 		a current source or Capacitor to create a non-linear Capacitor
 		equation -- string containing B Element equation
 		"""
-		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode),
 				type, str(equation))
 
 class PyB(simulator_.CallBack_):
 	"""
 	Python Based Behavioural Model (Call-Back Model)
-	
+
 	This device is intended as an alternate to the spice3-like B-Element.
 	It provides an inheritable class that can be used to define Python based
 	Behavioural models. The constructor takes as arguments, the positive node,
 	the negative node, the type (Voltage or Current), and a list of node
 	voltages, source currents, or 'Time' to be passed to the callback method,
 	model and should redefined as part of the new device class.
-	
+
 	Examples:
-	
+
 	1. Nonlinear Current Source
 	>>> import eispice
 	>>> class MyDevice(eispice.PyB):
 	... 	def __init__(self, pNode, nNode):
 	... 		eispice.PyB.__init__(self, pNode, nNode, eispice.Current, \
-					self.v(pNode))				
+					self.v(pNode))
 	... 	def model(self, vP):
 	... 		return 2*vP
 	>>> cct = eispice.Circuit("Call-Back Current Test")
@@ -282,12 +282,12 @@ class PyB(simulator_.CallBack_):
 	>>> cct.op()
 	>>> cct.check_i('Vx', -8.0)
 	True
-	
+
 	2. Nonlinear Voltage Source
 	>>> import eispice
 	>>> class MyDevice(eispice.PyB):
 	... 	def __init__(self, pNode, nNode):
-	... 		eispice.PyB.__init__(self, pNode, nNode, eispice.Current, 
+	... 		eispice.PyB.__init__(self, pNode, nNode, eispice.Current,
 	... 				self.v(pNode), self.v(nNode), eispice.Time)
 	... 	def model(self, vP, vN, time):
 	... 		if time > 10e-9:
@@ -302,7 +302,7 @@ class PyB(simulator_.CallBack_):
 	True
 	>>> cct.check_i('Vx', -8, '20n')
 	True
-	
+
 	3. Simple CMOS Model
 	>>> import eispice
 	>>> cct = eispice.Circuit('PyB Defined Behavioral MOS Divider Test')
@@ -338,49 +338,49 @@ class PyB(simulator_.CallBack_):
 	>>> cct.check_v('vg', 1.436097)
 	True
 	"""
-	
+
 	def __init__(self, pNode, nNode, type, *variables):
 		"""
 		Arguments:
 		pNode -- positive node name
 		nNode -- negative node name
-		type -- either Voltage to create a voltage source or Current 
-		to create a current source		
+		type -- either Voltage to create a voltage source or Current
+		to create a current source
 		*variables -- remaining arguments are a list of all of the
 		voltage nodes and current probes that will be passed back
 		to the model method (in the same order)
 		"""
 		simulator_.CallBack_.__init__(self, str(pNode), str(nNode),
 				type, variables, self.callBack)
-		
+
 		self.args = []
 		for varaiable in variables:
 			self.args.append(calc.Variable())
-		
+
 		self.range = range(len(variables))
-		
+
 	def callBack(self, data, derivs):
 		"""Wrapper around the low-level PyB call-back."""
-		
+
 		for i in self.range:
 			self.args[i](data[i])
-		
+
 		result = self.model(*self.args)
-		
+
 		if not isinstance(result, calc.Variable):
 			for i in self.range:
 				derivs[i] = 0.0
 		else:
 			for i in self.range:
 				derivs[i] = result[self.args[i]]
-		
+
 		return float(result)
-		
+
 	def model(self, *args):
 		"""This should be redefined when this class is inherited."""
 		warnings.warn('PyB model has not been defined.')
 		return 0.0
-	
+
 	def v(self, node):
 		"""Returns the name of a node used within the simulator."""
 		return 'v(%s)' % str(node)
@@ -395,7 +395,7 @@ class PyB(simulator_.CallBack_):
 
 class I(simulator_.CurrentSource_):
 	"""Current Source Model
-	
+
 	Example (refer to the waveforms module for more examples):
 	>>> import eispice
 	>>> cct = eispice.Circuit("Current Pulse Test")
@@ -426,7 +426,7 @@ class I(simulator_.CurrentSource_):
 
 class V(simulator_.VoltageSource_):
 	"""Voltage Source Model
-	
+
 	Example (refer to the waveforms module for more examples):
 	>>> import eispice
 	>>> cct = eispice.Circuit("Voltage Pulse Test")
@@ -456,7 +456,7 @@ class V(simulator_.VoltageSource_):
 
 class VI(simulator_.VICurve_):
 	"""Voltage/Current (VI) Curve Model
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("VI Curve Test")
@@ -488,7 +488,7 @@ class VI(simulator_.VICurve_):
 
 class G(simulator_.Behavioral_):
 	"""Voltage-Controlled Current Source
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("VCCS Test")
@@ -499,7 +499,7 @@ class G(simulator_.Behavioral_):
 	>>> cct.op()
 	>>> cct.check_i('Vy', -6.4)
 	True
-	"""	
+	"""
 	def __init__(self, pNode, nNode, pControlNode, nControlNode, value):
 		"""
 		Arguments:
@@ -509,24 +509,24 @@ class G(simulator_.Behavioral_):
 		nNode -- negative control node name
 		value -- gain (Siemens)
 		"""
-		equation = ('v(%s,%s)*%e' % (str(pControlNode), str(nControlNode), 
+		equation = ('v(%s,%s)*%e' % (str(pControlNode), str(nControlNode),
 				units.float(value)))
-		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode),
 				Current, equation)
 
 class E(simulator_.Behavioral_):
 	"""Voltage-Controlled Voltage Source
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("VCVS Test")
 	>>> cct.Vx = eispice.V(1, 0, 3.2)
 	>>> cct.Vy = eispice.E(2, 0, 1, 0, 2.7)
-	>>> cct.Ry = eispice.R(2, 0, 4.1)	
+	>>> cct.Ry = eispice.R(2, 0, 4.1)
 	>>> cct.op()
 	>>> cct.check_v(2, 8.64)
 	True
-	"""	
+	"""
 	def __init__(self, pNode, nNode, pControlNode, nControlNode, value):
 		"""
 		Arguments:
@@ -536,14 +536,14 @@ class E(simulator_.Behavioral_):
 		nNode -- negative control node name
 		value -- gain
 		"""
-		equation = ('v(%s,%s)*%e' % (str(pControlNode), str(nControlNode), 
+		equation = ('v(%s,%s)*%e' % (str(pControlNode), str(nControlNode),
 				units.float(value)))
-		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode),
 				Voltage, equation)
 
 class F(simulator_.Behavioral_):
 	"""Current-Controlled Current Source
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("CCCS Test")
@@ -556,7 +556,7 @@ class F(simulator_.Behavioral_):
 	>>> cct.op()
 	>>> cct.check_i('Vy', 5.6)
 	True
-	"""	
+	"""
 	def __init__(self, pNode, nNode, controlDevice, value):
 		"""
 		Arguments:
@@ -565,14 +565,14 @@ class F(simulator_.Behavioral_):
 		controlDevice -- name of control voltage source (string)
 		value -- gain
 		"""
-		equation = ('i(%s)*%e' % (str(controlDevice), 
+		equation = ('i(%s)*%e' % (str(controlDevice),
 				units.float(value)))
-		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode),
 				Current, equation)
 
 class H(simulator_.Behavioral_):
 	"""Current-Controlled Voltage Source
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("CCVS Test")
@@ -584,7 +584,7 @@ class H(simulator_.Behavioral_):
 	>>> cct.op()
 	>>> cct.check_v(2, -8.64)
 	True
-	"""	
+	"""
 	def __init__(self, pNode, nNode, controlDevice, value):
 		"""
 		Arguments:
@@ -593,9 +593,9 @@ class H(simulator_.Behavioral_):
 		controlDevice -- name of control voltage source (string)
 		value -- gain
 		"""
-		equation = ('i(%s)*%e' % (str(controlDevice), 
+		equation = ('i(%s)*%e' % (str(controlDevice),
 				units.float(value)))
-		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode), 
+		simulator_.Behavioral_.__init__(self, str(pNode), str(nNode),
 				Voltage, equation)
 
 #-----------------------------------------------------------------------------#
@@ -604,7 +604,7 @@ class H(simulator_.Behavioral_):
 
 class T(simulator_.TLine_):
 	"""Basic Transmission Line Model
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Simple Transmission Line Model Test")
@@ -619,9 +619,9 @@ class T(simulator_.TLine_):
 	>>> cct.check_i('Vx', -0.008381298823, '4.62n')
 	True
 	"""
-	def __init__(self, pNodeLeft, nNodeLeft, pNodeRight, nNodeRight, Z0, Td, 
+	def __init__(self, pNodeLeft, nNodeLeft, pNodeRight, nNodeRight, Z0, Td,
 			loss=None):
-		"""		
+		"""
 		Arguments:
 		pNodeLeft -- positive node on the left side to tline
 		nNodeLeft -- negative node on the left side to tline
@@ -632,23 +632,23 @@ class T(simulator_.TLine_):
 		x.loss --> (optional) loss factor times length, is unitless
 		"""
 		if loss == None:
-			simulator_.TLine_.__init__(self, str(pNodeLeft), 
+			simulator_.TLine_.__init__(self, str(pNodeLeft),
 				str(nNodeLeft), str(pNodeRight), str(nNodeRight),
 				units.float(Z0), units.float(Td))
 		else:
-			simulator_.TLine_.__init__(self, str(pNodeLeft), 
+			simulator_.TLine_.__init__(self, str(pNodeLeft),
 				str(nNodeLeft), str(pNodeRight), str(nNodeRight),
 				units.float(Z0), units.float(Td), units.float(loss))
 
 class W(simulator_.TLineW_):
 	"""
 	W-Element Transmission Line Model
-	
+
 	An RLGC matrix defined coupled, frequency dependent transmission-line
 	model, should be roughly equivalent to the W-Element in HSPICE.
 	"""
-	
-	def __init__(self, iNodes, iRef, oNodes, oRef, length, R0, L0, C0, 
+
+	def __init__(self, iNodes, iRef, oNodes, oRef, length, R0, L0, C0,
 			G0=None, Rs=None, Gd=None, fgd=1e100, fK=1e9, M=6):
 		"""
 		Arguments:
@@ -667,26 +667,26 @@ class W(simulator_.TLineW_):
 		fK -- (optional) Cut-Off for T-Line Model (Hz)
 		M -- (optional) Order of Approximation of Curve Fit (unitless)
 		"""
-	
+
 		warnings.warn("W-Element Model not complete.")
-		
+
 		# Makes it possible to send a single string for a non-coupled T-Line
-		
+
 		if isinstance(iNodes, str):
 			iNodes = (iNodes, )
-		
+
 		if isinstance(oNodes, str):
 			oNodes = (oNodes, )
-		
+
 		if len(iNodes) != len(oNodes):
-			raise (RuntimeError, 
+			raise (RuntimeError,
 				"Must have the same number of input and output nodes.")
-		
+
 		nodes = len(iNodes)
-		
+
 		# Do some parameter checking here that is tough to do in C, also
 		# create zeroed matracies if G and/or R aren't defined.
-		
+
 		if nodes > 1:
 			if G0 is None:
 				G0 = array(zeros((nodes, nodes)))
@@ -701,22 +701,22 @@ class W(simulator_.TLineW_):
 			Rs =  array(units.floatList2D(Rs))
 			Gd =  array(units.floatList2D(Gd))
 			if (R0.shape[0] != nodes) or (R0.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"R0 must be a square matrix with as many rows as nodes.")
 			if (L0.shape[0] != nodes) or (L0.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"L0 must be a square matrix with as many rows as nodes.")
 			if (C0.shape[0] != nodes) or (C0.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"C0 must be a square matrix with as many rows as nodes.")
 			if (G0.shape[0] != nodes) or (G0.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"G0 must be a square matrix with as many rows as nodes.")
 			if (Rs.shape[0] != nodes) or (Rs.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"Rs must be a square matrix with as many rows as nodes.")
 			if (Gd.shape[0] != nodes) or (Gd.shape[1] != nodes):
-				raise (RuntimeError, 
+				raise (RuntimeError,
 					"Gd must be a square matrix with as many rows as nodes.")
 		else:
 			if G0 is None:
@@ -731,11 +731,11 @@ class W(simulator_.TLineW_):
 			G0 =  array((units.float(G0),))
 			Rs =  array((units.float(Rs),))
 			Gd =  array((units.float(Gd),))
-	
+
 		nodeNames = tuple([str(i) for i in iNodes] + [str(iRef)]
 			 + [str(i) for i in oNodes] + [str(oRef)])
-		
-		simulator_.TLineW_.__init__(self, nodeNames, int(M), 
+
+		simulator_.TLineW_.__init__(self, nodeNames, int(M),
 				units.float(length), L0, C0, R0, G0, Rs, Gd, units.float(fgd),
 				units.float(fK))
 
@@ -746,9 +746,9 @@ class W(simulator_.TLineW_):
 class D(subckt.Subckt):
 	"""
 	Diode Model
-	
+
 	A Berkley spice3f5 compatible Junction Diode Model.
-	
+
 	Example:
 	>>> import eispice
 	>>> cct = eispice.Circuit("Diode Test")
@@ -762,8 +762,8 @@ class D(subckt.Subckt):
 	>>> cct.check_i('Vx', -1.781444540e-01, '6.4u')
 	True
 	"""
-	
-	def __init__(self, pNode, nNode, area=1.0, 
+
+	def __init__(self, pNode, nNode, area=1.0,
 			IS=1.0e-14, RS=0, N=1, TT=0, CJO=0, VJ=1, M=0.5, EG=1.11, XTI=3.0,
 			KF=0, AF=1, FC=0.5, BV=1e100, IBV=1e-3, TNOM=27):
 		"""
@@ -787,7 +787,7 @@ class D(subckt.Subckt):
 		IBV -- current at breakdown voltage (A) -- default = 1e-3
 		TNOM -- parameter measurement temperature (degC) -- default = 27
 		"""
-		
+
 		pNode = str(pNode)
 		nNode = str(nNode)
 		area = units.float(area)
@@ -800,41 +800,41 @@ class D(subckt.Subckt):
 		M = units.float(M)
 		BV = units.float(BV)
 		IBV = units.float(IBV)
-		TNOM = units.float(TNOM)		
-		
+		TNOM = units.float(TNOM)
+
 		# Parasitic Resistance
 		if RS != 0:
 			self.Rs = R(pNode, self.node('r'), area*RS)
 			pNode = self.node('r')
-		
+
 		# Local Variables
 		k = 1.3806503e-23 				# Boltzmann's Constant (1/JK)
 		q = 1.60217646e-19 				# Electron Charge (C)
 		Vt = ((k*(TNOM+273.15))/q)		# Thermal Voltage
-		
+
 		# Saturation and Breakdown Current
-		Is = ('(if(v(%s,%s)>=%e)*(%e*(exp(v(%s,%s)/%e)-1)))' % 
+		Is = ('(if(v(%s,%s)>=%e)*(%e*(exp(v(%s,%s)/%e)-1)))' %
 				(pNode, nNode, -BV, area*IS, pNode, nNode, N*Vt))
-		Ib = ('(if(v(%s,%s)<%e)*(%e*(exp((-%e-v(%s,%s))/%e)-1)))' % 
+		Ib = ('(if(v(%s,%s)<%e)*(%e*(exp((-%e-v(%s,%s))/%e)-1)))' %
 				(pNode, nNode, -BV, area*IS, BV, pNode, nNode,Vt))
 		self.Isb = B(pNode, nNode, Current, Is + '+' + Ib)
-			
+
 		# Junction (Depletion) and Diffusion Capacitance
 		Cd = '(%e*(exp(v(%s,%s)/%e)))' % (area*TT*IS/N*Vt, pNode, nNode, N*Vt)
-		Cj1 = ('(if(v(%s,%s)<%e)*(%e/((1-v(%s,%s)/%e)^%e)))' % 
+		Cj1 = ('(if(v(%s,%s)<%e)*(%e/((1-v(%s,%s)/%e)^%e)))' %
 				(pNode, nNode, FC*VJ, area*CJO, pNode, nNode, VJ, M))
-		Cj2 = ('(if(v(%s,%s)>=%e)*%e*(1-%e+%e*v(%s,%s)))' % 
-				(pNode, nNode, FC*VJ, (area*CJO/((1-FC)**(M+1))), 
+		Cj2 = ('(if(v(%s,%s)>=%e)*%e*(1-%e+%e*v(%s,%s)))' %
+				(pNode, nNode, FC*VJ, (area*CJO/((1-FC)**(M+1))),
 				FC*(1+M), (M/VJ), pNode, nNode))
 		self.Cjd = B(pNode, nNode, Capacitor, Cd + '+' + Cj1 + '+' + Cj2)
-		
+
 
 class Q(subckt.Subckt):
 	"""BJT Model
-	
+
 	A Berkley spice3f5 compatible BJT Model.
 	"""
-	
+
 	def __init__(self, cNode, bNode, eNode, sNode=GND, area=1.0,
 			IS=1.0e-16, BF=100, NF=1.0, VAF=1e100, IKF=1e100, ISE=0, NE=1.5,
 			BR=1, NR=1, VAR=1e100, IKR=1e100, ISC=0, NC=2, RB=0, IRB=1e100,
@@ -848,10 +848,10 @@ class Q(subckt.Subckt):
 		bNode -- base node name
 		eNode -- emitter node name
 		bNode -- substrate node name -- default = GND
-		
+
 		area -- area factor (for spice3f5 compatibility) -- default = 1.0
 		"""
-		
+
 		cNode = str(cNode)
 		bNode = str(bNode)
 		eNode = str(eNode)
@@ -892,13 +892,13 @@ class Q(subckt.Subckt):
 		KF = units.float(area)
 		AF = units.float(area)
 		FC = units.float(area)
-		TNOM = units.float(area)		
-		
+		TNOM = units.float(area)
+
 		# Local Variables
 		k = 1.3806503e-23 				# Boltzmann's Constant (1/JK)
 		q = 1.60217646e-19 				# Electron Charge (C)
 		Vt = ((k*(TNOM+273.15))/q)		# Thermal Voltage
-		
+
 		# Parasitic Resistance
 		if RE != 0:
 			self.Re = R(eNode, self.node('re'), area*RE)
@@ -907,20 +907,20 @@ class Q(subckt.Subckt):
 			self.Rc = R(eNode, self.node('rc'), area*RC)
 			cNode = self.node('rc')
 		#~ if RB != 0:
-			#~ Rb = 
+			#~ Rb =
 			#~ self.Rb = R(eNode, self.node('rc'), area*RC)
 			#~ cNode = self.node('rc')
-		
+
 		# Saturation and Breakdown Current
 		#~ Ibe = '(%e*(exp(v(%s,%s)/%e)-1))' % (IS/BF, rNode, nNode, NF*Vt)
 		#~ Ibe = '(%e*(exp(v(%s,%s)/%e)-1))' % (IS/BF, rNode, nNode, NF*Vt)
 		#~ self.Isb = B(rNode, nNode, Current, Is + '+' + Ib)
-		
+
 		warnings.warn("BJT Model not complete.")
-		
+
 
 if __name__ == '__main__':
-	
+
 	import doctest
 	doctest.testmod(verbose=False)
 	print 'Testing Complete'

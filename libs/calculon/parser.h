@@ -1,14 +1,14 @@
 /* This file was automatically generated.  Do not edit! */
-#define ParseTOKENTYPE  token_* 
-#define ParseARG_PDECL , double *solution 
+#define ParseTOKENTYPE  token_*
+#define ParseARG_PDECL , double *solution
 void Parse(void *yyp,int yymajor,ParseTOKENTYPE yyminor ParseARG_PDECL);
 void ParseFree(void *p,void(*freeProc)(void *));
 void *ParseAlloc(void *(*mallocProc)(size_t));
 #if !defined(NDEBUG)
 void ParseTrace(FILE *TraceFILE,char *zTracePrompt);
 #endif
-#define ParseARG_STORE yypParser->solution  = solution 
-#define ParseARG_FETCH  double *solution  = yypParser->solution 
+#define ParseARG_STORE yypParser->solution  = solution
+#define ParseARG_FETCH  double *solution  = yypParser->solution
 #define ParseARG_SDECL  double *solution ;
 #define TOKEN_OR                             38
 #define TOKEN_AND                            37

@@ -182,9 +182,9 @@
 *                        3000             6000          NS = 128
 *                        6000             infinity      NS = 256
 *
-*                  (+)  By default some or all matrices of this order 
+*                  (+)  By default some or all matrices of this order
 *                       are passed to the implicit double shift routine
-*                       ZLAHQR and NS is ignored.  See ISPEC=1 above 
+*                       ZLAHQR and NS is ignored.  See ISPEC=1 above
 *                       and comments in IPARM for details.
 *
 *                       The asterisks (**) indicate an ad-hoc

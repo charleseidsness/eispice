@@ -1,6 +1,6 @@
-/* 
+/*
  * Purpose
- * ======= 
+ * =======
  *	Returns the time in seconds used by the process.
  *
  * Note: the timer function call is machine dependent. Use conditional
@@ -10,13 +10,13 @@
 
 #define NO_TIMER
 
-#ifdef SUN 
+#ifdef SUN
 /*
- * 	It uses the system call gethrtime(3C), which is accurate to 
- *	nanoseconds. 
+ * 	It uses the system call gethrtime(3C), which is accurate to
+ *	nanoseconds.
 */
 #include <sys/time.h>
- 
+
 double SuperLU_timer_() {
     return ( (double)gethrtime() / 1e9 );
 }

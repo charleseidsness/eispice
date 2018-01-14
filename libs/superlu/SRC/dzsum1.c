@@ -3,40 +3,40 @@
 
 double dzsum1_(int *n, doublecomplex *cx, int *incx)
 {
-/*  -- LAPACK auxiliary routine (version 2.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
+/*  -- LAPACK auxiliary routine (version 2.0) --
+       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
+       Courant Institute, Argonne National Lab, and Rice University
+       October 31, 1992
 
-    Purpose   
-    =======   
+    Purpose
+    =======
 
-    DZSUM1 takes the sum of the absolute values of a complex   
-    vector and returns a double precision result.   
+    DZSUM1 takes the sum of the absolute values of a complex
+    vector and returns a double precision result.
 
-    Based on DZASUM from the Level 1 BLAS.   
-    The change is to use the 'genuine' absolute value.   
+    Based on DZASUM from the Level 1 BLAS.
+    The change is to use the 'genuine' absolute value.
 
-    Contributed by Nick Higham for use with ZLACON.   
+    Contributed by Nick Higham for use with ZLACON.
 
-    Arguments   
-    =========   
+    Arguments
+    =========
 
-    N       (input) INT   
-            The number of elements in the vector CX.   
+    N       (input) INT
+            The number of elements in the vector CX.
 
-    CX      (input) COMPLEX*16 array, dimension (N)   
-            The vector whose elements will be summed.   
+    CX      (input) COMPLEX*16 array, dimension (N)
+            The vector whose elements will be summed.
 
-    INCX    (input) INT   
-            The spacing between successive values of CX.  INCX > 0.   
+    INCX    (input) INT
+            The spacing between successive values of CX.  INCX > 0.
 
-    ===================================================================== 
-*/  
+    =====================================================================
+*/
 
     /* Builtin functions */
     double z_abs(doublecomplex *);
-    
+
     /* Local variables */
     int i, nincx;
     double stemp;
@@ -62,7 +62,7 @@ double dzsum1_(int *n, doublecomplex *cx, int *incx)
 	stemp += z_abs(&CX(i));
 /* L10: */
     }
-    
+
     return stemp;
 
     /*     CODE FOR INCREMENT EQUAL TO 1 */
@@ -75,7 +75,7 @@ L20:
 	stemp += z_abs(&CX(i));
 /* L30: */
     }
-    
+
     return stemp;
 
     /*     End of DZSUM1 */

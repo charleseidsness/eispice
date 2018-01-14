@@ -3,7 +3,7 @@ ibis_test = """
 [Comment char]  |_char
 [File Name]     test.ibs
 [File Rev]      1.0
-[Date]          January 10, 2006 
+[Date]          January 10, 2006
 [Source]        Data created from TI-SPICE simulations at TI-SLL.
 [Notes]         eispice sample ibis model
 [Component]            Test
@@ -32,8 +32,8 @@ Vinl=0.8
 Vinh=2.0
 |
 C_comp                                      2.50pF      1.92pF      3.16pF
-[Temperature Range]                         40          100         -40        
-[Voltage range]                             3.3         3           3.6        
+[Temperature Range]                         40          100         -40
+[Voltage range]                             3.3         3           3.6
 |
 [GND Clamp]
 |                       Voltage              I(typ)      I(min)      I(max)
@@ -151,8 +151,8 @@ C_comp                                      3.92pF      3.51pF      4.34pF
 | C_pullup                                  6.19pF      3.92pF      7.71pF
 | C_pulldown                                5.66pF      4.14pF      7.27pF
 | C_tri-state                               3.92pF      3.51pF      4.34pF
-[Temperature Range]                         40          100         -40        
-[Voltage range]                             3.3         3           3.6        
+[Temperature Range]                         40          100         -40
+[Voltage range]                             3.3         3           3.6
 |
 [GND Clamp]
 |                       Voltage              I(typ)      I(min)      I(max)
@@ -570,24 +570,24 @@ C_comp                                      3.92pF      3.51pF      4.34pF
                         8.4400e+00          -8.8244e-02 -5.1456e-02 -1.5243e-01
                         1.1000e+01          -9.0962e-02 -5.2816e-02 -1.5754e-01
 |
-[Ramp]                        
-|                             
+[Ramp]
+|
 | variable           typ                min                max
 dV/dt_r          1.95/2.68E-10      1.75/4.91E-10      2.15/1.67E-10
 dV/dt_f          1.97/2.29E-10      1.77/4.09E-10      2.16/1.56E-10
-R_load = 500                   
-|                             
-[Rising Waveform]             
+R_load = 500
 |
-R_fixture =     500                
+[Rising Waveform]
+|
+R_fixture =     500
 C_fixture =     0
 L_fixture =     0
-V_fixture =     0               
+V_fixture =     0
 V_fixture_min = 0
 V_fixture_max = 0
-|                             
+|
 |                       Time                 V(typ)      V(min)      V(max)
-|                        
+|
                         0.0000e+00           1.7639e-10  3.3985e-09  2.0941e-11
                         1.9200e-09           8.0361e-04  3.0040e-04 -3.1791e-04
                         2.0300e-09          -2.4851e-03  7.2302e-04 -1.4600e-02
@@ -694,9 +694,9 @@ V_fixture_max = 0
 R_fixture =     500
 C_fixture =     0
 L_fixture =     0
-V_fixture =     3.3        
-V_fixture_min = 3          
-V_fixture_max = 3.6        
+V_fixture =     3.3
+V_fixture_min = 3
+V_fixture_max = 3.6
 |
 |                       Time                 V(typ)      V(min)      V(max)
 |
@@ -801,17 +801,17 @@ V_fixture_max = 3.6
                         5.3850e-09           6.4387e-02  9.1107e-02  4.1930e-02
                         2.4995e-08           6.4516e-02  9.2104e-02  4.1933e-02
 |
-[Rising Waveform]          
+[Rising Waveform]
 |
 R_fixture =     500
 C_fixture =     0
 L_fixture =     0
-V_fixture =     3.3        
-V_fixture_min = 3          
-V_fixture_max = 3.6        
-|                          
+V_fixture =     3.3
+V_fixture_min = 3
+V_fixture_max = 3.6
+|
 |                       Time                 V(typ)      V(min)      V(max)
-|                             
+|
                         0.0000e+00           6.4516e-02  9.2104e-02  4.1933e-02
                         1.9100e-09           6.5193e-02  9.2340e-02  4.1749e-02
                         2.0200e-09           6.2714e-02  9.2683e-02  2.9603e-02
@@ -1037,8 +1037,8 @@ C_comp                                      3.92pF      3.51pF      4.34pF
 | C_pullup                                  6.19pF      3.92pF      7.71pF
 | C_pulldown                                5.66pF      4.14pF      7.27pF
 | C_tri-state                               3.92pF      3.51pF      4.34pF
-[Temperature Range]                         40          100         -40        
-[Voltage range]                             3.3         3           3.6        
+[Temperature Range]                         40          100         -40
+[Voltage range]                             3.3         3           3.6
 |
 [GND Clamp]
 |                       Voltage              I(typ)      I(min)      I(max)
@@ -1456,24 +1456,24 @@ C_comp                                      3.92pF      3.51pF      4.34pF
                         8.4400e+00          -8.8244e-02 -5.1456e-02 -1.5243e-01
                         1.1000e+01          -9.0962e-02 -5.2816e-02 -1.5754e-01
 |
-[Ramp]                        
-|                             
+[Ramp]
+|
 | variable           typ                min                max
 dV/dt_r          1.95/2.68E-10      1.75/4.91E-10      2.15/1.67E-10
 dV/dt_f          1.97/2.29E-10      1.77/4.09E-10      2.16/1.56E-10
-R_load = 500                   
-|                             
-[Rising Waveform]             
+R_load = 500
 |
-R_fixture =     500                
+[Rising Waveform]
+|
+R_fixture =     500
 C_fixture =     0
 L_fixture =     0
-V_fixture =     0               
+V_fixture =     0
 V_fixture_min = 0
 V_fixture_max = 0
-|                             
+|
 |                       Time                 V(typ)      V(min)      V(max)
-|                        
+|
                         0.0000e+00           1.7639e-10  3.3985e-09  2.0941e-11
                         1.9200e-09           8.0361e-04  3.0040e-04 -3.1791e-04
                         2.0300e-09          -2.4851e-03  7.2302e-04 -1.4600e-02
@@ -1580,9 +1580,9 @@ V_fixture_max = 0
 R_fixture =     500
 C_fixture =     0
 L_fixture =     0
-V_fixture =     3.3        
-V_fixture_min = 3          
-V_fixture_max = 3.6        
+V_fixture =     3.3
+V_fixture_min = 3
+V_fixture_max = 3.6
 |
 |                       Time                 V(typ)      V(min)      V(max)
 |
@@ -1699,8 +1699,8 @@ C_comp                                      3.92pF      3.51pF      4.34pF
 | C_pullup                                  6.19pF      3.92pF      7.71pF
 | C_pulldown                                5.66pF      4.14pF      7.27pF
 | C_tri-state                               3.92pF      3.51pF      4.34pF
-[Temperature Range]                         40          100         -40        
-[Voltage range]                             3.3         3           3.6        
+[Temperature Range]                         40          100         -40
+[Voltage range]                             3.3         3           3.6
 |
 [GND Clamp]
 |                       Voltage              I(typ)      I(min)      I(max)
@@ -2118,12 +2118,12 @@ C_comp                                      3.92pF      3.51pF      4.34pF
                         8.4400e+00          -8.8244e-02 -5.1456e-02 -1.5243e-01
                         1.1000e+01          -9.0962e-02 -5.2816e-02 -1.5754e-01
 |
-[Ramp]                        
-|                             
+[Ramp]
+|
 | variable           typ                min                max
 dV/dt_r          1.95/2.68E-10      1.75/4.91E-10      2.15/1.67E-10
 dV/dt_f          1.97/2.29E-10      1.77/4.09E-10      2.16/1.56E-10
-R_load = 500                   
+R_load = 500
 |
 [END]
 """

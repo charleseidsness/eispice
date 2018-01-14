@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -38,9 +38,9 @@ int deviceTLineWConfig(device_ *r, int *M, double *len,
 		double **L0, double **C0, double **R0, double **G0, double **Rs,
 		double **Gd, double *fgd, double *fK);
 
-int deviceCurrentSourceConfig(device_ *r, double *dc, char type, 
+int deviceCurrentSourceConfig(device_ *r, double *dc, char type,
 		double *args[7]);
-int deviceVoltageSourceConfig(device_ *r, double *dc, char type, 
+int deviceVoltageSourceConfig(device_ *r, double *dc, char type,
 		double *args[7]);
 
 int deviceNonlinearVoltageConfig(device_ *r, char *equation);
@@ -71,9 +71,9 @@ listAddReturn_ deviceCheckDuplicate(device_ *old, device_ *new);
 
 int devicePrint(device_ *r, void *data);
 int deviceDestroy(device_ *r);
-device_ * deviceNew2Pins(matrix_ *matrix, control_ *control, char *refdes, 
+device_ * deviceNew2Pins(matrix_ *matrix, control_ *control, char *refdes,
 		char *pNode, char *nNode);
-device_ * deviceNew3Pins(matrix_ *matrix, control_ *control, char *refdes, 
+device_ * deviceNew3Pins(matrix_ *matrix, control_ *control, char *refdes,
 		char *pNode, char *nNode, char *cNode);
 device_ * deviceNew4Pins(matrix_ *matrix, control_ *control, char *refdes,
 		char *pNodeLeft, char *nNodeLeft, char *pNodeRight, char *nNodeRight);

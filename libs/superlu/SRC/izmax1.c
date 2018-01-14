@@ -5,42 +5,42 @@
 int
 izmax1_(int *n, doublecomplex *cx, int *incx)
 {
-/*  -- LAPACK auxiliary routine (version 2.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
+/*  -- LAPACK auxiliary routine (version 2.0) --
+       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
+       Courant Institute, Argonne National Lab, and Rice University
+       September 30, 1994
 
 
-    Purpose   
-    =======   
+    Purpose
+    =======
 
-    IZMAX1 finds the index of the element whose real part has maximum   
-    absolute value.   
+    IZMAX1 finds the index of the element whose real part has maximum
+    absolute value.
 
-    Based on IZAMAX from Level 1 BLAS.   
-    The change is to use the 'genuine' absolute value.   
+    Based on IZAMAX from Level 1 BLAS.
+    The change is to use the 'genuine' absolute value.
 
-    Contributed by Nick Higham for use with ZLACON.   
+    Contributed by Nick Higham for use with ZLACON.
 
-    Arguments   
-    =========   
+    Arguments
+    =========
 
-    N       (input) INT   
-            The number of elements in the vector CX.   
+    N       (input) INT
+            The number of elements in the vector CX.
 
-    CX      (input) COMPLEX*16 array, dimension (N)   
-            The vector whose elements will be summed.   
+    CX      (input) COMPLEX*16 array, dimension (N)
+            The vector whose elements will be summed.
 
-    INCX    (input) INT   
-            The spacing between successive values of CX.  INCX >= 1.   
+    INCX    (input) INT
+            The spacing between successive values of CX.  INCX >= 1.
 
-   ===================================================================== 
-*/  
+   =====================================================================
+*/
 
     /* System generated locals */
     int ret_val, i__1, i__2;
     double d__1;
-    
+
     /* Local variables */
     double smax;
     int i, ix;
