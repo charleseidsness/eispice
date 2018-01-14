@@ -31,58 +31,58 @@ import mutex
 _subcktCnt = 0
 
 class Subckt(list):
-	"""
-	Is used as a base class that is inherited by User Defined a
-	sub-circuit. Similar to a subckt in Berkely Spice.
+    """
+    Is used as a base class that is inherited by User Defined a
+    sub-circuit. Similar to a subckt in Berkely Spice.
 
-	Example:
-	>>> import eispice
-	>>> class Subckt1(eispice.Subckt):
-	...	def __init__(self, pNode, nNode, Rx, Ry):
-	...		self.Rx = eispice.R(pNode, self.node('node'), Rx)
-	...		self.Ry = eispice.R(nNode, self.node('node'), Ry)
-	>>> class Subckt2(eispice.Subckt):
-	...	def __init__(self, pNode, nNode, Rx, Ry):
-	...		self.Rx = eispice.R(pNode, self.node('node'), Rx)
-	...		self.Xy = Subckt1(nNode, self.node('node'), Rx, Ry)
-	>>> cct = eispice.Circuit("Subckt Test")
-	>>> cct.Vx = eispice.V(1, 0, 10)
-	>>> cct.Xx = Subckt2(1, 0, 100, 100)
-	>>> cct.op()
-	>>> cct.check_i('Vx', -10.0 / 300.0)
-	True
-	"""
+    Example:
+    >>> import eispice
+    >>> class Subckt1(eispice.Subckt):
+    ...    def __init__(self, pNode, nNode, Rx, Ry):
+    ...        self.Rx = eispice.R(pNode, self.node('node'), Rx)
+    ...        self.Ry = eispice.R(nNode, self.node('node'), Ry)
+    >>> class Subckt2(eispice.Subckt):
+    ...    def __init__(self, pNode, nNode, Rx, Ry):
+    ...        self.Rx = eispice.R(pNode, self.node('node'), Rx)
+    ...        self.Xy = Subckt1(nNode, self.node('node'), Rx, Ry)
+    >>> cct = eispice.Circuit("Subckt Test")
+    >>> cct.Vx = eispice.V(1, 0, 10)
+    >>> cct.Xx = Subckt2(1, 0, 100, 100)
+    >>> cct.op()
+    >>> cct.check_i('Vx', -10.0 / 300.0)
+    True
+    """
 
-	def __new__(self, *args, **argsk):
-		# NOTE: This is not necissailly the best way to do this
-		self.subcktCnt = globals()['_subcktCnt']
-		globals()['_subcktCnt'] += 1
-		return list.__new__(self, args, argsk)
+    def __new__(self, *args, **argsk):
+        # NOTE: This is not necissailly the best way to do this
+        self.subcktCnt = globals()['_subcktCnt']
+        globals()['_subcktCnt'] += 1
+        return list.__new__(self, args, argsk)
 
-	def node(self, name):
-		"""Identifys a local node, that doesn't exit the Subckt"""
-		return "%s@%s" % (self.subcktCnt, name)
+    def node(self, name):
+        """Identifys a local node, that doesn't exit the Subckt"""
+        return "%s@%s" % (self.subcktCnt, name)
 
-	def device(self, name):
-		"""Identifys a local device, that doesn't exit the Subckt"""
-		return "%s#%s" % (self.subcktCnt, name)
+    def device(self, name):
+        """Identifys a local device, that doesn't exit the Subckt"""
+        return "%s#%s" % (self.subcktCnt, name)
 
-	def __setattr__(self, name, value):
-		"""
-		Adds a device that can be accessed using its name, and creates a
-		flat version by adding a prefix based on the instantiations id to
-		uniquly label the device instances. This is done because the base
-		simulator doesn't support hiearchy and every device needs a unique
-		identifier. If the device being attached is a Subckt it pulls in
-		its flat circuit dict.
-		"""
-		self.__dict__[name] = value
+    def __setattr__(self, name, value):
+        """
+        Adds a device that can be accessed using its name, and creates a
+        flat version by adding a prefix based on the instantiations id to
+        uniquly label the device instances. This is done because the base
+        simulator doesn't support hiearchy and every device needs a unique
+        identifier. If the device being attached is a Subckt it pulls in
+        its flat circuit dict.
+        """
+        self.__dict__[name] = value
 
-		try:
-			for (subName, subValue) in value:
-				self.append((subName, subValue))
-		except TypeError:
-			self.append((self.device(name),value))
+        try:
+            for (subName, subValue) in value:
+                self.append((subName, subValue))
+        except TypeError:
+            self.append((self.device(name),value))
 
 # --------------------------------------------------------------------------- #
 #                                  Test                                       #
@@ -90,6 +90,6 @@ class Subckt(list):
 
 if __name__ == '__main__':
 
-	import doctest
-	doctest.testmod(verbose=False)
-	print 'Testing Complete'
+    import doctest
+    doctest.testmod(verbose=False)
+    print 'Testing Complete'
