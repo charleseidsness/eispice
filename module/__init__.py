@@ -57,5 +57,5 @@ from ibis import *
 from plot import *
 from subckt import *
 from waveform import *
-from test import *
+#from test import *
 import calc
