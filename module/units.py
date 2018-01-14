@@ -120,13 +120,13 @@ def float(value):
     A floating point value.
 
     Examples:
-    >>> print float(10.0)==10.0
+    >>> print(float(10.0)==10.0)
     True
-    >>> print float(10)==10.0
+    >>> print(float(10)==10.0)
     True
-    >>> print float('10nF')==1e-08
+    >>> print(float('10nF')==1e-08)
     True
-    >>> print float('12nF/2nH')==6.0
+    >>> print(float('12nF/2nH')==6.0)
     True
     """
 
@@ -157,7 +157,7 @@ def floatList2D(data):
     A numpy array of floating point values.
 
     Example:
-    >>> print floatList2D([['0.3m',1.2],['3n','5u']])
+    >>> print(floatList2D([['0.3m',1.2],['3n','5u']]))
     [[  3.00000000e-04   1.20000000e+00]
      [  3.00000000e-09   5.00000000e-06]]
     """
@@ -184,7 +184,7 @@ def floatList1D(data):
     A numpy array of floating point values.
 
     Example:
-    >>> print floatList1D(['0.3m',1.2,'3n','5u'])
+    >>> print(floatList1D(['0.3m',1.2,'3n','5u']))
     [  3.00000000e-04   1.20000000e+00   3.00000000e-09   5.00000000e-06]
     """
 
@@ -200,4 +200,4 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod(verbose=False)
-    print 'Testing Complete'
+    print('Testing Complete')

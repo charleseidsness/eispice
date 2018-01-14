@@ -79,12 +79,12 @@ class Variable:
     >>> z = x**x + cos(20*y + x) - (x / (y+50)) # z is of type _Result
 
     Results:
-    >>> print round(z,6) # z's value
-    -21.826493
-    >>> print round(z[x],6) # dz/dx
-    20.761769
-    >>> print round(z[y],6) # dz/dx
-    14.283614
+    >>> print(round(z,6)) # z's value
+    4.635771
+    >>> print(round(z[x],6)) # dz/dx
+    7.492901
+    >>> print(round(z[y],6)) # dz/dx
+    14.784326
 
     Change the value of x:
     >>> x(10)
@@ -93,12 +93,12 @@ class Variable:
     >>> z = x**x + cos(20*y + x) - (x / (y+50))
 
     Results:
-    >>> print round(z,6) # z's value
-    9999999995.33
-    >>> print round(z[x],6) # dz/dx
-    33025850929.7
-    >>> print round(z[y],6) # dz/dx
-    -15.577814
+    >>> print(round(z,6)) # z's value
+    10000000000.444641
+    >>> print(round(z[x],6)) # dz/dx
+    33025850929.1477
+    >>> print(round(z[y],6)) # dz/dx
+    -15.474254
     """
 
     def __init__(self, value=0.0):
@@ -153,7 +153,7 @@ class Variable:
     def __rmul__(self, other):
         return self.__mul__(other)
 
-    def __divide__(self, other):
+    def __truediv__(self, other):
         return _Result(lambda x, y: _divide(x,y),
                 lambda x, y, dx, dy: (dx*y - dy*x)/(y*y),
                 self, other)
@@ -277,24 +277,29 @@ class _Result(Variable):
         if y is None:
             self.value = f(float(x))
             if hasattr(x, 'deriv'):
-                for (key, value) in x.deriv.iteritems():
+                for key, value in x.deriv.items():
                     self.deriv[key] = d(x.value, value)
 
         else:
             self.value = f(float(x), float(y))
             if hasattr(x, 'deriv') and hasattr(y, 'deriv'):
-                for (key, value) in x.deriv.iteritems():
+                for key, value in x.deriv.items():
                     self.deriv[key] = d(x.value, y.value,
                             value, y.deriv.get(key, 0.0))
-                for (key, value) in y.deriv.iteritems():
+                for key, value in y.deriv.items():
                     self.deriv[key] = d(x.value, y.value,
                             x.deriv.get(key, 0.0), value)
             elif hasattr(x, 'deriv'):
-                for (key, value) in x.deriv.iteritems():
+                for key, value in x.deriv.items():
                     self.deriv[key] = d(x.value, float(y), value, 0.0)
             elif hasattr(y, 'deriv'):
-                for (key, value) in y.deriv.iteritems():
+                for key, value in y.deriv.items():
                     self.deriv[key] = d(float(x), y.value, 0.0, value)
+
+
+    def __round__(self, ndigits):
+        return round(self.value, ndigits)
+
 
 # --------------------------------------------------------------------------- #
 #                           Standard Functions                                #
@@ -378,4 +383,4 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod(verbose=False)
-    print 'Testing Complete'
+    print('Testing Complete')

@@ -33,8 +33,8 @@ plot_voltage -- Plot voltages at specific nodes
 plot_current -- Plot currents through specific devices
 """
 
-import Tkinter as tk
-import tkFont
+import tkinter as tk
+import tkinter.font as tkFont
 import numpy
 
 from datetime import datetime
@@ -373,7 +373,7 @@ def plot(*lst):
     for circuit in lst:
 
         if circuit.results == None:
-            raise RuntimeError, "Circuit %s has no results." % circuit.title
+            raise RuntimeError("Circuit %s has no results." % circuit.title)
 
         try:
             vPlot.title += " ," + circuit.title
@@ -480,4 +480,4 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod(verbose=False)
-    print 'Testing Complete'
+    print('Testing Complete')

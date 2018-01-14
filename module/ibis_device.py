@@ -67,17 +67,17 @@ class Receiver(subckt.Subckt):
                 if hasattr(self, 'C_comp'):
                     self.C_comp.C = self.model.c_comp[self.speed]
                 else:
-                    raise RuntimeError, "Can't add C_comp"
+                    raise RuntimeError("Can't add C_comp")
             if hasattr(self.model, 'gnd_clamp'):
                 if hasattr(self, 'VI_gnd'):
                     self.VI_gnd.VI = waveform.PWL(self.model.gnd_clamp[self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_gnd"
+                    raise RuntimeError("Can't add VI_gnd")
             if hasattr(self.model, 'power_clamp'):
                 if hasattr(self, 'VI_pwr'):
                     self.VI_pwr.VI = waveform.PWL(self.model.power_clamp[self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_pwr"
+                    raise RuntimeError("Can't add VI_pwr")
         else:
             subckt.Subckt.__setattr__(self, name, value)
 
@@ -123,29 +123,29 @@ class Driver(subckt.Subckt):
                 if hasattr(self, 'C_comp'):
                     self.C_comp.C = self.model.c_comp[self.speed]
                 else:
-                    raise RuntimeError, "Can't add C_comp"
+                    raise RuntimeError("Can't add C_comp")
             if hasattr(self.model, 'gnd_clamp'):
                 if hasattr(self, 'VI_gnd'):
                     self.VI_gnd.VI = waveform.PWL(self.model.gnd_clamp[self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_gnd"
+                    raise RuntimeError("Can't add VI_gnd")
             if hasattr(self.model, 'power_clamp'):
                 if hasattr(self, 'VI_pwr'):
                     self.VI_pwr.VI = waveform.PWL(self.model.power_clamp[self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_pwr"
+                    raise RuntimeError("Can't add VI_pwr")
             if hasattr(self.model, 'pullup'):
                 if hasattr(self, 'VI_pu'):
                     self.VI_pu.VI = waveform.PWL(self.model.pullup[self.speed])
                     self.VI_pu.TA = waveform.PWL(self.model.pullup_k[self.direction][self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_pu"
+                    raise RuntimeError("Can't add VI_pu")
             if hasattr(self.model, 'pulldown'):
                 if hasattr(self, 'VI_pd'):
                     self.VI_pd.VI = waveform.PWL(self.model.pulldown[self.speed])
                     self.VI_pd.TA = waveform.PWL(self.model.pulldown_k[self.direction][self.speed])
                 else:
-                    raise RuntimeError, "Can't add VI_pd"
+                    raise RuntimeError("Can't add VI_pd")
         else:
             subckt.Subckt.__setattr__(self, name, value)
 
@@ -230,7 +230,7 @@ class Pin(subckt.Subckt):
 
         else:
 
-            raise RuntimeError, "Unsupported Model Type %s" % model.model_type
+            raise RuntimeError("Unsupported Model Type %s" % model.model_type)
 
         R = pin.R
         if (pin.R == None):

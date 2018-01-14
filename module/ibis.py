@@ -110,4 +110,4 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod(verbose=False)
-    print 'Testing Complete'
+    print('Testing Complete')

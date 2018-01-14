@@ -94,12 +94,13 @@ class _Builder:
                     return handler(**match.groupdict())
                 else:
                     return handler
-        raise RuntimeError, line
+        raise RuntimeError(line)
 
     def process(self):
         for line in iter(self.fdin.readline, ''):
             if self._process(line) is Done:
-                self.fdin.seek(-len(line),1)
+                pos = int(self.fdin.tell()) - len(line)
+                self.fdin.seek(pos, 0)
                 break
 
     def handleName(self, key, name):
@@ -113,7 +114,8 @@ class _Builder:
                 name = name + '\n'
                 name = name + line.strip()
             else:
-                self.fdin.seek(-len(line),1)
+                pos = int(self.fdin.tell()) - len(line)
+                self.fdin.seek(pos, 0)
                 break
         key = key.replace(" ","_").lower()
         setattr(self, key, name)
@@ -163,10 +165,10 @@ class _Builder:
 
     def handleCommentChar(self, key, name):
         if name != '':
-            raise RuntimeError, "Don't support comment characters other than |. "
+            raise RuntimeError("Don't support comment characters other than |. ")
 
     def handleUnkown(self, line):
-        raise RuntimeError, 'Unsupported Line\n%s' % line
+        raise RuntimeError('Unsupported Line\n%s' % line)
 
 # -------------------------------------------------------------------------- #
 
@@ -537,11 +539,11 @@ class Ibis_Parser(_Builder):
         _Builder.__init__(self)
         if filename == 'test':
             import ibis_test
-            import StringIO
-            self.fdin = StringIO.StringIO(ibis_test.ibis_test)
+            import io
+            self.fdin = io.StringIO(ibis_test.ibis_test)
         else:
             filename = os.path.join(sys.path[0], filename)
-            self.fdin = open(filename, 'rb')
+            self.fdin = open(filename, 'r')
 
         self.addRE(_reLabeled % "ibis[ _]ver", self.handleName)
         # Todo: Make this comment char thing work
@@ -568,10 +570,9 @@ class Ibis_Parser(_Builder):
 
         # Set the default component (called device)
         if device == None:
-            self.device = self.component.keys()[0]
+            self.device = next(iter(self.component.keys()))
         else:
             if device in self.component:
                 self.device = device
             else:
-                raise RuntimeError, "Can not find %s in the IBIS File" % device
-
+                raise RuntimeError("Can not find %s in the IBIS File" % device)

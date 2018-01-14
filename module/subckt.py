@@ -26,8 +26,6 @@ Classes:
 Subckt -- Base calss used to define a sub-circuit.
 """
 
-import mutex
-
 _subcktCnt = 0
 
 class Subckt(list):
@@ -92,4 +90,4 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod(verbose=False)
-    print 'Testing Complete'
+    print('Testing Complete')

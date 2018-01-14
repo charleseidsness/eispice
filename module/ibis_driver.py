@@ -112,7 +112,7 @@ def calcDriverKDoubleWave(model, direction, speed, tstepDivisor=10):
     elif direction == Falling:
         wave = model.falling_waveform
     else:
-        raise RuntimeError, 'Direction must be Rising or Falling.'
+        raise RuntimeError('Direction must be Rising or Falling.')
 
     # Based on the schematic defined above
     cct = circuit.Circuit("Double Waveform")
@@ -380,7 +380,7 @@ def calcDriverKRamp(model, direction, speed, tstepDivisor=10):
         ramp = model.ramp.dt_f[speed]
         wave = waveform.Gauss(voh, vol, 0, ramp)
     else:
-        raise RuntimeError, 'Direction must be Rising or Falling.'
+        raise RuntimeError('Direction must be Rising or Falling.')
 
     # Based on the schematic defined above
     cct = circuit.Circuit("Ramp")
