@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -143,7 +143,7 @@ static int waveformParseArgs(waveform_ *r, double *args[7], double **dcPtr)
 	case 'l': /* pwl */
 	case 'c': /* pwc */
 		argsUsed = 2;
-		r->d.pw.pw = piecewiseNew(r->d.pw.pw, (double**)args[0], 
+		r->d.pw.pw = piecewiseNew(r->d.pw.pw, (double**)args[0],
 				(int*)args[1], r->type);
 		ReturnErrIf(r->d.pw.pw == NULL);
 		*dcPtr = &r->d.pw.dc;
@@ -160,11 +160,11 @@ static int waveformParseArgs(waveform_ *r, double *args[7], double **dcPtr)
 	default:
 		ReturnErr("Unsupported waveform type %c", r->type);
 	}
-	
+
 	for(i = 0; i < argsUsed; i++) {
 		ReturnErrIf(args[i] == NULL, "Argument %i is NULL", i);
 	}
-	
+
 	return 0;
 }
 
@@ -175,9 +175,9 @@ int waveformNextStep(waveform_ *r, double *nextStep)
 	double tp, time;
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(nextStep == NULL);
-	
+
 	time = r->control->time;
-	
+
 	switch(r->type) {
 	case 'p': /* pulse */
 		tp = fmod(time,  *r->d.pulse.per);
@@ -216,7 +216,7 @@ int waveformNextStep(waveform_ *r, double *nextStep)
 	default:
 		break;
 	}
-	
+
 	return 0;
 }
 
@@ -230,10 +230,10 @@ int waveformCalcValue(waveform_ *r, double *value)
 	double tau1, tau2;
 	double fc, mdi, fs;
 	double dvdt;
-	
+
 	time = r->control->time;
 	*value = 0.0;
-	
+
 	switch(r->type) {
 	case 'p': /* pulse */
 		v1 = *r->d.pulse.v1;
@@ -267,27 +267,27 @@ int waveformCalcValue(waveform_ *r, double *value)
 		pw = *r->d.pulse.pw;
 		per = *r->d.pulse.per;
 		tn = fmod(time, per);
-		
+
 		/* Calculate 't3' using the relationships in table B.1, remember that
 			the provided values (td and tf from the user) are the 20% to 80%
 			rise and fall times */
-		
+
 		tr = (tr/0.672)*0.281*2;
 		tf = (tf/0.672)*0.281*2;
-	
+
 		/* Calculate the values to send to the error function */
 		tr = (tn - (tr/0.281)*0.672-td)/tr;
 		tf = (tn - (tf/0.281)*0.672-td-pw)/tf;
-		
+
 		/* Calculate the error functions */
 		ReturnErrIf(netlibERF(tr, &vo));
 		ReturnErrIf(netlibERF(tf, &va));
-		
+
 		/* Calculate the voltage value */
 		*value = v1;
 		*value += 0.5*(v2-v1)*(1+vo);
-		*value += 0.5*(v1-v2)*(1+va);		
-		
+		*value += 0.5*(v1-v2)*(1+va);
+
 		break;
 	case 's': /* sin */
 		vo = *r->d.sin.vo;
@@ -313,13 +313,13 @@ int waveformCalcValue(waveform_ *r, double *value)
 		} else if(time <= td2) {
 			*value = v1 + (v2-v1)*(1-exp(-(time-td1)/tau1));
 		} else {
-			*value = v1 + (v2-v1)*(1-exp(-(time-td1)/tau1)) + 
+			*value = v1 + (v2-v1)*(1-exp(-(time-td1)/tau1)) +
 					(v1-v2)*(1-exp(-(time-td2)/tau2));
 		}
 		break;
 	case 'l': /* pwl */
 	case 'c': /* pwc */
-		ReturnErrIf(piecewiseCalcValue(r->d.pw.pw, &r->d.pw.index, time, 
+		ReturnErrIf(piecewiseCalcValue(r->d.pw.pw, &r->d.pw.index, time,
 				value, &dvdt));
 		break;
 	case 'f': /* sffm */
@@ -333,7 +333,7 @@ int waveformCalcValue(waveform_ *r, double *value)
 	default:
 		ReturnErr("Unsupported waveform type %c", r->type);
 	}
-	
+
 	return 0;
 }
 
@@ -342,7 +342,7 @@ int waveformCalcValue(waveform_ *r, double *value)
 int waveformInitialize(waveform_ *r)
 {
 	double dvdt;
-	
+
 	r->zero = 0.0;
 	r->tstep = r->control->tstep;
 	ReturnErrIf(r->tstep == HUGE_VAL);
@@ -350,7 +350,7 @@ int waveformInitialize(waveform_ *r)
 	r->tstop = r->control->tstop+r->tstep;
 	ReturnErrIf(r->tstop == HUGE_VAL);
 	r->fmin = 1 / r->tstop;
-	
+
 	switch(r->type) {
 	case 'p': /* pulse */
 		if(*r->d.pulse.td == HUGE_VAL)
@@ -419,40 +419,40 @@ int waveformDestroy(waveform_ **r)
 	ReturnErrIf(r == NULL);
 	ReturnErrIf((*r) == NULL);
 	Debug("Destroying Waveform %p", *r);
-	
-	if((((*r)->type == 'l') || ((*r)->type == 'c')) && 
+
+	if((((*r)->type == 'l') || ((*r)->type == 'c')) &&
 			((*r)->d.pw.pw != NULL)) {
 		if(piecewiseDestroy(&(*r)->d.pw.pw)) {
 			Warn("Error destroying piecewise");
 		}
 	}
-	
+
 	free(*r);
 	*r = NULL;
-	
+
 	return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-waveform_ * waveformNew(waveform_ *r, control_ *control, char type, 
+waveform_ * waveformNew(waveform_ *r, control_ *control, char type,
 		double *args[7], double **dcPtr)
 {
 	ReturnNULLIf(r != NULL);
 	ReturnNULLIf(control == NULL);
-	ReturnNULLIf((type != 'p') && (type != 'g') && (type != 's') && 
+	ReturnNULLIf((type != 'p') && (type != 'g') && (type != 's') &&
 			(type != 'e') && (type != 'l') && (type != 'c') && (type != 'f'));
 	ReturnNULLIf(args == NULL);
-	
+
 	r = calloc(1, sizeof(waveform_));
 	ReturnNULLIf(r == NULL, "Malloc Failed");
-	
+
 	Debug("Creating Waveform %p", r);
-	
+
 	r->type = type;
 	r->control = control;
 	ReturnNULLIf(waveformParseArgs(r, args, dcPtr));
-	
+
 	return r;
 }
 

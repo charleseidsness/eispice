@@ -15,8 +15,8 @@
  */
 
 /*
- * Solves a dense UNIT lower triangular system. The unit lower 
- * triangular matrix is stored in a 2D array M(1:nrow,1:ncol). 
+ * Solves a dense UNIT lower triangular system. The unit lower
+ * triangular matrix is stored in a 2D array M(1:nrow,1:ncol).
  * The solution will be returned in the rhs vector.
  */
 void dlsolve ( int ldm, int ncol, double *M, double *rhs )
@@ -61,13 +61,13 @@ void dlsolve ( int ldm, int ncol, double *M, double *rhs )
       rhs[++firstcol] = x6;
       rhs[++firstcol] = x7;
       ++firstcol;
-    
+
       for (k = firstcol; k < ncol; k++)
 	rhs[k] = rhs[k] - x0 * *Mki0++ - x1 * *Mki1++
 	                - x2 * *Mki2++ - x3 * *Mki3++
                         - x4 * *Mki4++ - x5 * *Mki5++
 			- x6 * *Mki6++ - x7 * *Mki7++;
- 
+
       M0 += 8 * ldm + 8;
     }
 
@@ -86,11 +86,11 @@ void dlsolve ( int ldm, int ncol, double *M, double *rhs )
       rhs[++firstcol] = x2;
       rhs[++firstcol] = x3;
       ++firstcol;
-    
+
       for (k = firstcol; k < ncol; k++)
 	rhs[k] = rhs[k] - x0 * *Mki0++ - x1 * *Mki1++
 	                - x2 * *Mki2++ - x3 * *Mki3++;
- 
+
       M0 += 4 * ldm + 4;
     }
 
@@ -103,12 +103,12 @@ void dlsolve ( int ldm, int ncol, double *M, double *rhs )
 
       rhs[++firstcol] = x1;
       ++firstcol;
-    
+
       for (k = firstcol; k < ncol; k++)
 	rhs[k] = rhs[k] - x0 * *Mki0++ - x1 * *Mki1++;
- 
+
     }
-    
+
 }
 
 /*
@@ -132,7 +132,7 @@ double *rhs;	/* modified */
 
 	xj = rhs[jcol] / M[jcol + jcol*ldm]; 		/* M(jcol, jcol) */
 	rhs[jcol] = xj;
-	
+
 	for (irow = 0; irow < jcol; irow++)
 	    rhs[irow] -= xj * M[irow + jcol*ldm];	/* M(irow, jcol) */
 
@@ -149,7 +149,7 @@ double *rhs;	/* modified */
 void dmatvec ( ldm, nrow, ncol, M, vec, Mxvec )
 
 int ldm;	/* in -- leading dimension of M */
-int nrow;	/* in */ 
+int nrow;	/* in */
 int ncol;	/* in */
 double *M;	/* in */
 double *vec;	/* in */
@@ -177,15 +177,15 @@ double *Mxvec;	/* in/out */
 	vi0 = vec[firstcol++];
 	vi1 = vec[firstcol++];
 	vi2 = vec[firstcol++];
-	vi3 = vec[firstcol++];	
+	vi3 = vec[firstcol++];
 	vi4 = vec[firstcol++];
 	vi5 = vec[firstcol++];
 	vi6 = vec[firstcol++];
-	vi7 = vec[firstcol++];	
+	vi7 = vec[firstcol++];
 
-	for (k = 0; k < nrow; k++) 
+	for (k = 0; k < nrow; k++)
 	    Mxvec[k] += vi0 * *Mki0++ + vi1 * *Mki1++
-		      + vi2 * *Mki2++ + vi3 * *Mki3++ 
+		      + vi2 * *Mki2++ + vi3 * *Mki3++
 		      + vi4 * *Mki4++ + vi5 * *Mki5++
 		      + vi6 * *Mki6++ + vi7 * *Mki7++;
 
@@ -202,8 +202,8 @@ double *Mxvec;	/* in/out */
 	vi0 = vec[firstcol++];
 	vi1 = vec[firstcol++];
 	vi2 = vec[firstcol++];
-	vi3 = vec[firstcol++];	
-	for (k = 0; k < nrow; k++) 
+	vi3 = vec[firstcol++];
+	for (k = 0; k < nrow; k++)
 	    Mxvec[k] += vi0 * *Mki0++ + vi1 * *Mki1++
 		      + vi2 * *Mki2++ + vi3 * *Mki3++ ;
 
@@ -219,6 +219,6 @@ double *Mxvec;	/* in/out */
 
 	M0 += ldm;
     }
-	
+
 }
 

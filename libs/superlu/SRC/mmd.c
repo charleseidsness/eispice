@@ -48,9 +48,9 @@ typedef int shortint;
 
 /* *************************************************************** */
 
-/* Subroutine */ int genmmd_(int *neqns, int *xadj, shortint *adjncy, 
-	shortint *invp, shortint *perm, int *delta, shortint *dhead, 
-	shortint *qsize, shortint *llist, shortint *marker, int *maxint, 
+/* Subroutine */ int genmmd_(int *neqns, int *xadj, shortint *adjncy,
+	shortint *invp, shortint *perm, int *delta, shortint *dhead,
+	shortint *qsize, shortint *llist, shortint *marker, int *maxint,
 	int *nofsub)
 {
     /* System generated locals */
@@ -58,13 +58,13 @@ typedef int shortint;
 
     /* Local variables */
     static int mdeg, ehead, i, mdlmt, mdnode;
-    extern /* Subroutine */ int mmdelm_(int *, int *, shortint *, 
-	    shortint *, shortint *, shortint *, shortint *, shortint *, 
-	    shortint *, int *, int *), mmdupd_(int *, int *, 
-	    int *, shortint *, int *, int *, shortint *, shortint 
-	    *, shortint *, shortint *, shortint *, shortint *, int *, 
-	    int *), mmdint_(int *, int *, shortint *, shortint *, 
-	    shortint *, shortint *, shortint *, shortint *, shortint *), 
+    extern /* Subroutine */ int mmdelm_(int *, int *, shortint *,
+	    shortint *, shortint *, shortint *, shortint *, shortint *,
+	    shortint *, int *, int *), mmdupd_(int *, int *,
+	    int *, shortint *, int *, int *, shortint *, shortint
+	    *, shortint *, shortint *, shortint *, shortint *, int *,
+	    int *), mmdint_(int *, int *, shortint *, shortint *,
+	    shortint *, shortint *, shortint *, shortint *, shortint *),
 	    mmdnum_(int *, shortint *, shortint *, shortint *);
     static int nextmd, tag, num;
 
@@ -235,8 +235,8 @@ L1000:
 
 /* *************************************************************** */
 
-/* Subroutine */ int mmdint_(int *neqns, int *xadj, shortint *adjncy, 
-	shortint *dhead, shortint *dforw, shortint *dbakw, shortint *qsize, 
+/* Subroutine */ int mmdint_(int *neqns, int *xadj, shortint *adjncy,
+	shortint *dhead, shortint *dforw, shortint *dbakw, shortint *qsize,
 	shortint *llist, shortint *marker)
 {
     /* System generated locals */
@@ -320,14 +320,14 @@ L1000:
 /* *************************************************************** */
 
 /* Subroutine */ int mmdelm_(int *mdnode, int *xadj, shortint *adjncy,
-	 shortint *dhead, shortint *dforw, shortint *dbakw, shortint *qsize, 
+	 shortint *dhead, shortint *dforw, shortint *dbakw, shortint *qsize,
 	shortint *llist, shortint *marker, int *maxint, int *tag)
 {
     /* System generated locals */
     int i__1, i__2;
 
     /* Local variables */
-    static int node, link, rloc, rlmt, i, j, nabor, rnode, elmnt, xqnbr, 
+    static int node, link, rloc, rlmt, i, j, nabor, rnode, elmnt, xqnbr,
 	    istop, jstop, istrt, jstrt, nxnode, pvnode, nqnbrs, npv;
 
 
@@ -566,16 +566,16 @@ L1800:
 
 /* *************************************************************** */
 
-/* Subroutine */ int mmdupd_(int *ehead, int *neqns, int *xadj, 
-	shortint *adjncy, int *delta, int *mdeg, shortint *dhead, 
-	shortint *dforw, shortint *dbakw, shortint *qsize, shortint *llist, 
+/* Subroutine */ int mmdupd_(int *ehead, int *neqns, int *xadj,
+	shortint *adjncy, int *delta, int *mdeg, shortint *dhead,
+	shortint *dforw, shortint *dbakw, shortint *qsize, shortint *llist,
 	shortint *marker, int *maxint, int *tag)
 {
     /* System generated locals */
     int i__1, i__2;
 
     /* Local variables */
-    static int node, mtag, link, mdeg0, i, j, enode, fnode, nabor, elmnt, 
+    static int node, mtag, link, mdeg0, i, j, enode, fnode, nabor, elmnt,
 	    istop, jstop, q2head, istrt, jstrt, qxhead, iq2, deg, deg0;
 
 
@@ -658,11 +658,11 @@ L500:
 	if (dbakw[enode] != 0) {
 	    goto L700;
 	}
-/*                            --------------------------------------- 
+/*                            ---------------------------------------
 */
-/*                            PLACE EITHER IN QXHEAD OR Q2HEAD LISTS. 
+/*                            PLACE EITHER IN QXHEAD OR Q2HEAD LISTS.
 */
-/*                            --------------------------------------- 
+/*                            ---------------------------------------
 */
 	if (dforw[enode] == 2) {
 	    goto L600;
@@ -768,11 +768,11 @@ L1200:
 	dbakw[node] = -(*maxint);
 	goto L1400;
 L1300:
-/*                            -------------------------------------- 
+/*                            --------------------------------------
 */
-/*                            CASE WHEN NODE IS OUTMATCHED BY ENODE. 
+/*                            CASE WHEN NODE IS OUTMATCHED BY ENODE.
 */
-/*                            -------------------------------------- 
+/*                            --------------------------------------
 */
 	if (dbakw[node] == 0) {
 	    dbakw[node] = -(*maxint);
@@ -823,14 +823,14 @@ L1600:
 	deg += qsize[nabor];
 	goto L2000;
 L1700:
-/*                                    ------------------------------- 
+/*                                    -------------------------------
 */
-/*                                    IF ELIMINATED, INCLUDE UNMARKED 
+/*                                    IF ELIMINATED, INCLUDE UNMARKED
 */
-/*                                    NODES IN THIS ELEMENT INTO THE 
+/*                                    NODES IN THIS ELEMENT INTO THE
 */
 /*                                    DEGREE COUNT. */
-/*                                    ------------------------------- 
+/*                                    -------------------------------
 */
 	jstrt = xadj[link];
 	jstop = xadj[link + 1] - 1;
@@ -922,7 +922,7 @@ L2300:
 
 /* *************************************************************** */
 
-/* Subroutine */ int mmdnum_(int *neqns, shortint *perm, shortint *invp, 
+/* Subroutine */ int mmdnum_(int *neqns, shortint *perm, shortint *invp,
 	shortint *qsize)
 {
     /* System generated locals */

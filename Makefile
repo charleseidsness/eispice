@@ -11,7 +11,7 @@ DATA_DIR = libs/data
 
 # Quiet (set to @ for a quite compile)
 Q	?= @
-#Q	?= 
+#Q	?=
 
 # Build Tools
 CROSS	?=
@@ -47,7 +47,7 @@ libs:
 	$(Q)(cd $(LAPACK_DIR); $(MAKE) install)
 	$(Q)(cd $(SPARSE_DIR); $(MAKE) install)
 	$(Q)(cd $(CALC_DIR); $(MAKE) install)
-	$(Q)(cd $(SIM_DIR); $(MAKE) install)	
+	$(Q)(cd $(SIM_DIR); $(MAKE) install)
 
 distclean:
 	@echo Cleaning...
@@ -57,12 +57,12 @@ distclean:
 	$(Q)(cd $(CEPHES_DIR); $(MAKE) clean)
 	$(Q)(cd $(LAPACK_DIR); $(MAKE) clean)
 	$(Q)(cd $(SPARSE_DIR); $(MAKE) clean)
-	$(Q)(cd $(CALC_DIR); $(MAKE) clean)	
+	$(Q)(cd $(CALC_DIR); $(MAKE) clean)
 	$(Q)(cd $(SIM_DIR); $(MAKE) clean)
 	$(Q)rm -vf libs/*.a
 	$(Q)rm -vf include/*
 	$(Q)rm -vf *~ */*~ */*/*~
-	$(Q)rm -vf *.stackdump */*.stackdump	
+	$(Q)rm -vf *.stackdump */*.stackdump
 	$(Q)rm -vf ./module/*.o
 	$(Q)rm -vf ./module/*.pyc
 	$(Q)rm -vf ./eispice.dll
@@ -78,7 +78,7 @@ clean:
 uninstall:
 	@echo Un-Installing
 	$(Q)python uninstall.py
-	
+
 
 install: uninstall
 	@echo Installing

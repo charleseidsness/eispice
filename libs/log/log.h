@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -51,12 +51,12 @@
  *	LOG_FDLOG
  *		-- FILE pointer for the log file
  *	OpenErrorFile(file)
- *		-- Opens a file for printing error and warning messges to, if not 
+ *		-- Opens a file for printing error and warning messges to, if not
  *			included stderr will be used.
- *	CloseErrorFile	
+ *	CloseErrorFile
  *		-- Closes the error file, if it was opened.
- *	OpenLogFile(file) 
- *		-- Opens a file for printing info and debug messges to, if not 
+ *	OpenLogFile(file)
+ *		-- Opens a file for printing info and debug messges to, if not
  *			included stdout will be used.
  *	CloseLogFile
  *		-- Closes the error file, if it was opened.
@@ -90,20 +90,20 @@
  *			pointed to by ptr and returns a NULL if the expression is true.
  *	ReturnNaNIf(expr, args...)
  *		-- Prints an Error message including the expression and returns a nan
- *			if the expression is true. 
+ *			if the expression is true.
  *		-- must include math.h to use
  *	ReturnNaN(args...)
- *		-- Prints an Error message and returns a nan. 
+ *		-- Prints an Error message and returns a nan.
  *		-- must include math.h to use
  *	GotoFailedIf(expr, args...)
  *		-- Prints an Error message including the expression and "goto failed"
  *			if the expression is true.
  *	ExitFailureIf(expr, args...)
  *		-- Prints an Error message including the expression and termintes the
- *			application with a "exit(EXIT_FAILURE)" if the expression is true. 
+ *			application with a "exit(EXIT_FAILURE)" if the expression is true.
  *			To be used in the main function.
  *	ExitFailure(args...)
- *		-- Prints an Error message and termintes the application with a 
+ *		-- Prints an Error message and termintes the application with a
  *			"exit(EXIT_FAILURE)". To be used in the main function.
  *	ExitSuccess
  *		-- Exits an application with no error codes, i.e. "exit(EXIT_SUCCESS)"
@@ -202,7 +202,7 @@ extern FILE *fdlog;
 		fprintf(LOG_FDLOG, "\n");\
 		(void)fflush(LOG_FDLOG)
 #	define Text(args...) \
-		fprintf(LOG_FDLOG, args);	
+		fprintf(LOG_FDLOG, args);
 #else
 #	define Debug(args...)
 #	define Text(args...)

@@ -10,7 +10,7 @@
 #include "slu_ddefs.h"
 
 double
-dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c, 
+dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
              SuperMatrix *L, SuperMatrix *U)
 {
 /*
@@ -33,8 +33,8 @@ dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
  *          Stype = NC; Dtype = SLU_D; Mtype = GE.
  *
  * L        (output) SuperMatrix*
- *          The factor L from the factorization Pr*A=L*U; use compressed row 
- *          subscripts storage for supernodes, i.e., L has type: 
+ *          The factor L from the factorization Pr*A=L*U; use compressed row
+ *          subscripts storage for supernodes, i.e., L has type:
  *          Stype = SC; Dtype = SLU_D; Mtype = TRLU.
  *
  * U        (output) SuperMatrix*
@@ -54,7 +54,7 @@ dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
     extern   double dlamch_(char *);
     double   smlnum;
     double   *luval;
-   
+
     /* Get machine constants. */
     smlnum = dlamch_("S");
     rpg = 1. / smlnum;
@@ -65,7 +65,7 @@ dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
     Aval = Astore->nzval;
     Lval = Lstore->nzval;
     Uval = Ustore->nzval;
-    
+
     inv_perm_c = (int *) SUPERLU_MALLOC(A->ncol*sizeof(int));
     for (j = 0; j < A->ncol; ++j) inv_perm_c[perm_c[j]] = j;
 
@@ -75,17 +75,17 @@ dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
 	luptr = L_NZ_START(fsupc);
 	luval = &Lval[luptr];
 	nz_in_U = 1;
-	
+
 	for (j = fsupc; j < L_FST_SUPC(k+1) && j < ncols; ++j) {
 	    maxaj = 0.;
             oldcol = inv_perm_c[j];
 	    for (i = Astore->colptr[oldcol]; i < Astore->colptr[oldcol+1]; ++i)
 		maxaj = SUPERLU_MAX( maxaj, fabs(Aval[i]) );
-	
+
 	    maxuj = 0.;
 	    for (i = Ustore->colptr[j]; i < Ustore->colptr[j+1]; i++)
 		maxuj = SUPERLU_MAX( maxuj, fabs(Uval[i]) );
-	    
+
 	    /* Supernode */
 	    for (i = 0; i < nz_in_U; ++i)
 		maxuj = SUPERLU_MAX( maxuj, fabs(luval[i]) );
@@ -98,7 +98,7 @@ dPivotGrowth(int ncols, SuperMatrix *A, int *perm_c,
 	    else
 		rpg = SUPERLU_MIN( rpg, maxaj / maxuj );
 	}
-	
+
 	if ( j >= ncols ) break;
     }
 

@@ -39,30 +39,30 @@ static int dblhashGrow(dblhash_ *h)
 	int i;
     record_ *old_recs, *new_recs;
     unsigned int old_recs_length;
-	
+
 	Debug("Growing Hash %p", h);
-	
+
 	ReturnErrIf(h->size_index == (sizes_count - 1));
-	
+
     old_recs_length = sizes[h->size_index];
     old_recs = h->records;
-	
+
 	new_recs = calloc(sizes[++h->size_index], sizeof(record_));
 	ReturnErrIf(new_recs == NULL);
 	h->records = new_recs;
-    
+
     h->records_count = 0;
-	
+
     /* rehash table */
     for (i=0; i < old_recs_length; i++) {
         if (old_recs[i].hash && old_recs[i].key) {
-            ReturnErrIf(dblhashAdd(h, old_recs[i].key, old_recs[i].freeMem, 
+            ReturnErrIf(dblhashAdd(h, old_recs[i].key, old_recs[i].freeMem,
 					old_recs[i].value));
 		}
 	}
-	
+
     free(old_recs);
-	
+
     return 0;
 }
 
@@ -85,13 +85,13 @@ int dblhashFindPtr(dblhash_ *h, char *key, double **value)
     record_ *recs;
     unsigned int off, ind, size;
     unsigned int code;
-	
+
 	ReturnErrIf(h == NULL);
 	ReturnErrIf(key == NULL);
 	ReturnErrIf(value == NULL);
-	
+
 	code = strhash(key);
-	
+
     recs = h->records;
     size = sizes[h->size_index];
     ind = code % size;
@@ -109,7 +109,7 @@ int dblhashFindPtr(dblhash_ *h, char *key, double **value)
 		}
         ind = (code + (int)pow(++off,2)) % size;
     }
-	
+
     	/* Couldn't find the key */
 	*value = NULL;
     return 0;
@@ -134,35 +134,35 @@ int dblhashAddPtr(dblhash_ *h, char *key, char freeMem, double value,
 {
     record_ *recs;
     unsigned int off, ind, size, code;
-	
+
 	ReturnErrIf(h == NULL);
 	ReturnErrIf(key == NULL);
 	ReturnErrIf(*key == '\0');
 	ReturnErrIf(valuePtr == NULL);
-	
+
     if (h->records_count > (sizes[h->size_index] * load_factor)) {
         ReturnErrIf(dblhashGrow(h));
     }
-	
+
     code = strhash(key);
     recs = h->records;
     size = sizes[h->size_index];
-	
+
     ind = code % size;
     off = 0;
-	
+
     while (recs[ind].key) {
         ind = (code + (int)pow(++off,2)) % size;
 	}
-	
+
     recs[ind].hash = code;
     recs[ind].key = key;
 	recs[ind].freeMem = freeMem;
     recs[ind].value = value;
 	*valuePtr = &recs[ind].value;
-	
+
     h->records_count++;
-	
+
     return 0;
 }
 
@@ -180,17 +180,17 @@ int dblhashRemove(dblhash_ *h, char *key)
     unsigned int code;
     record_ *recs;
     unsigned int off, ind, size;
-	
+
 	ReturnErrIf(h == NULL);
 	ReturnErrIf(key == NULL);
-	
+
 	code = strhash(key);
-	
+
     recs = h->records;
     size = sizes[h->size_index];
     ind = code % size;
     off = 0;
-	
+
     while (recs[ind].hash) {
         if ((code == recs[ind].hash) && (recs[ind].key != NULL)) {
 			if(!strcmp(key, recs[ind].key)) {
@@ -206,7 +206,7 @@ int dblhashRemove(dblhash_ *h, char *key)
         }
         ind = (code + (int)pow(++off, 2)) % size;
     }
-	
+
 	ReturnErr("Couldn't find %s", key);
 }
 
@@ -225,24 +225,24 @@ int dblhashLength(dblhash_ *h, unsigned int *length)
 int dblhashDestroy(dblhash_ **h)
 {
 	int i;
-	
+
 	ReturnErrIf(h == NULL);
 	ReturnErrIf((*h) == NULL);
 	Debug("Destroying Hash %p", *h);
-	
+
 	if((*h)->records != NULL) {
 		for(i = 0; i < sizes[(*h)->size_index]; i++) {
-			if(((*h)->records[i].freeMem != 'n') && 
+			if(((*h)->records[i].freeMem != 'n') &&
 					((*h)->records[i].key != NULL)) {
 				free((*h)->records[i].key);
 			}
 		}
 		free((*h)->records);
 	}
-	
+
 	free(*h);
 	*h = NULL;
-	
+
 	return 0;
 }
 
@@ -251,26 +251,26 @@ int dblhashDestroy(dblhash_ **h)
 dblhash_ * dblhashNew(dblhash_ *h, unsigned int capacity)
 {
     int i, sind = 0;
-	
+
     capacity /= load_factor;
-	
+
     for (i = 0; i < sizes_count; i++) {
         if (sizes[i] > capacity) {
 			sind = i;
 			break;
 		}
 	}
-	
+
 	h = calloc(sizeof(dblhash_), 1);
 	ReturnNULLIf(h == NULL);
-	
+
 	h->records = calloc(sizes[sind], sizeof(record_));
 	ReturnNULLIf(h->records == NULL);
-    
+
 	Debug("Creating Hash %p", h);
     h->records_count = 0;
     h->size_index = sind;
-	
+
     return h;
 }
 

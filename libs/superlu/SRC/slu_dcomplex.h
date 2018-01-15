@@ -9,7 +9,7 @@
 #ifndef __SUPERLU_DCOMPLEX /* allow multiple inclusions */
 #define __SUPERLU_DCOMPLEX
 
-/* 
+/*
  * This header file is to be included in source files z*.c
  */
 #ifndef DCOMPLEX_INCLUDE

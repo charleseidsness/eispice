@@ -30,18 +30,18 @@ typedef int int_t; /* default */
 
 /*
  * Global data structures used in LU factorization -
- * 
+ *
  *   nsuper: #supernodes = nsuper + 1, numbered [0, nsuper].
  *   (xsup,supno): supno[i] is the supernode no to which i belongs;
  *	xsup(s) points to the beginning of the s-th supernode.
  *	e.g.   supno 0 1 2 2 3 3 3 4 4 4 4 4   (n=12)
  *	        xsup 0 1 2 4 7 12
- *	Note: dfs will be performed on supernode rep. relative to the new 
+ *	Note: dfs will be performed on supernode rep. relative to the new
  *	      row pivoting ordering
  *
  *   (xlsub,lsub): lsub[*] contains the compressed subscript of
  *	rectangular supernodes; xlsub[j] points to the starting
- *	location of the j-th column in lsub[*]. Note that xlsub 
+ *	location of the j-th column in lsub[*]. Note that xlsub
  *	is indexed by column.
  *	Storage: original row subscripts
  *
@@ -82,7 +82,7 @@ typedef int int_t; /* default */
  */
 typedef struct {
     int     *xsup;    /* supernode and column mapping */
-    int     *supno;   
+    int     *supno;
     int     *lsub;    /* compressed L subscripts */
     int	    *xlsub;
     float  *lusup;   /* L supernodes */
@@ -131,7 +131,7 @@ extern void
 sCreate_Dense_Matrix(SuperMatrix *, int, int, float *, int,
 		     Stype_t, Dtype_t, Mtype_t);
 extern void
-sCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, float *, 
+sCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, float *,
 		         int *, int *, int *, int *, int *,
 			 Stype_t, Dtype_t, Mtype_t);
 extern void
@@ -141,8 +141,8 @@ extern void    countnz (const int, int *, int *, int *, GlobalLU_t *);
 extern void    fixupL (const int, const int *, GlobalLU_t *);
 
 extern void    sallocateA (int, int, float **, int **, int **);
-extern void    sgstrf (superlu_options_t*, SuperMatrix*, float, 
-                       int, int, int*, void *, int, int *, int *, 
+extern void    sgstrf (superlu_options_t*, SuperMatrix*, float,
+                       int, int, int*, void *, int, int *, int *,
                        SuperMatrix *, SuperMatrix *, SuperLUStat_t*, int *);
 extern int     ssnode_dfs (const int, const int, const int *, const int *,
 			     const int *, int *, int *, GlobalLU_t *);
@@ -160,8 +160,8 @@ extern int     scolumn_bmod (const int, const int, float *,
 			   float *, int *, int *, int,
                            GlobalLU_t *, SuperLUStat_t*);
 extern int     scopy_to_ucol (int, int, int *, int *, int *,
-                              float *, GlobalLU_t *);         
-extern int     spivotL (const int, const float, int *, int *, 
+                              float *, GlobalLU_t *);
+extern int     spivotL (const int, const float, int *, int *,
                          int *, int *, int *, GlobalLU_t *, SuperLUStat_t*);
 extern void    spruneL (const int, const int *, const int, const int,
 			  const int *, const int *, int *, GlobalLU_t *);
@@ -179,12 +179,12 @@ extern void    sgsequ (SuperMatrix *, float *, float *, float *,
 			float *, float *, int *);
 extern void    slaqgs (SuperMatrix *, float *, float *, float,
                         float, float, char *);
-extern void    sgscon (char *, SuperMatrix *, SuperMatrix *, 
+extern void    sgscon (char *, SuperMatrix *, SuperMatrix *,
 		         float, float *, SuperLUStat_t*, int *);
-extern float   sPivotGrowth(int, SuperMatrix *, int *, 
+extern float   sPivotGrowth(int, SuperMatrix *, int *,
                             SuperMatrix *, SuperMatrix *);
 extern void    sgsrfs (trans_t, SuperMatrix *, SuperMatrix *,
-                       SuperMatrix *, int *, int *, char *, float *, 
+                       SuperMatrix *, int *, int *, char *, float *,
                        float *, SuperMatrix *, SuperMatrix *,
                        float *, float *, SuperLUStat_t*, int *);
 
@@ -194,7 +194,7 @@ extern int     sp_sgemv (char *, float, SuperMatrix *, float *,
 			int, float, float *, int);
 
 extern int     sp_sgemm (char *, char *, int, int, int, float,
-			SuperMatrix *, float *, int, float, 
+			SuperMatrix *, float *, int, float,
 			float *, int);
 
 /* Memory-related */

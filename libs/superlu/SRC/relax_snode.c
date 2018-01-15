@@ -7,10 +7,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -34,13 +34,13 @@ relax_snode (
 /*
  * Purpose
  * =======
- *    relax_snode() - Identify the initial relaxed supernodes, assuming that 
+ *    relax_snode() - Identify the initial relaxed supernodes, assuming that
  *    the matrix has been reordered according to the postorder of the etree.
  *
- */ 
+ */
     register int j, parent;
     register int snode_start;	/* beginning of a snode */
-    
+
     ifill (relax_end, n, EMPTY);
     for (j = 0; j < n; j++) descendants[j] = 0;
 
@@ -52,7 +52,7 @@ relax_snode (
     }
 
     /* Identify the relaxed supernodes by postorder traversal of the etree. */
-    for (j = 0; j < n; ) { 
+    for (j = 0; j < n; ) {
      	parent = et[j];
         snode_start = j;
  	while ( parent != n && descendants[parent] < relax_columns ) {
@@ -66,6 +66,6 @@ relax_snode (
 	while ( descendants[j] != 0 && j < n ) j++;
     }
 
-    /*printf("No of relaxed snodes: %d; relaxed columns: %d\n", 
+    /*printf("No of relaxed snodes: %d; relaxed columns: %d\n",
 		nsuper, no_relaxed_col); */
 }

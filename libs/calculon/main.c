@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -43,14 +43,14 @@ static double ** getVariable(char *name, void *private)
 {
 	ReturnNULLIf(numValues >= MAX_VALUES, "Can have a maximum of %i variables",
 		MAX_VALUES);
-	
+
 	printf("Please enter value: %s = ", name);
-	
+
 	fflush(stdout);
 	numValues++;
 	scanf("%lg", &value[numValues]);
 	valueP[numValues] = &value[numValues];
-	
+
 	return &valueP[numValues];
 }
 
@@ -102,7 +102,7 @@ void help()
 int main(int argc, char *argv[])
 {
 	int opt;
-	struct option longopts[] = { 
+	struct option longopts[] = {
 			{"iterations", 0, NULL, 'n'},
 			{"help", 0, NULL, 'h'},
 			{"version", 0, NULL, 'v'},
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 	double solution = 0, minDiv = 1e-12;
 	int result;
 	solveType type = SOLVE_NORMAL;
-    
+
 	/* Process the command line options */
 	while((opt = getopt_long(argc, argv, "d:hve:l:d:zm:E", longopts, NULL)) != -1) {
 		switch(opt) {
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	Debug("Formula: %s", formula);
 	calc = calcNew(calc, formula, getVariable, NULL, &minDiv);
 	ExitFailureIf(calc == NULL, "Failed to create calculon");
-	
+
 	switch(type) {
 		case SOLVE_NORMAL:
 			ExitFailureIf(calcSolve(calc, &solution));
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 			Info("Result: %i", result);
 			break;
 	}
-	
+
 	calcDestroy(&calc);
 	CloseErrorFile;
 	CloseLogFile;

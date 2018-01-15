@@ -4,7 +4,7 @@ INC_PREFIX = ../../include
 
 # Quiet (set to @ for a quite compile)
 Q	?= @
-#Q	?= 
+#Q	?=
 
 # Build Tools
 CROSS	?=
@@ -54,7 +54,7 @@ $(LIB):$(LIB_OBJ)
 	@echo AR $@
 	$(Q)$(AR) $(ARFLAGS) $@ $(LIB_OBJ)
 	$(Q)$(RANLIB) $@
-	
+
 clean:
 	@echo Cleaning...
 	$(Q)rm -vf $(EXE_OBJ) $(EXE)
@@ -66,12 +66,12 @@ $(LIB_PREFIX)/$(LIB):$(LIB)
 	$(Q)cp $(LIB) $(LIB_PREFIX)
 	$(Q)cp $(INC) $(INC_PREFIX)
 
-install:$(LIB_PREFIX)/$(LIB)	
+install:$(LIB_PREFIX)/$(LIB)
 
 %.o:%.c
 	@echo CC $@
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 %.dis:%.o
 	@echo DIS $@
 	$(Q)$(OBJDUMP) -D $< >> $@

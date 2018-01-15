@@ -101,7 +101,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH('S') 
+      SFMIN = DLAMCH('S')
 *
       DO 10 J = 1, MIN( M, N )
 *

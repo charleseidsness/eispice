@@ -14,58 +14,58 @@ dlacon_(int *n, double *v, double *x, int *isgn, double *est, int *kase)
 
 {
 /*
-    Purpose   
-    =======   
+    Purpose
+    =======
 
-    DLACON estimates the 1-norm of a square matrix A.   
-    Reverse communication is used for evaluating matrix-vector products. 
-  
+    DLACON estimates the 1-norm of a square matrix A.
+    Reverse communication is used for evaluating matrix-vector products.
 
-    Arguments   
-    =========   
+
+    Arguments
+    =========
 
     N      (input) INT
-           The order of the matrix.  N >= 1.   
+           The order of the matrix.  N >= 1.
 
-    V      (workspace) DOUBLE PRECISION array, dimension (N)   
-           On the final return, V = A*W,  where  EST = norm(V)/norm(W)   
-           (W is not returned).   
+    V      (workspace) DOUBLE PRECISION array, dimension (N)
+           On the final return, V = A*W,  where  EST = norm(V)/norm(W)
+           (W is not returned).
 
-    X      (input/output) DOUBLE PRECISION array, dimension (N)   
-           On an intermediate return, X should be overwritten by   
-                 A * X,   if KASE=1,   
+    X      (input/output) DOUBLE PRECISION array, dimension (N)
+           On an intermediate return, X should be overwritten by
+                 A * X,   if KASE=1,
                  A' * X,  if KASE=2,
-           and DLACON must be re-called with all the other parameters   
-           unchanged.   
+           and DLACON must be re-called with all the other parameters
+           unchanged.
 
     ISGN   (workspace) INT array, dimension (N)
 
-    EST    (output) DOUBLE PRECISION   
-           An estimate (a lower bound) for norm(A).   
+    EST    (output) DOUBLE PRECISION
+           An estimate (a lower bound) for norm(A).
 
     KASE   (input/output) INT
-           On the initial call to DLACON, KASE should be 0.   
-           On an intermediate return, KASE will be 1 or 2, indicating   
-           whether X should be overwritten by A * X  or A' * X.   
-           On the final return from DLACON, KASE will again be 0.   
+           On the initial call to DLACON, KASE should be 0.
+           On an intermediate return, KASE will be 1 or 2, indicating
+           whether X should be overwritten by A * X  or A' * X.
+           On the final return from DLACON, KASE will again be 0.
 
-    Further Details   
-    ======= =======   
+    Further Details
+    ======= =======
 
-    Contributed by Nick Higham, University of Manchester.   
-    Originally named CONEST, dated March 16, 1988.   
+    Contributed by Nick Higham, University of Manchester.
+    Originally named CONEST, dated March 16, 1988.
 
-    Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of 
-    a real or complex matrix, with applications to condition estimation", 
-    ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.   
-    ===================================================================== 
+    Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
+    a real or complex matrix, with applications to condition estimation",
+    ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
+    =====================================================================
 */
 
     /* Table of constant values */
     int c__1 = 1;
     double      zero = 0.0;
     double      one = 1.0;
-    
+
     /* Local variables */
     static int iter;
     static int jump, jlast;
@@ -102,7 +102,7 @@ dlacon_(int *n, double *v, double *x, int *isgn, double *est, int *kase)
 	case 5:  goto L140;
     }
 
-    /*     ................ ENTRY   (JUMP = 1)   
+    /*     ................ ENTRY   (JUMP = 1)
 	   FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY A*X. */
   L20:
     if (*n == 1) {
@@ -125,7 +125,7 @@ dlacon_(int *n, double *v, double *x, int *isgn, double *est, int *kase)
     jump = 2;
     return 0;
 
-    /*     ................ ENTRY   (JUMP = 2)   
+    /*     ................ ENTRY   (JUMP = 2)
 	   FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
 #ifdef _CRAY
@@ -144,7 +144,7 @@ L50:
     jump = 3;
     return 0;
 
-    /*     ................ ENTRY   (JUMP = 3)   
+    /*     ................ ENTRY   (JUMP = 3)
 	   X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
 #ifdef _CRAY
@@ -178,7 +178,7 @@ L90:
     jump = 4;
     return 0;
 
-    /*     ................ ENTRY   (JUMP = 4)   
+    /*     ................ ENTRY   (JUMP = 4)
 	   X HAS BEEN OVERWRITTEN BY TRANDPOSE(A)*X. */
 L110:
     jlast = j;
@@ -203,8 +203,8 @@ L120:
     *kase = 1;
     jump = 5;
     return 0;
-    
-    /*     ................ ENTRY   (JUMP = 5)   
+
+    /*     ................ ENTRY   (JUMP = 5)
 	   X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
 #ifdef _CRAY

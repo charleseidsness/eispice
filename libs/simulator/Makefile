@@ -11,7 +11,7 @@ CEPHES_LIB = $(LIB_PREFIX)/libcephes.a
 
 # Quiet (set to @ for a quite compile)
 Q	?= @
-#Q	?= 
+#Q	?=
 
 # Build Tools
 CROSS	?=
@@ -76,11 +76,11 @@ $(LIB):$(LIB_OBJ)
 	@echo AR $@
 	$(Q)$(AR) $(ARFLAGS) $@ $(LIB_OBJ)
 	$(Q)$(RANLIB) $@
-	
+
 clean:
 	@echo Cleaning...
 	$(Q)rm -vf $(EXE_OBJ) $(EXE)
-	$(Q)rm -vf $(LIB_OBJ) $(LIB) 
+	$(Q)rm -vf $(LIB_OBJ) $(LIB)
 	$(Q)rm -vf *~ */*~
 
 $(LIB_PREFIX)/$(LIB):$(LIB)
@@ -92,8 +92,8 @@ install:$(LIB_PREFIX)/$(LIB)
 
 %.o:%.c
 	@echo CC $@
-	$(Q)$(CC) $(CFLAGS) -c -o $@ $<	
-	
+	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
+
 %.dis:%.o
 	@echo DIS $@
 	$(Q)$(OBJDUMP) -D $< >> $@

@@ -6,6 +6,6 @@ top = get_python_lib() + '\eispice'
 print top
 
 for root, dirs, files in os.walk(top, topdown=False):
-	for name in files:
-		os.remove(os.path.join(root, name))
+    for name in files:
+        os.remove(os.path.join(root, name))
 

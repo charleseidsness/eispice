@@ -110,7 +110,7 @@
 *
 *     .. Parameters ..
       COMPLEX*16        ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ), 
+      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
      $                     ONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
@@ -138,10 +138,10 @@
 *
 *           Update I-th column of A - Y * V'
 *
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA ) 
+            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
             CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA ) 
+            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
 *           Apply I - V * T' * V' to this column (call it b) from the
 *           left, using the last column of T as workspace
@@ -154,31 +154,31 @@
 *           w := V1' * b1
 *
             CALL ZCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL ZTRMV( 'Lower', 'Conjugate transpose', 'UNIT', 
+            CALL ZTRMV( 'Lower', 'Conjugate transpose', 'UNIT',
      $                  I-1, A( K+1, 1 ),
      $                  LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2'*b2
 *
-            CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, 
+            CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $                  ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
 *           w := T'*w
 *
-            CALL ZTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT', 
+            CALL ZTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT',
      $                  I-1, T, LDT,
      $                  T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL ZGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE, 
+            CALL ZGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
      $                  A( K+I, 1 ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL ZTRMV( 'Lower', 'NO TRANSPOSE', 
+            CALL ZTRMV( 'Lower', 'NO TRANSPOSE',
      $                  'UNIT', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
             CALL ZAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
@@ -196,13 +196,13 @@
 *
 *        Compute  Y(K+1:N,I)
 *
-         CALL ZGEMV( 'NO TRANSPOSE', N-K, N-K-I+1, 
+         CALL ZGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
      $               ONE, A( K+1, I+1 ),
      $               LDA, A( K+I, I ), 1, ZERO, Y( K+1, I ), 1 )
-         CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, 
+         CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $               ONE, A( K+I, 1 ), LDA,
      $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, 
+         CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
      $               Y( K+1, 1 ), LDY,
      $               T( 1, I ), 1, ONE, Y( K+1, I ), 1 )
          CALL ZSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
@@ -210,7 +210,7 @@
 *        Compute T(1:I,I)
 *
          CALL ZSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL ZTRMV( 'Upper', 'No Transpose', 'NON-UNIT', 
+         CALL ZTRMV( 'Upper', 'No Transpose', 'NON-UNIT',
      $               I-1, T, LDT,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
@@ -221,15 +221,15 @@
 *     Compute Y(1:K,1:NB)
 *
       CALL ZLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
-      CALL ZTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE', 
+      CALL ZTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
      $            'UNIT', K, NB,
      $            ONE, A( K+1, 1 ), LDA, Y, LDY )
       IF( N.GT.K+NB )
-     $   CALL ZGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K, 
+     $   CALL ZGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
      $               NB, N-K-NB, ONE,
      $               A( 1, 2+NB ), LDA, A( K+1+NB, 1 ), LDA, ONE, Y,
      $               LDY )
-      CALL ZTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE', 
+      CALL ZTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
      $            'NON-UNIT', K, NB,
      $            ONE, T, LDT, Y, LDY )
 *

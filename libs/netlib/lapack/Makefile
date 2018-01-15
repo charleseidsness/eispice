@@ -4,7 +4,7 @@ INC_PREFIX = ../../../include
 
 # Quiet (set to @ for a quite compile)
 Q	?= @
-#Q	?= 
+#Q	?=
 
 # Build Tools
 CROSS	?=
@@ -26,6 +26,7 @@ ifeq ($(OS), Windows_NT)
 else
 	CFLAGS 	+= -fPIC
 	FFLAGS	+= -fPIC
+	NOOPT   += -fPIC
 endif
 
 LIB = liblapack.a
@@ -36,7 +37,7 @@ SRC_LAPACK = zgesv.o zgees.o ilaenv.o zhseqr.o dlabad.o zlange.o zlascl.o \
 	zgetf2.o dzsum1.o izmax1.o zladiv.o zrot.o zlarf.o dlapy2.o \
 	zlartg.o zung2r.o zlarft.o zung2r.o zlarfg.o zlacgv.o dladiv.o dlapy3.o \
 	zlahqr.o zlaqr3.o zlaqr5.o zlaqr4.o zlahqr.o zlaqr1.o zlaqr2.o dlamch.o \
-	dgesv.o dgetrf.o dgetrs.o dgetf2.o dlaswp.o dgetri.o dtrtri.o dtrti2.o 
+	dgesv.o dgetrf.o dgetrs.o dgetf2.o dlaswp.o dgetri.o dtrtri.o dtrti2.o
 
 LIB_OBJ = $(addprefix SRC/, $(SRC_LAPACK))
 
@@ -48,10 +49,10 @@ $(LIB):$(LIB_OBJ)
 	@echo AR $@
 	$(Q)$(AR) $(ARFLAGS) $@ $(LIB_OBJ)
 	$(Q)$(RANLIB) $@
-	
+
 clean:
 	@echo Cleaning...
-	$(Q)rm -vf $(LIB_OBJ) $(LIB) 
+	$(Q)rm -vf $(LIB_OBJ) $(LIB)
 	$(Q)rm -vf *~ */*~
 
 $(LIB_PREFIX)/$(LIB):$(LIB)

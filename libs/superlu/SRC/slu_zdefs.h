@@ -31,18 +31,18 @@ typedef int int_t; /* default */
 
 /*
  * Global data structures used in LU factorization -
- * 
+ *
  *   nsuper: #supernodes = nsuper + 1, numbered [0, nsuper].
  *   (xsup,supno): supno[i] is the supernode no to which i belongs;
  *	xsup(s) points to the beginning of the s-th supernode.
  *	e.g.   supno 0 1 2 2 3 3 3 4 4 4 4 4   (n=12)
  *	        xsup 0 1 2 4 7 12
- *	Note: dfs will be performed on supernode rep. relative to the new 
+ *	Note: dfs will be performed on supernode rep. relative to the new
  *	      row pivoting ordering
  *
  *   (xlsub,lsub): lsub[*] contains the compressed subscript of
  *	rectangular supernodes; xlsub[j] points to the starting
- *	location of the j-th column in lsub[*]. Note that xlsub 
+ *	location of the j-th column in lsub[*]. Note that xlsub
  *	is indexed by column.
  *	Storage: original row subscripts
  *
@@ -83,7 +83,7 @@ typedef int int_t; /* default */
  */
 typedef struct {
     int     *xsup;    /* supernode and column mapping */
-    int     *supno;   
+    int     *supno;
     int     *lsub;    /* compressed L subscripts */
     int	    *xlsub;
     doublecomplex  *lusup;   /* L supernodes */
@@ -132,7 +132,7 @@ extern void
 zCreate_Dense_Matrix(SuperMatrix *, int, int, doublecomplex *, int,
 		     Stype_t, Dtype_t, Mtype_t);
 extern void
-zCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, doublecomplex *, 
+zCreate_SuperNode_Matrix(SuperMatrix *, int, int, int, doublecomplex *,
 		         int *, int *, int *, int *, int *,
 			 Stype_t, Dtype_t, Mtype_t);
 extern void
@@ -142,8 +142,8 @@ extern void    countnz (const int, int *, int *, int *, GlobalLU_t *);
 extern void    fixupL (const int, const int *, GlobalLU_t *);
 
 extern void    zallocateA (int, int, doublecomplex **, int **, int **);
-extern void    zgstrf (superlu_options_t*, SuperMatrix*, double, 
-                       int, int, int*, void *, int, int *, int *, 
+extern void    zgstrf (superlu_options_t*, SuperMatrix*, double,
+                       int, int, int*, void *, int, int *, int *,
                        SuperMatrix *, SuperMatrix *, SuperLUStat_t*, int *);
 extern int     zsnode_dfs (const int, const int, const int *, const int *,
 			     const int *, int *, int *, GlobalLU_t *);
@@ -161,8 +161,8 @@ extern int     zcolumn_bmod (const int, const int, doublecomplex *,
 			   doublecomplex *, int *, int *, int,
                            GlobalLU_t *, SuperLUStat_t*);
 extern int     zcopy_to_ucol (int, int, int *, int *, int *,
-                              doublecomplex *, GlobalLU_t *);         
-extern int     zpivotL (const int, const double, int *, int *, 
+                              doublecomplex *, GlobalLU_t *);
+extern int     zpivotL (const int, const double, int *, int *,
                          int *, int *, int *, GlobalLU_t *, SuperLUStat_t*);
 extern void    zpruneL (const int, const int *, const int, const int,
 			  const int *, const int *, int *, GlobalLU_t *);
@@ -180,12 +180,12 @@ extern void    zgsequ (SuperMatrix *, double *, double *, double *,
 			double *, double *, int *);
 extern void    zlaqgs (SuperMatrix *, double *, double *, double,
                         double, double, char *);
-extern void    zgscon (char *, SuperMatrix *, SuperMatrix *, 
+extern void    zgscon (char *, SuperMatrix *, SuperMatrix *,
 		         double, double *, SuperLUStat_t*, int *);
-extern double   zPivotGrowth(int, SuperMatrix *, int *, 
+extern double   zPivotGrowth(int, SuperMatrix *, int *,
                             SuperMatrix *, SuperMatrix *);
 extern void    zgsrfs (trans_t, SuperMatrix *, SuperMatrix *,
-                       SuperMatrix *, int *, int *, char *, double *, 
+                       SuperMatrix *, int *, int *, char *, double *,
                        double *, SuperMatrix *, SuperMatrix *,
                        double *, double *, SuperLUStat_t*, int *);
 
@@ -195,7 +195,7 @@ extern int     sp_zgemv (char *, doublecomplex, SuperMatrix *, doublecomplex *,
 			int, doublecomplex, doublecomplex *, int);
 
 extern int     sp_zgemm (char *, char *, int, int, int, doublecomplex,
-			SuperMatrix *, doublecomplex *, int, doublecomplex, 
+			SuperMatrix *, doublecomplex *, int, doublecomplex,
 			doublecomplex *, int);
 
 /* Memory-related */

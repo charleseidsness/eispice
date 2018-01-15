@@ -20,7 +20,7 @@
  * exponential argument x*x.
  *
  * If sign < 0, the result is inverted; i.e., y = exp(-x*x) .
- * 
+ *
  *
  * ACCURACY:
  *

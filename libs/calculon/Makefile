@@ -5,7 +5,7 @@ DATA_LIB = $(LIB_PREFIX)/libdata.a
 
 # Quiet (set to @ for a quite compile)
 Q	?= @
-#Q	?= 
+#Q	?=
 
 # Build Tools
 CROSS	?=
@@ -59,7 +59,7 @@ $(LIB):$(LIB_OBJ) parser.h
 	@echo AR $@
 	$(Q)$(AR) $(ARFLAGS) $@ $(LIB_OBJ)
 	$(Q)$(RANLIB) $@
-	
+
 clean:
 	@echo Cleaning...
 	$(Q)rm -vf $(EXE_OBJ) $(EXE)
@@ -76,7 +76,7 @@ install:$(LIB_PREFIX)/$(LIB)
 %.o:%.c
 	@echo CC $@
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 %.dis:%.o
 	@echo DIS $@
 	$(Q)$(OBJDUMP) -D $< >> $@
@@ -88,7 +88,7 @@ install:$(LIB_PREFIX)/$(LIB)
 %.c:%.lem
 	@echo LEMON $@
 	$(Q)$(LEMON) -m $<
-	
+
 parser.h:
 	$(Q)rm -vf $@
 	$(Q)$(MAKEHEADERS) parser.c

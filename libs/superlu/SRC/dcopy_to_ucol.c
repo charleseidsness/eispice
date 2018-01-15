@@ -8,10 +8,10 @@
  */
 /*
   Copyright (c) 1994 by Xerox Corporation.  All rights reserved.
- 
+
   THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY
   EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
- 
+
   Permission is hereby granted to use or copy this program for any
   purpose, provided the above notices are retained on all copies.
   Permission to modify the code and to distribute modified code is
@@ -32,7 +32,7 @@ dcopy_to_ucol(
 	      GlobalLU_t *Glu      /* modified */
 	      )
 {
-/* 
+/*
  * Gather from SPA dense[*] to global ucol[*].
  */
     int ksub, krep, ksupno;
@@ -56,7 +56,7 @@ dcopy_to_ucol(
     usub    = Glu->usub;
     xusub   = Glu->xusub;
     nzumax  = Glu->nzumax;
-    
+
     jsupno = supno[jcol];
     nextu  = xusub[jcol];
     k = nseg - 1;
@@ -84,7 +84,7 @@ dcopy_to_ucol(
 		    usub = Glu->usub;
 		    lsub = Glu->lsub;
 		}
-		
+
 		for (i = 0; i < segsze; i++) {
 		    irow = lsub[isub];
 		    usub[nextu] = perm_r[irow];
@@ -92,7 +92,7 @@ dcopy_to_ucol(
 		    dense[irow] = zero;
 		    nextu++;
 		    isub++;
-		} 
+		}
 
 	    }
 

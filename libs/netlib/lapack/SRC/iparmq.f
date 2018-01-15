@@ -3,7 +3,7 @@
 *  -- LAPACK auxiliary routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
-*     
+*
 *     .. Scalar Arguments ..
       INTEGER            IHI, ILO, ISPEC, LWORK, N
       CHARACTER          NAME*( * ), OPTS*( * )
@@ -12,7 +12,7 @@
 *  =======
 *
 *       This program sets problem and machine dependent parameters
-*       useful for xHSEQR and its subroutines. It is called whenever 
+*       useful for xHSEQR and its subroutines. It is called whenever
 *       ILAENV is called with 12 <= ISPEC <= 16
 *
 *  Arguments

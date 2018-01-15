@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2006 Cooper Street Innovations Inc.
  *	Charles Eidsness    <charles@cooper-street.com>
  *
@@ -6,15 +6,15 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  *
  */
@@ -69,9 +69,9 @@ int tokenSolve(token_ *r, tokenSolveArgs_ *args)
 {
 	ReturnErrIf(r == NULL);
 	ReturnErrIf(args == NULL);
-	
+
 	if(args->diffVariable != NULL) {
-		if((r->type == TOKEN_VARIABLE) && 
+		if((r->type == TOKEN_VARIABLE) &&
 				(*(r->variable) == *(args->diffVariable))) {
 			Debug("%s", ParseTokenName(TOKEN_DIFF_VARIABLE));
 			Parse(args->parser, TOKEN_DIFF_VARIABLE, r, args->solution);
@@ -79,7 +79,7 @@ int tokenSolve(token_ *r, tokenSolveArgs_ *args)
 			return 0;
 		}
 	}
-	
+
 	Debug("%s", ParseTokenName(r->type));
 	Parse(args->parser, r->type, r, args->solution);
 	ReturnErrIf(isnan(*args->solution), "Parser failed");
@@ -97,23 +97,23 @@ int tokenDestroy(token_ *r)
 #define Attach(tok, var, con, minDiv) \
 	GotoFailedIf(listAdd(tokens, tokenNew(tok, var, con, minDiv), NULL))
 
-list_ * tokenizerNew(char *buffer, tokenizerGetVarPtr getVarFunc, 
+list_ * tokenizerNew(char *buffer, tokenizerGetVarPtr getVarFunc,
 		void *private, double *minDiv)
 {
 	list_ *tokens = NULL;
 	char *cursor = NULL, *marker = NULL, *start = NULL, *tmp, *comma, *lparen;
 	double **variable;
 	int i, c;
-	
+
 	ReturnNULLIf(buffer == NULL);
 	ReturnNULLIf(getVarFunc == NULL);
-	
+
 	Debug("Creating tokenizer");
 	tokens = listNew(tokens);
 	ReturnNULLIf(tokens == NULL);
 	cursor = buffer;
 	marker = buffer;
-	
+
 parse:
 	start = cursor;
 /*!re2c /*!ignore!re2c Parse Block */
@@ -168,7 +168,7 @@ parse:
 			performance hit is so small who cares? */
 		for(lparen = start; *lparen != '('; lparen++);
 		for(comma = lparen; *comma != ','; comma++);
-		
+
 		/* First get left variable */
 		tmp = malloc(comma - start + 2);
 		GotoFailedIf(tmp == NULL);
@@ -185,10 +185,10 @@ parse:
 		GotoFailedIf(variable == NULL);
 		Attach(TOKEN_LPAREN, NULL, 0, NULL)
 		Attach(TOKEN_VARIABLE, variable, 0, NULL);
-		
+
 		/* Minus */
 		Attach(TOKEN_MINUS, NULL, 0, minDiv);
-		
+
 		/* the right variable */
 		tmp = malloc((lparen - start) + (cursor - comma) + 2);
 		GotoFailedIf(tmp == NULL);
