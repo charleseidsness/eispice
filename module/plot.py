@@ -372,7 +372,7 @@ def plot(*lst):
 
     for circuit in lst:
 
-        if circuit.results == None:
+        if circuit.results.all() is None:
             raise RuntimeError("Circuit %s has no results." % circuit.title)
 
         try:

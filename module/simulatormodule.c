@@ -1178,12 +1178,12 @@ static int cbSourceInit(cbSource_ *r, PyObject *args, PyObject *kwds)
 
     length = PyTuple_Size(r->variables);
     ReturnErrIf(length <= 0);
-
-    r->derivs = (PyArrayObject*)PyArray_FromDims(1, &length, PyArray_DOUBLE);
+    npy_intp length1 = length;
+    r->derivs = (PyArrayObject*)PyArray_SimpleNew(1, &length1, PyArray_DOUBLE);
     ReturnErrIf(r->derivs == NULL);
     Py_INCREF(r->derivs);
 
-    r->values = (PyArrayObject*)PyArray_FromDims(1, &length, PyArray_DOUBLE);
+    r->values = (PyArrayObject*)PyArray_SimpleNew(1, &length1, PyArray_DOUBLE);
     ReturnErrIf(r->values == NULL);
     Py_INCREF(r->values);
 
@@ -1462,8 +1462,19 @@ static void circuitDestroy(circuit_ *r)
 static int circuitBuildResults(circuit_ *r, double *data, int dims[2])
 {
     Py_XDECREF(r->results);
-    r->results = (PyArrayObject*)PyArray_FromDimsAndData(2, dims,
-            PyArray_DOUBLE, (char*)data);
+    npy_intp dim[2];
+    dim[0] = dims[0];
+    dim[1] = dims[1];
+    r->results = (PyArrayObject*)PyArray_NewFromDescr(&PyArray_Type,\
+                                        PyArray_DescrFromType(PyArray_DOUBLE),\
+                                        2,\
+                                        dim,\
+                                        NULL,\
+                                        (char *) data,\
+                                        NPY_OWNDATA,\
+                                        NULL\
+                                        );
+
     ReturnErrIf(r->results == NULL);
     /* We own the data, should free it when we're done with it. */
     /* TODO: Make sure this does what we want and doesn't create
